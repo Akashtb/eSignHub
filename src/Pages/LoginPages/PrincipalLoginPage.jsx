@@ -7,13 +7,14 @@ import './login.css';
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [userType,setUserType] = useState('Student')
 
 
   return (
     <div className="login-container">
       <div className="login-box">
         <div className="login-form">
-          <h2>Welcome back,Principal!</h2>
+          <h2>Welcome back,{userType}!</h2>
           <p>Please enter your details</p>
 
           <input type="text" placeholder="Enter your e-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -27,9 +28,9 @@ function Login() {
           <button className="login-btn">Sign in</button>
 
 
-          <p className="signup-text">
+       { userType === "Student" && <p className="signup-text">
             Don't have an account? <span>Sign up for free</span>
-          </p>
+          </p>}
         </div>
 
         <div className="image-section">

@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Camera } from "lucide-react"; // Using Lucide-react for the camera icon
+import { Camera } from "lucide-react"; 
 import "./StudentRegister.css";
 
 const StudentRegister = () => {
     const [profileImage, setProfileImage] = useState(null);
 
-    // Function to handle file input change
     const handleImageChange = (event) => {
         const file = event.target.files[0];
         if (file) {
@@ -19,7 +18,6 @@ const StudentRegister = () => {
             <div className="studentRegisterSub">
                 <h1>Student Registration</h1>
 
-                {/* Profile Picture Upload */}
                 <div className="profilePic" onClick={() => document.getElementById("fileInput").click()}>
                     {profileImage ? (
                         <img src={profileImage} alt="Profile Preview" className="profileImage" />
