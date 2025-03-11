@@ -29,5 +29,5 @@ const tutorSchema = mongoose.Schema({
     { timestamps: true }
 )
 
-const Tutor = mongoose.model("HOD",tutorSchema);
+const Tutor = mongoose.model("Tutor",tutorSchema);
 export default Tutor
