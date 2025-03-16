@@ -1,8 +1,8 @@
-import HOD from "../models/HOD"
-import Principal from "../models/Principal"
-import Student from "../models/Student"
-import Tutor from "../models/Tutor"
-import bcrypt from "bcryptjs"
+import HOD from "../models/HOD.js"
+import Principal from "../models/Principal.js"
+import Student from "../models/Student.js"
+import Tutor from "../models/Tutor.js"
+import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
 
 
