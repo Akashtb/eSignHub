@@ -5,7 +5,7 @@ import authRoute from "./routes/authRoutes.js"
 import principalRoutes from "./routes/principalRoutes.js"
 import tutorRoutes from "./routes/tutorRoutes.js"
 import hodRoutes from "./routes/hodRoutes.js"
-
+import studentRoutes from "./routes/studentRoutes.js"
 const app = express()
 
 
@@ -17,6 +17,7 @@ app.use("/auth",authRoute)
 app.use("/principal",principalRoutes)
 app.use("/tutor",tutorRoutes)
 app.use("/hod",hodRoutes)
+app.use("/student",studentRoutes)
 
 
 connect();
