@@ -20,7 +20,7 @@ export const createPrincipal = async(req,res)=>{
                 phone
             })
 
-            return res.status(201).json({message:"User created successfully",newPrincipal})
+            return res.status(201).json({message:"User created successfully"})
     }catch(error){
         console.error(error)
         return res.status(500).json({ message: "Internal server error", error: error.message })
@@ -59,8 +59,6 @@ export const updatePrincipal = async(req,res)=>{
 
 export const deletePrincipal = async (req, res) => {
     const principalId = req.params.id;
-    console.log("Received principalId:", principalId);
-
     try {
         const deletePrincipal = await Principal.findByIdAndDelete(principalId);
         console.log(deletePrincipal);

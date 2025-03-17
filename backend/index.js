@@ -3,7 +3,7 @@ import dotenv from "dotenv"
 import connect from "./db.js"
 import authRoute from "./routes/authRoutes.js"
 import principalRoutes from "./routes/principalRoutes.js"
-
+import tutorRoutes from "./routes/tutorRoutes.js"
 
 const app = express()
 
@@ -14,6 +14,7 @@ app.use(express.json())
 
 app.use("/auth",authRoute)
 app.use("/principal",principalRoutes)
+app.use("/tutor",tutorRoutes)
 
 
 connect();
