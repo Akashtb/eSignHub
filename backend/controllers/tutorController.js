@@ -56,9 +56,6 @@ export const deleteTutor = async(req,res)=>{
 export const viewAllTutor = async(req,res)=>{
     try{
         const allTutor = await Tutor.find();
-        if(!allTutor){
-            return res.status(404).json({message:"Tutor not found"})
-        }
         return res.status(200).json({allTutor,message:"Tutor fetched successfully"})
     }catch(error){
         console.error(error)
