@@ -1,5 +1,5 @@
 import express from "express"
-import { createStudent, deleteStudent, updateStudent, viewAllStudent, viewStudent } from "../controllers/studentController"
+import { createStudent, deleteStudent, updateStudent, viewAllStudent, viewStudent } from "../controllers/studentController.js"
 const router = express.Router()
 
 router.post('/create',createStudent)

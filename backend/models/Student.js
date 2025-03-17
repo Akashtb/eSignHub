@@ -30,7 +30,7 @@ const studentSchema = new mongoose.Schema(
             required: true,
             unique: true,
         },
-        Batch: {
+        batch: {
             type: String,
             required: true,
         },
@@ -38,20 +38,14 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        departmentCode: {
-            type: String,
-        },
-        instituteCode: {
-            type: String,
-        },
-        currentSemester: {
-            type: Number,
-            required: true,
-        },
-        assignedTutor: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Tutor",
-        },
+        // assignedTutor: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "Tutor",
+        // },
+        // assignedHOD: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "HOD",
+        // },
     },
     { timestamps: true }
 );

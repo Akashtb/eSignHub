@@ -4,6 +4,7 @@ import Student from "../models/Student.js"
 import Tutor from "../models/Tutor.js"
 import bcrypt from "bcrypt"
 import jwt from "jsonwebtoken"
+import { createError } from "../utils/customErrorHandling.js"
 
 
 const roleModels = {
@@ -13,17 +14,17 @@ const roleModels = {
     hod: HOD,
 }
 
-export const Login =async (req, res) => {
+export const Login =async (req, res,next) => {
     try {
         const { email, password, role ,regNumber } = req.body;
         if (!email || !password || !role) {
-            return res.status(400).json({ message: "Email,Password and role are required" })
+            return next(createError(400, "All fields are required"));
         }
 
         const Model = roleModels[role.toLowerCase()]
 
         if (!Model) {
-            return res.status(400).json({ message: "Invalid role" })
+            return next(createError(400, "Invalid role"))
         }
         let user
         if(Model==="Student"){
@@ -33,12 +34,12 @@ export const Login =async (req, res) => {
         }
 
         if (!user) {
-            return res.status(400).json({ message: "User not found" })
+            return next(createError(400, "User not found"))
         }
 
         const isMatch = await bcrypt.compare(password, user.password)
         if (!isMatch) {
-            return res.status(400).json({ message: "Invalid password" })
+            return next(createError(400, "Invalid credentials"))
         }
 
         const accessToken = jwt.sign({
@@ -65,12 +66,12 @@ export const Login =async (req, res) => {
         }).status(201).json({message:"Login successfull",accessToken:accessToken,role:otherDetails.role})
 
     } catch (error) {
-        res.status(500).json(error)
+        next(createError(500, error.message));
     }
 }
 
 
-export const logOut = (req, res) => {
+export const logOut = (req, res,next) => {
     res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: 'none' });
     res.status(200).json({ message: "logged out successfully" })
 }
