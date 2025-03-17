@@ -8,26 +8,26 @@ import { createError } from "../utils/customErrorHandling.js"
 
 
 const roleModels = {
-    principle: Principal,
-    student: Student,
-    tutor: Tutor,
-    hod: HOD,
+    Principal: Principal,
+    Student: Student,
+    Tutor: Tutor,
+    HOD: HOD,
 }
 
 export const Login =async (req, res,next) => {
     try {
         const { email, password, role ,regNumber } = req.body;
-        if (!email || !password || !role) {
+        if (!password || !role) {
             return next(createError(400, "All fields are required"));
         }
 
-        const Model = roleModels[role.toLowerCase()]
+        const Model = roleModels[role]
 
         if (!Model) {
             return next(createError(400, "Invalid role"))
         }
         let user
-        if(Model==="Student"){
+        if(role==="Student"){
              user = await Model.findOne({ regNumber });
         }else{
              user = await Model.findOne({ email });
@@ -59,7 +59,7 @@ export const Login =async (req, res,next) => {
             process.env.JWT_SECRET
         )
 
-        res.cookie("resfreshToken",refreshToken,{
+        res.cookie("refreshToken",refreshToken,{
             httpOnly: true,
             secure: true,
             maxAge: 24 * 60 * 60 * 1000 
