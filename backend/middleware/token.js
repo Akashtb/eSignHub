@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { createError } from "../utils/customErrorHandling";
+import { createError } from "../utils/customErrorHandling.js";
 
 export const verifyToken = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
@@ -29,6 +29,27 @@ export const verifyPrincipal = (req, res, next) => {
         }
     })
 }
+
+export const verifyHOD = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.user && req.user.role === "HOD" || req.user.role === "Principal" ) {
+            next()
+        } else {
+            return next(createError(403, "You are not an principal to perform this operation."))
+        }
+    })
+}
+
+export const verifyTutor = (req, res, next) => {
+    verifyToken(req, res, () => {
+        if (req.user && req.user.role === "Tutor" || req.user.role === "Principal" ) {
+            next()
+        } else {
+            return next(createError(403, "You are not an principal to perform this operation."))
+        }
+    })
+}
+
 
 export const verifyStaff = (req, res, next) => {
     verifyToken(req, res, () => {

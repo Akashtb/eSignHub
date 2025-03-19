@@ -28,7 +28,7 @@ const requestLetterSchema = new mongoose.Schema(
         },
         role: {
           type: String,
-          enum: ["principal", "tutor", "hod"],
+          enum: ["Principal", "Tutor", "HOD"],
           required: true,
         },
       },
@@ -36,11 +36,16 @@ const requestLetterSchema = new mongoose.Schema(
     approvedBy: {
         type: mongoose.Schema.Types.ObjectId,
     },
+    seenBy:{
+        type: [mongoose.Schema.Types.ObjectId],
+        default: []
+    },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+
   },
   { timestamps: true }
 );

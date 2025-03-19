@@ -6,6 +6,7 @@ import principalRoutes from "./routes/principalRoutes.js"
 import tutorRoutes from "./routes/tutorRoutes.js"
 import hodRoutes from "./routes/hodRoutes.js"
 import studentRoutes from "./routes/studentRoutes.js"
+import requestLetterRoutes from "./routes/requestLetterRoutes.js"
 const app = express()
 
 
@@ -18,6 +19,7 @@ app.use("/principal",principalRoutes)
 app.use("/tutor",tutorRoutes)
 app.use("/hod",hodRoutes)
 app.use("/student",studentRoutes)
+app.use('/requestLetter', requestLetterRoutes);
 
 
 app.use((err,req,res,next)=>{
