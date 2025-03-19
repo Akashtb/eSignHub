@@ -5,11 +5,20 @@ import Login from './Pages/LoginPages/PrincipalLoginPage'
 import StudentRegister from './Pages/StudentRegister/StudentRegister'
 import "./styles/global.scss";
 import Home from "./pages/home/Home"
-import User from "./pages/users/User"
 import Products from "./pages/products/Products"
 import Navbar from "./components/navbar/Navbar"
 import Menu from "./components/menu/Menu"
 import Footer from "./components/footer/Footer"
+import Users from "./Pages/users/Users";
+import User from "./Pages/user/User";
+import Product from "./Pages/product/Product";
+
+// import {
+//   QueryClient,
+//   QueryClientProvider,
+// } from "@tanstack/react-query";
+
+// const queryClient = new QueryClient();
 function App() {
   const Layout = () =>{
     return(
@@ -20,7 +29,9 @@ function App() {
           <Menu/>
         </div>
         <div className="contentContainer">
+        {/* <QueryClientProvider client={queryClient}> */}
           <Outlet/>
+          {/* </QueryClientProvider> */}
         </div>
       </div>
       <Footer/>
@@ -33,8 +44,10 @@ function App() {
       element: <Layout/>, 
       children : [
         { path: "/", element: <Home /> },
-        { path: "/users", element: <User /> },
-        { path: "/products", element: <Products /> }
+        { path: "/users", element: <Users /> },
+        { path: "/products", element: <Products /> },
+        { path:  "/users/:id", element: <User />,},
+        { path: "/products/:id", element: <Product />,},
         
       ]
     },
