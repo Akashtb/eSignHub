@@ -71,6 +71,26 @@ export const Login =async (req, res,next) => {
 }
 
 
+export const refreshToken = async(req,res,next)=>{
+    const {refreshToken} = req.cookies;
+    if(!refreshToken){
+        return next(createError(400,"Please Login"))
+    }
+    jwt.verify(refreshToken,process.env.JWT,(err,user)=>{
+        if(err){
+            return next(createError(400,"Please Login"))
+        }
+        const accessToken = jwt.sign({
+            id: user.id,
+            role: user.role,
+            email: user.email
+        }, process.env.JWT_SECRET,{ expiresIn: "30s" })
+
+        res.status(201).json({message:"Token refreshed",accessToken:accessToken,role:user.role})
+    })
+}
+
+
 export const logOut = (req, res,next) => {
     res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: 'none' });
     res.status(200).json({ message: "logged out successfully" })
