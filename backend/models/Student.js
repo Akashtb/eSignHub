@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import bcrypt from "bcryptjs";
 
 const studentSchema = new mongoose.Schema(
     {
@@ -31,7 +30,7 @@ const studentSchema = new mongoose.Schema(
             required: true,
             unique: true,
         },
-        Batch: {
+        batch: {
             type: String,
             required: true,
         },
@@ -39,20 +38,18 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        departmentCode: {
+        role:{
             type: String,
-        },
-        instituteCode: {
-            type: String,
-        },
-        currentSemester: {
-            type: Number,
-            required: true,
-        },
-        assignedTutor: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Tutor",
-        },
+            default: "Student"
+        }
+        // assignedTutor: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "Tutor",
+        // },
+        // assignedHOD: {
+        //     type: mongoose.Schema.Types.ObjectId,
+        //     ref: "HOD",
+        // },
     },
     { timestamps: true }
 );

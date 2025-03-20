@@ -1,4 +1,4 @@
-import mongoose, { model } from "mongoose";
+import mongoose from "mongoose";
 
 const principalSchema  = new mongoose.Schema({
     name: {
@@ -23,6 +23,10 @@ const principalSchema  = new mongoose.Schema({
     },
     address: {
         type: String
+    },
+    role:{
+        type: String,
+        default: "Principal"
     }
 }, {
     timestamps: true
