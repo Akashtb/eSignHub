@@ -5,13 +5,15 @@ import Login from './Pages/LoginPages/PrincipalLoginPage'
 import StudentRegister from './Pages/StudentRegister/StudentRegister'
 import "./styles/global.scss";
 import Home from "./pages/home/Home"
-import Products from "./pages/products/Products"
+import Teachers from "./Pages/teachers/Teachers"
 import Navbar from "./components/navbar/Navbar"
 import Menu from "./components/menu/Menu"
 import Footer from "./components/footer/Footer"
-import Users from "./Pages/users/Users";
-import User from "./Pages/user/User";
+import Students from "./Pages/students/Students";
 import Product from "./Pages/product/Product";
+import User from "./Pages/user/User";
+import Request from "./Pages/request/Request";
+
 
 // import {
 //   QueryClient,
@@ -44,9 +46,10 @@ function App() {
       element: <Layout/>, 
       children : [
         { path: "/", element: <Home /> },
-        { path: "/users", element: <Users /> },
-        { path: "/products", element: <Products /> },
-        { path:  "/users/:id", element: <User />,},
+        { path: "/students", element: <Students /> },
+        { path: "/teacher", element: <Teachers /> },
+        { path: "/requests", element: <Request /> },
+        { path:  "/users/:id", element: <User />},
         { path: "/products/:id", element: <Product />,},
         
       ]

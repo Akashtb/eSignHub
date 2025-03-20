@@ -15,9 +15,11 @@ a {
   font-family: "inter", sans-serif;
   background-color: $main-bg;
   color: $main-color;
+ 
 }
 .container {
   display: flex;
+  
 }
 
 .menuContainer {
@@ -33,4 +35,5 @@ a {
 .contentContainer {
   padding: 5px 20px;
   width: 100%;
+ 
 }

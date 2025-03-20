@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./Products.scss";
+import "./teachers.scss";
 import DataTable from "../../components/dataTable/DataTable";
 import Add from "../../components/add/Add";
 import { products } from "../../data";
@@ -46,7 +46,7 @@ const columns = [
   },
 ];
 
-const Products = () => {
+const Teachers = () => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -61,4 +61,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Teachers;

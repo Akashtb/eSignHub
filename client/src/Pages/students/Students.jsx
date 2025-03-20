@@ -1,5 +1,5 @@
 import DataTable from "../../components/dataTable/DataTable";
-import "./Users.scss";
+import "./students.scss";
 import { useState } from "react";
 import Add from "../../components/add/Add";
 import { userRows } from "../../data";
@@ -46,7 +46,7 @@ const columns = [
   },
 ];
 
-const Users = () => {
+const Students = () => {
   const [open, setOpen] = useState(false);
 
     //TEST THE API
@@ -71,4 +71,4 @@ const Users = () => {
   );
 };
 
-export default Users;
+export default Students;
