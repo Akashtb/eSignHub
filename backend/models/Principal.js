@@ -23,6 +23,10 @@ const principalSchema  = new mongoose.Schema({
     },
     address: {
         type: String
+    },
+    role:{
+        type: String,
+        default: "Principal"
     }
 }, {
     timestamps: true

@@ -4,10 +4,10 @@ import {  verifyStaff, verifyStudent } from "../middleware/token.js"
 const router = express.Router()
 
 router.post('/create',createStudent)
-router.get('/view/:id',verifyStudent,viewStudent)
+router.get('/view/:id',viewStudent)
 router.delete('/delete/:id',verifyStaff,deleteStudent)
-router.patch('/update/:id',verifyStaff,updateStudent)
-router.get('/viewAll',verifyStaff,viewAllStudent)
+router.patch('/update/:id',updateStudent)
+router.get('/viewAll',viewAllStudent)
 
 
 export default router

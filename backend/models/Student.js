@@ -38,6 +38,10 @@ const studentSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        role:{
+            type: String,
+            default: "Student"
+        }
         // assignedTutor: {
         //     type: mongoose.Schema.Types.ObjectId,
         //     ref: "Tutor",

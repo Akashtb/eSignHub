@@ -24,6 +24,10 @@ const tutorSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+    role:{
+        type: String,
+        default: "Tutor"
+    }
 
 },
     { timestamps: true }

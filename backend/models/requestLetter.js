@@ -8,7 +8,7 @@ const requestLetterSchema = new mongoose.Schema(
     },
     fromRole: {
       type: String,
-      enum: ["student", "tutor", "hod"], 
+      enum: ["Student", "Tutor", "HOD"], 
       required: true,
     },
     subject: {

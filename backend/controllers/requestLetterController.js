@@ -2,15 +2,16 @@ import RequestLetter from "../models/requestLetter.js"
 import { createError } from "../utils/customErrorHandling.js"
 
 export const createRequestLetter = async(req,res)=>{
-    const {fromUid} = req.params
-    const {fromRole,subject,messageBody,toUid} = req.body
+    const fromUid= req.user.id
+    const fromRole = req.user.role
+    const {subject,messageBody,toUids} = req.body
     try {
         await RequestLetter.create({
             fromUid,
             fromRole,
             subject,
             messageBody,
-            toUid,
+            toUids,
             status:"pending"
         })
         return res.status(201).json({message:"Request Letter created successfully"})
@@ -111,7 +112,7 @@ export const viewRequestLetter= async(req,res,next)=>{
 }
 
 
-// toUid - principal
+
 
 export const receviedRequestLetter = async (req, res, next) => {
     try {
@@ -128,38 +129,6 @@ export const receviedRequestLetter = async (req, res, next) => {
     }
 };
 
-
-// export const requestLetterforHOD = async (req, res, next) => {
-
-//     const {id} = req.params;
-
-//     try {
-//         const requestLetters = await RequestLetter.find({ "toUids.userId": id, "toUids.role": "HOD" });
-//         res.status(200).json({ 
-//             success: true,
-//             message: requestLetters.length ? "Request letters retrieved successfully" : "No request letters found",
-//             requestLetters 
-//         });
-//     } catch (error) {
-//         next(createError(500, error.message));
-//     }
-
-// }
-
-// export const requestLetterForTutor = async (req, res, next) => {
-//     const {id} = req.params;
-
-//     try {
-//         const requestLetters = await RequestLetter.find({ "toUids.userId": id, "toUids.role": "Tutor" });
-//         res.status(200).json({ 
-//             success: true,
-//             message: requestLetters.length ? "Request letters retrieved successfully" : "No request letters found",
-//             requestLetters 
-//         });
-//     } catch (error) {
-//         next(createError(500, error.message));
-//     }
-// }
 
 export const listOfSentRequestLetter = async (req, res, next) => {
     try {
