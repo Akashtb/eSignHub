@@ -7,11 +7,13 @@ import tutorRoutes from "./routes/tutorRoutes.js"
 import hodRoutes from "./routes/hodRoutes.js"
 import studentRoutes from "./routes/studentRoutes.js"
 import requestLetterRoutes from "./routes/requestLetterRoutes.js"
+import cookieParser from "cookie-parser"
 const app = express()
 
 
 dotenv.config()
 app.use(express.json())
+app.use(cookieParser());
 
 
 app.use("/auth",authRoute)

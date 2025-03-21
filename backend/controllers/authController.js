@@ -14,9 +14,9 @@ const roleModels = {
     HOD: HOD,
 }
 
-export const Login =async (req, res,next) => {
+export const Login = async (req, res, next) => {
     try {
-        const { email, password, role ,regNumber } = req.body;
+        const { email, password, role, regNumber } = req.body;
         if (!password || !role) {
             return next(createError(400, "All fields are required"));
         }
@@ -27,10 +27,10 @@ export const Login =async (req, res,next) => {
             return next(createError(400, "Invalid role"))
         }
         let user
-        if(role==="Student"){
-             user = await Model.findOne({ regNumber });
-        }else{
-             user = await Model.findOne({ email });
+        if (role === "Student") {
+            user = await Model.findOne({ regNumber });
+        } else {
+            user = await Model.findOne({ email });
         }
 
         if (!user) {
@@ -46,24 +46,24 @@ export const Login =async (req, res,next) => {
             id: user._id,
             role: user.role,
             email: user.email
-        }, process.env.JWT_SECRET,{ expiresIn: "1h" })
+        }, process.env.JWT_SECRET, { expiresIn: "15s" })
 
-        const {_id,password:_,...otherDetails} = user._doc
+        const { _id, password: _, ...otherDetails } = user._doc
 
         const refreshToken = jwt.sign(
             {
                 id: user._id,
-                role: user.role,    
+                role: user.role,
                 email: user.email
             },
             process.env.JWT_SECRET
         )
 
-        res.cookie("refreshToken",refreshToken,{
+        res.cookie("refreshToken", refreshToken, {
             httpOnly: true,
             secure: true,
-            maxAge: 24 * 60 * 60 * 1000 
-        }).status(201).json({message:"Login successfull",accessToken:accessToken,role:otherDetails.role})
+            maxAge: 24 * 60 * 60 * 1000
+        }).status(201).json({ message: "Login successfull", accessToken: accessToken, role: otherDetails.role })
 
     } catch (error) {
         next(createError(500, error.message));
@@ -71,27 +71,27 @@ export const Login =async (req, res,next) => {
 }
 
 
-export const refreshToken = async(req,res,next)=>{
-    const {refreshToken} = req.cookies;
-    if(!refreshToken){
-        return next(createError(400,"Please Login"))
+export const refreshToken = async (req, res, next) => {
+    const refreshToken = req.cookies.refreshToken;
+    if (!refreshToken) {
+        return next(createError(400, "refresh token not found"))
     }
-    jwt.verify(refreshToken,process.env.JWT,(err,user)=>{
-        if(err){
-            return next(createError(400,"Please Login"))
+    jwt.verify(refreshToken, process.env.JWT_SECRET, (err, user) => {
+        if (err) {
+            return next(createError(400, "Please Login"))
         }
         const accessToken = jwt.sign({
             id: user.id,
             role: user.role,
             email: user.email
-        }, process.env.JWT_SECRET,{ expiresIn: "30s" })
+        }, process.env.JWT_SECRET, { expiresIn: "30s" })
 
-        res.status(201).json({message:"Token refreshed",accessToken:accessToken,role:user.role})
+        res.status(201).json({ message: "Token refreshed", accessToken: accessToken, role: user.role })
     })
 }
 
 
-export const logOut = (req, res,next) => {
+export const logOut = (req, res, next) => {
     res.clearCookie("refreshToken", { httpOnly: true, secure: true, sameSite: 'none' });
     res.status(200).json({ message: "logged out successfully" })
 }

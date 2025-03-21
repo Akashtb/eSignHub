@@ -6,6 +6,6 @@ router.post('/login',Login)
 
 router.post('/logout',logOut)
 
-router.post('refreshToken',refreshToken)
+router.post('/refreshToken',refreshToken)
 
 export default router
