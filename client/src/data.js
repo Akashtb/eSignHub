@@ -827,4 +827,28 @@ export const menu = [
     // Add more data up to 20 entries...
   ];
   
+  export const users = [
+    { id: 1, name: "Alex Johnson", email: "alex.johnson123@gmail.com" },
+    { id: 2, name: "Emily Smith", email: "emily.smith987@gmail.com" },
+    { id: 3, name: "Michael Brown", email: "michael.brown456@gmail.com" },
+    { id: 4, name: "Sarah Jones", email: "sarah.jones789@gmail.com" },
+    { id: 5, name: "David Wilson", email: "david.wilson234@gmail.com" },
+    { id: 6, name: "Olivia Martin", email: "olivia.martin567@gmail.com" },
+    { id: 7, name: "James Taylor", email: "james.taylor890@gmail.com" },
+    { id: 8, name: "Sophia Anderson", email: "sophia.anderson123@gmail.com" },
+    { id: 9, name: "Benjamin Thomas", email: "benjamin.thomas456@gmail.com" },
+    { id: 10, name: "Isabella Moore", email: "isabella.moore789@gmail.com" },
+    { id: 11, name: "William Jackson", email: "william.jackson234@gmail.com" },
+    { id: 12, name: "Ava White", email: "ava.white567@gmail.com" },
+    { id: 13, name: "Ethan Harris", email: "ethan.harris890@gmail.com" },
+    { id: 14, name: "Mia Clark", email: "mia.clark123@gmail.com" },
+    { id: 15, name: "Noah Lewis", email: "noah.lewis456@gmail.com" },
+    { id: 16, name: "Charlotte Robinson", email: "charlotte.robinson789@gmail.com" },
+    { id: 17, name: "Logan Walker", email: "logan.walker234@gmail.com" },
+    { id: 18, name: "Amelia Hall", email: "amelia.hall567@gmail.com" },
+    { id: 19, name: "Mason Allen", email: "mason.allen890@gmail.com" },
+    { id: 20, name: "Harper Young", email: "harper.young123@gmail.com" }
+  ];
+  
+  
   
