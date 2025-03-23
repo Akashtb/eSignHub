@@ -11,6 +11,7 @@ import User from "./Pages/user/User";
 import Request from "./Pages/request/Request";
 import HOD from "./Pages/users/HOD/Hod";
 import Students from "./Pages/users/students/Students";
+import Tutor from "./Pages/users/Tutor/Tutor";
 
 
 
@@ -38,6 +39,7 @@ function App() {
       children : [
         { path: "/", element: <Home /> },
         { path: "/students", element: <Students /> },
+        { path: "/Tutor", element: <Tutor /> },
         { path: "/HOD", element: <HOD /> },
         { path: "/requests", element: <Request /> },
         { path:  "/users/:id", element: <User />},

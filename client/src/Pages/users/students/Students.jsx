@@ -4,6 +4,7 @@ import { useState } from "react";
 import Add from "../../../components/add/Add";
 import { userRows } from "../../../data";
 import Edit from "../../../Components/Edit/Edit";
+import View from "../../../Components/View/View";
 
 const columns = [
   {
@@ -68,6 +69,8 @@ const columns = [
 const Students = () => {
   const [open, setOpen] = useState(false);
   const [openEdit,setOpenEdit] = useState(false)
+  const [openView,setOpenView] = useState(false)
+  
 
   return (
     <div className="students">
@@ -76,10 +79,12 @@ const Students = () => {
         <button onClick={() => setOpen(true)}>Add New Student</button>
       </div>
       <div className="tableContainer">
-        <DataTable slug="student" columns={columns} rows={userRows} setOpenEdit={setOpenEdit} />
+        <DataTable slug="student" columns={columns} rows={userRows} setOpenEdit={setOpenEdit} setOpenView={setOpenView} />
       </div>
       {open && <Add slug="student" columns={columns} setOpen={setOpen} />}
       {openEdit && <Edit slug="student" columns={columns} setOpenEdit={setOpenEdit} />}
+      {openView && <View slug="HOD" columns={columns} setOpenView={setOpenView} />}
+
     </div>
   );
 };

@@ -1,8 +1,8 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import { Link } from "react-router-dom";
 import "./dataTable.scss";
+import { FaEye } from "react-icons/fa";
 
-const DataTable = ({ columns, rows, slug ,setOpenEdit}) => {
+const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView}) => {
   const handleDelete = (id) => {
     console.log("Delete ID:", id);
   };
@@ -15,6 +15,9 @@ const DataTable = ({ columns, rows, slug ,setOpenEdit}) => {
     renderCell: (params) => {
       return (
         <div className="action">
+          <div style={{ cursor: "pointer" }}>
+            <FaEye size={18} color="#71c9d5" title="View" onClick={() => setOpenView(true)}/>
+          </div>
           <div onClick={() => setOpenEdit(true)}>
             <img src="/view.svg" alt="View" />
           </div>
