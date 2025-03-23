@@ -13,6 +13,7 @@ import HOD from "./Pages/users/HOD/Hod";
 import Students from "./Pages/users/students/Students";
 import Tutor from "./Pages/users/Tutor/Tutor";
 import RequestLetter from "./Pages/request/Request";
+import SingleLetterView from "./Pages/singleLetterView/SingleLetterView";
 
 
 
@@ -45,6 +46,7 @@ function App() {
         { path: "/requests", element: <Request /> },
         { path:  "/users/:id", element: <User />},
         {path:"/requestLetter", element: <RequestLetter/>},
+        {path:"/singleLetterView/:id", element: <SingleLetterView/>},
         
       ]
     },
