@@ -1,63 +1,100 @@
-
-import DataTable from '../../components/dataTable/DataTable'
-import Add from '../../components/add/Add'
-import { userRows } from "../../data";
-import { useState } from 'react';
+import React, { useState } from "react";
 import "./request.scss";
+import RequestLetterTable from "../../Components/dataTable/request letter data table/RequestTable";
+import { requestLetter } from "../../data";
+import { MenuItem, Select, FormControl, InputLabel } from "@mui/material";
 
 const columns = [
-  { field: "id", headerName: "ID", width: 90 },
   {
-    field: "img",
-    headerName: "Avatar",
-    width: 100,
+    field: "Name",
+    headerName: "Name",
+    flex: 1,
+    minWidth: 180,
     renderCell: (params) => {
-      return <img src={params.row.img || "/noavatar.png"} alt="" />;
+      return (
+        <div className="nameContainer">
+          <span className="name">{params.value}</span>
+          <span className="designation">{params.row.designation}</span>
+        </div>
+      );
     },
   },
   {
-    field: "firstName",
-    headerName: "First name",
-    width: 150,
+    field: "subject",
+    headerName: "Subject",
+    flex: 4,
+    minWidth: 300,
   },
   {
-    field: "lastName",
-    headerName: "Last name",
-    width: 150,
+    field: "status",
+    headerName: "Status",
+    flex: 1,
+    minWidth: 120,
+    renderCell: (params) => {
+      return (
+        <span className={`status ${params.value.toLowerCase()}`}>
+          {params.value}
+        </span>
+      );
+    },
   },
   {
-    field: "email",
-    headerName: "Email",
-    width: 200,
-  },
-  {
-    field: "phone",
-    headerName: "Phone",
-    width: 200,
-  },
-  {
-    field: "createdAt",
-    headerName: "Created At",
-    width: 200,
-  },
-  {
-    field: "verified",
-    headerName: "Verified",
-    width: 150,
+    field: "approvedBy",
+    headerName: "Department",
+    flex: 2,
+    minWidth: 200,
+    renderCell: (params) => {
+      return (
+        <div className="nameContainer">
+          <span className="name">{params.value}</span>
+          <span className="designation">{params.row.designation}</span>
+        </div>
+      );
+    },
   },
 ];
-const Request = () => {
-    const [open, setOpen] = useState(false);
-  return (
-    <div className="requests">
-    <div className="info">
-      <h1>Request</h1>
-      <button onClick={() => setOpen(true)}>Compose Letter</button>
-    </div>
-    <DataTable slug="users" columns={columns} rows={userRows} />
-    {open && <Add slug="user" columns={columns} setOpen={setOpen} />}
-  </div>
-  )
-}
 
-export default Request
+const RequestLetter = () => {
+  const [filter, setFilter] = useState("");
+
+  const handleFilterChange = (event) => {
+    setFilter(event.target.value);
+  };
+
+  const filteredData = filter
+    ? requestLetter.filter((row) => row.status === filter)
+    : requestLetter;
+
+  return (
+    <div className="letter">
+      <div className="info">
+        <h1>Request Letter</h1>
+        <button>Add Request Letter</button>
+      </div>
+
+      {/* Selection Box
+ <div className="filterContainer">
+          <FormControl variant="outlined" className="filterSelect">
+            <InputLabel>Status</InputLabel>
+            <Select value={filter} onChange={handleFilterChange} label="Status">
+              <MenuItem value="">All</MenuItem>
+              <MenuItem value="Rejected">All</MenuItem>
+              <MenuItem value="Pending">Sent</MenuItem>
+              <MenuItem value="Approved">Recevied</MenuItem>
+            </Select>
+          </FormControl>
+        </div> */}
+
+      <div className="tableContainer">
+       
+        {filteredData.length > 0 ? (
+          <RequestLetterTable slug="letter" columns={columns} rows={filteredData} />
+        ) : (
+          <span className="noDataMessage">No Data Available</span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default RequestLetter;

@@ -12,6 +12,7 @@ import Request from "./Pages/request/Request";
 import HOD from "./Pages/users/HOD/Hod";
 import Students from "./Pages/users/students/Students";
 import Tutor from "./Pages/users/Tutor/Tutor";
+import RequestLetter from "./Pages/request/Request";
 
 
 
@@ -43,7 +44,7 @@ function App() {
         { path: "/HOD", element: <HOD /> },
         { path: "/requests", element: <Request /> },
         { path:  "/users/:id", element: <User />},
-        { path: "/products/:id", element: <Product />,},
+        {path:"/requestLetter", element: <RequestLetter/>},
         
       ]
     },
