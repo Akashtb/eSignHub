@@ -1,38 +1,23 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
-import "./dataTable.scss";
 import { Link } from "react-router-dom";
-// import { useMutation, useQueryClient } from "@tanstack/react-query";
+import "./dataTable.scss";
 
-const DataTable = ({ columns, rows, slug }) => {
-  // TEST THE API
-
-  // const queryClient = useQueryClient();
-  // const mutation = useMutation({
-  //   mutationFn: (id) => {
-  //     return fetch(`http://localhost:8800/api/${slug}/${id}`, {
-  //       method: "delete",
-  //     });
-  //   },
-  //   onSuccess: ()=>{
-  //     queryClient.invalidateQueries([`all${slug}`]);
-  //   }
-  // });
-
+const DataTable = ({ columns, rows, slug ,setOpenEdit}) => {
   const handleDelete = (id) => {
-    //delete the item
-    // mutation.mutate(id)
+    console.log("Delete ID:", id);
   };
 
   const actionColumn = {
     field: "action",
     headerName: "Action",
-    width: 200,
+    width: 120,
+    sortable: false,
     renderCell: (params) => {
       return (
         <div className="action">
-          <Link to={`/${slug}/${params.row.id}`}>
+          <div onClick={() => setOpenEdit(true)}>
             <img src="/view.svg" alt="View" />
-          </Link>
+          </div>
           <div className="delete" onClick={() => handleDelete(params.row.id)}>
             <img src="/delete.svg" alt="Delete" />
           </div>
@@ -45,6 +30,7 @@ const DataTable = ({ columns, rows, slug }) => {
     <div className="dataTable">
       <DataGrid
         className="dataGrid"
+        autoHeight
         rows={rows}
         columns={[...columns, actionColumn]}
         initialState={{
@@ -61,7 +47,7 @@ const DataTable = ({ columns, rows, slug }) => {
             quickFilterProps: { debounceMs: 500 },
           },
         }}
-        pageSizeOptions={[5]}
+        pageSizeOptions={[5, 10, 20]}
         checkboxSelection
         disableRowSelectionOnClick
         disableColumnFilter

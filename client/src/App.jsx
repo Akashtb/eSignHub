@@ -15,12 +15,7 @@ import User from "./Pages/user/User";
 import Request from "./Pages/request/Request";
 
 
-// import {
-//   QueryClient,
-//   QueryClientProvider,
-// } from "@tanstack/react-query";
 
-// const queryClient = new QueryClient();
 function App() {
   const Layout = () =>{
     return(
@@ -31,9 +26,7 @@ function App() {
           <Menu/>
         </div>
         <div className="contentContainer">
-        {/* <QueryClientProvider client={queryClient}> */}
           <Outlet/>
-          {/* </QueryClientProvider> */}
         </div>
       </div>
       <Footer/>
