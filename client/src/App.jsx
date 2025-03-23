@@ -1,18 +1,16 @@
 
 import { createBrowserRouter,RouterProvider,Outlet } from "react-router"
-import LandingPage from './Pages/LandingPage/LandingPage'
 import Login from './Pages/LoginPages/PrincipalLoginPage'
-import StudentRegister from './Pages/StudentRegister/StudentRegister'
 import "./styles/global.scss";
 import Home from "./pages/home/Home"
-import Teachers from "./Pages/teachers/Teachers"
 import Navbar from "./components/navbar/Navbar"
 import Menu from "./components/menu/Menu"
 import Footer from "./components/footer/Footer"
-import Students from "./Pages/students/Students";
 import Product from "./Pages/product/Product";
 import User from "./Pages/user/User";
 import Request from "./Pages/request/Request";
+import HOD from "./Pages/users/HOD/Hod";
+import Students from "./Pages/users/students/Students";
 
 
 
@@ -40,7 +38,7 @@ function App() {
       children : [
         { path: "/", element: <Home /> },
         { path: "/students", element: <Students /> },
-        { path: "/teacher", element: <Teachers /> },
+        { path: "/HOD", element: <HOD /> },
         { path: "/requests", element: <Request /> },
         { path:  "/users/:id", element: <User />},
         { path: "/products/:id", element: <Product />,},
@@ -54,10 +52,6 @@ function App() {
   ])
   return (
     <>
-    {/* <Login/> */}
-    {/* <Login/> */}
-    {/* <StudentRegister/> */}
-    {/* <LandingPage/> */}
     <RouterProvider router={router}/>
     </>
   )
