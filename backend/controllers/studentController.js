@@ -3,9 +3,9 @@ import bcrypt from "bcrypt";
 import { createError } from "../utils/customErrorHandling.js";
 
 export const createStudent = async (req, res, next) => {
-    const { name, regNumber, email, password,batch, phone, departmentName } = req.body;
+    const {firstName,lastName, regNumber, email, password, batch, phone, departmentName,dateOfBirth } = req.body;
 
-    if (!name || !regNumber || !email || !password || !phone || !departmentName) {
+    if (!firstName || !lastName || !regNumber || !email || !password ||!dateOfBirth || !phone || !departmentName) {
         return next(createError(400, "All fields are required"));
     }
 
@@ -19,8 +19,10 @@ export const createStudent = async (req, res, next) => {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         await Student.create({
-            name,
+            firstName,
+            lastName,
             regNumber,
+            dateOfBirth,
             email,
             batch,
             password: hashedPassword,
@@ -74,16 +76,18 @@ export const deleteStudent = async (req, res, next) => {
 
 export const viewAllStudent = async (req, res, next) => {
     try {
-        const allStudents = await Student.find();
-        return res.status(200).json({ 
-            students: allStudents, 
-            count: allStudents.length, 
+        const allStudents = await Student.find().select("-password"); // Excludes password field
+
+        return res.status(200).json({
+            students: allStudents,
+            count: allStudents.length,
             message: allStudents.length > 0 ? "Students fetched successfully" : "No students found"
         });
     } catch (error) {
         next(createError(500, error.message));
     }
 };
+
 
 export const viewStudent = async (req, res, next) => {
     const studentId = req.params.id;

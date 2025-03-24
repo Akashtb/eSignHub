@@ -2,10 +2,17 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import { FaEye } from "react-icons/fa";
 
-const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView}) => {
-  const handleDelete = (id) => {
-    console.log("Delete ID:", id);
+const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId }) => {
+  
+  const handleView = (id) => {
+    setSelectedId(id);  
+    setOpenView(true);
   };
+
+  const handleEdit = (id)=>{
+    setSelectedId(id);  
+    setOpenEdit(true);
+  }
 
   const actionColumn = {
     field: "action",
@@ -16,12 +23,12 @@ const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView}) => {
       return (
         <div className="action">
           <div style={{ cursor: "pointer" }}>
-            <FaEye size={18} color="#71c9d5" title="View" onClick={() => setOpenView(true)}/>
+            <FaEye size={18} color="#71c9d5" title="View" onClick={() => handleView(params.row._id)}/>
           </div>
-          <div onClick={() => setOpenEdit(true)}>
+          <div onClick={() => handleEdit(params.row._id)}>
             <img src="/view.svg" alt="View" />
           </div>
-          <div className="delete" onClick={() => handleDelete(params.row.id)}>
+          <div className="delete" onClick={() => handleDelete(params.row._id)}>
             <img src="/delete.svg" alt="Delete" />
           </div>
         </div>
@@ -35,6 +42,7 @@ const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView}) => {
         className="dataGrid"
         autoHeight
         rows={rows}
+        // getRowId={(row) => row._id}
         columns={[...columns, actionColumn]}
         initialState={{
           pagination: {

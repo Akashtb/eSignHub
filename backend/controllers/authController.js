@@ -17,6 +17,8 @@ const roleModels = {
 export const Login = async (req, res, next) => {
     try {
         const { email, password, role, regNumber } = req.body;
+        console.log(role,"............role");
+        
         if (!password || !role) {
             return next(createError(400, "All fields are required"));
         }

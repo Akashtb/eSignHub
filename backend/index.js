@@ -8,12 +8,23 @@ import hodRoutes from "./routes/hodRoutes.js"
 import studentRoutes from "./routes/studentRoutes.js"
 import requestLetterRoutes from "./routes/requestLetterRoutes.js"
 import cookieParser from "cookie-parser"
+import cors from "cors"
 const app = express()
 
 
 dotenv.config()
 app.use(express.json())
 app.use(cookieParser());
+
+const corsOptions = {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+};
+
+app.use(cors(corsOptions));
+
 
 
 app.use("/auth",authRoute)
@@ -30,7 +41,7 @@ app.use((err,req,res,next)=>{
     return res.status(errorStatus).json({
         success:false,
         status:errorStatus,
-        message:errorMessage,
+        message:errorMessage, 
         stack:err.stack
     })
 })

@@ -1,10 +1,11 @@
 import DataTable from "../../../components/dataTable/DataTable";
 import "./students.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Add from "../../../components/add/Add";
 import { userRows } from "../../../data";
 import Edit from "../../../Components/Edit/Edit";
 import View from "../../../Components/View/View";
+import { useGetAllStudentsQuery } from "../../../features/redux/users/Studentslice";
 
 const columns = [
   {
@@ -44,7 +45,11 @@ const columns = [
     headerName: "Date of Birth",
     flex: 1.5,
     minWidth: 150,
+    // renderCell: (params) => {      
+    //   return new Date(params?.value).toISOString().split("T")[0]; 
+    // },
   },
+  
   {
     field: "regNumber",
     headerName: "Registration Number",
@@ -70,6 +75,14 @@ const Students = () => {
   const [open, setOpen] = useState(false);
   const [openEdit,setOpenEdit] = useState(false)
   const [openView,setOpenView] = useState(false)
+  const [selectedId, setSelectedId] = useState(null);
+  const { data: students, isLoading, isError ,refetch} = useGetAllStudentsQuery(); 
+  const studentData = students?.students;
+  useEffect(()=>{
+    refetch()
+  },[])
+
+  
   
 
   return (
@@ -79,11 +92,11 @@ const Students = () => {
         <button onClick={() => setOpen(true)}>Add New Student</button>
       </div>
       <div className="tableContainer">
-        <DataTable slug="student" columns={columns} rows={userRows} setOpenEdit={setOpenEdit} setOpenView={setOpenView} />
+        <DataTable slug="student" columns={columns} rows={userRows} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId}/>
       </div>
       {open && <Add slug="student" columns={columns} setOpen={setOpen} />}
-      {openEdit && <Edit slug="student" columns={columns} setOpenEdit={setOpenEdit} />}
-      {openView && <View slug="HOD" columns={columns} setOpenView={setOpenView} />}
+      {openEdit && <Edit slug="student" selectedId={selectedId} columns={columns} setOpenEdit={setOpenEdit} />}
+      {openView && <View slug="student" selectedId={selectedId} columns={columns} setOpenView={setOpenView} />}
 
     </div>
   );
