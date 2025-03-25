@@ -3,10 +3,8 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router"
 import Login from './Pages/LoginPages/LoginPage'
 import "./styles/global.scss";
 import Home from "./pages/home/Home"
-import Navbar from "./components/navbar/Navbar"
 import Menu from "./components/menu/Menu"
 import Footer from "./components/footer/Footer"
-import Product from "./Pages/product/Product";
 import User from "./Pages/user/User";
 import Request from "./Pages/request/Request";
 import HOD from "./Pages/users/HOD/Hod";
@@ -15,13 +13,14 @@ import Tutor from "./Pages/users/Tutor/Tutor";
 import RequestLetter from "./Pages/request/Request";
 import SingleLetterView from "./Pages/singleLetterView/SingleLetterView";
 import LandingPage from "./Pages/LandingPage/LandingPage"
+import Navbar from "./Components/navbar/Navbar";
 
 
 function App() {
   const Layout = () => {
     return (
       <div className="main">
-        <Navbar />
+        <Navbar/>
         <div className="container">
           <div className="menuContainer">
             <Menu />
