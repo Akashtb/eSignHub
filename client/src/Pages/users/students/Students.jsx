@@ -95,7 +95,7 @@ const Students = () => {
         <DataTable slug="student" columns={columns} rows={studentData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId}/>
       </div>
       {open && <Add slug="student" columns={columns} setOpen={setOpen} />}
-      {openEdit && <Edit slug="student" selectedId={selectedId} columns={columns} setOpenEdit={setOpenEdit} />}
+      {openEdit && <Edit slug="student" selectedId={selectedId} columns={columns} setOpenEdit={setOpenEdit} refetch={refetch} />}
       {openView && <View slug="student" selectedId={selectedId} columns={columns} setOpenView={setOpenView} />}
 
     </div>

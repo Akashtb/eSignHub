@@ -38,7 +38,7 @@ export const createStudent = async (req, res, next) => {
 };
 
 export const updateStudent = async (req, res, next) => {
-    const studentId = req.params.id;
+    const studentId = req.params.id;    
 
     try {
         const updateStudent = await Student.findByIdAndUpdate(studentId, req.body, {
@@ -94,6 +94,8 @@ export const viewStudent = async (req, res, next) => {
 
     try {
         const student = await Student.findById(studentId);
+        console.log(student);
+        
         if (!student) {
             return next(createError(404, "Student not found"));
         }

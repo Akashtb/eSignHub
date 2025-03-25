@@ -3,19 +3,25 @@ import { FaCamera } from "react-icons/fa";
 import "./edit.scss";
 import { useGetStudentByIdQuery, useUpdateStudentDetailMutation } from "../../features/redux/users/Studentslice";
 
-const Edit = ({ slug, columns, setOpenEdit, selectedId }) => {
+const Edit = ({ slug, columns, setOpenEdit, selectedId,refetch }) => {
   const [image, setImage] = useState(null);
   const [formData, setFormData] = useState({}); 
   const [updateStudent] = useUpdateStudentDetailMutation();
-  const { data: student, isLoading, isError, refetch } = useGetStudentByIdQuery(selectedId, {
+  const { data: student, isLoading, isError,refetch:singleStudentRefetch } = useGetStudentByIdQuery(selectedId, {
     skip: !selectedId, 
   });
 
+
+  console.log(student?.student);
+  
+
+  
   useEffect(() => {
     if (student?.student) {
-      setFormData(student.student);
+      singleStudentRefetch()
+      setFormData(student?.student);
     }
-  }, [student]);
+  }, [student,refetch]);
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -30,13 +36,17 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("Submitting Data:", formData); 
     try {
-        const updated = await updateStudent({ id: formData._id, ...formData }).unwrap();
+
+      
+        const updated = await updateStudent({ id: formData._id, studentData: formData,}).unwrap();
 
         console.log(updated,"User details updated successfully!");
         // toast.success("User details updated successfully!"); 
         refetch(); 
         setOpenEdit(false); 
+        singleStudentRefetch()
     } catch (error) {
         console.error("Failed to update user:", error);
         // toast.error("Failed to update user details."); 
