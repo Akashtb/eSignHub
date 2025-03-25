@@ -17,10 +17,8 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const formattedRole = role?.charAt(0).toUpperCase() + role?.slice(1).toLowerCase(); 
-    
-
-
+  const formattedRole = role?.charAt(0).toUpperCase() + role?.slice(1).toLowerCase();
+   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +42,7 @@ function Login() {
           <p>Please enter your details</p>
 
         {
-            role==="Student" ?(
+            role==="STUDENT" ?(
               <input 
               type="text" 
               placeholder="Enter your Register number" 

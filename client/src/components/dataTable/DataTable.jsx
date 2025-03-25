@@ -42,7 +42,7 @@ const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId 
         className="dataGrid"
         autoHeight
         rows={rows}
-        // getRowId={(row) => row._id}
+        getRowId={(row) => row._id}
         columns={[...columns, actionColumn]}
         initialState={{
           pagination: {

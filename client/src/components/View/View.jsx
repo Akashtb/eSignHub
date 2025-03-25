@@ -8,7 +8,7 @@ const View = ({ slug, selectedId, setOpenView }) => {
   const { data: student, isLoading, isError, refetch } = useGetStudentByIdQuery(selectedId, {
     skip: !selectedId, 
   });
-  const singleStudentData = student.student;
+  const singleStudentData = student?.student;
   
 
   console.log(selectedId,"student details inn vuew");

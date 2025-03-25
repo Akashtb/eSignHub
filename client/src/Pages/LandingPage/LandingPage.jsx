@@ -25,7 +25,7 @@ const LandingPage = () => {
           <img src="/src/assets/teacher.png" alt="Tutor" />
           <span>TUTOR</span>
         </div>
-        <div className="card" onClick={() => handleCardClick("STUDENTS")}>
+        <div className="card" onClick={() => handleCardClick("STUDENT")}>
           <img src="/src/assets/students.png" alt="Students" />
           <span>STUDENTS</span>
         </div>
