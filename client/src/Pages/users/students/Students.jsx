@@ -92,7 +92,7 @@ const Students = () => {
         <button onClick={() => setOpen(true)}>Add New Student</button>
       </div>
       <div className="tableContainer">
-        <DataTable slug="student" columns={columns} rows={studentData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId}/>
+        <DataTable slug="student" columns={columns} rows={studentData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} />
       </div>
       {open && <Add slug="student" columns={columns} setOpen={setOpen} />}
       {openEdit && <Edit slug="student" selectedId={selectedId} columns={columns} setOpenEdit={setOpenEdit} refetch={refetch} />}

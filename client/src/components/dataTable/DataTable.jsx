@@ -1,9 +1,12 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import { FaEye } from "react-icons/fa";
+import { useDeleteStudentMutation } from "../../features/redux/users/Studentslice";
 
-const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId }) => {
+const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId,refetch}) => {
   
+  const [deleteStudent]=useDeleteStudentMutation();
+
   const handleView = (id) => {
     setSelectedId(id);  
     setOpenView(true);
@@ -13,6 +16,27 @@ const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId 
     setSelectedId(id);  
     setOpenEdit(true);
   }
+
+  const handleDelete = async(id) => {
+    switch (slug) {
+      case "student":
+        await deleteStudent(id).unwrap();
+        refetch()
+        break;
+  
+      case "teachers":
+        console.log(`Deleting teacher with ID: ${id}`);
+        break;
+  
+      case "courses":
+        console.log(`Deleting course with ID: ${id}`);
+        break;
+  
+      default:
+        console.warn(`No delete action defined for slug: ${slug}`);
+    }
+  };
+  
 
   const actionColumn = {
     field: "action",
