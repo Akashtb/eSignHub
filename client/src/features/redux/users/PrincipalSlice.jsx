@@ -12,7 +12,7 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
                 method: 'PATCH',
                 body: studentData,
             }),
-            invalidatesTags: [{ type: 'Tutor' }],
+            invalidatesTags: [{ type: 'Principal' }],
         }),
     }),
 })

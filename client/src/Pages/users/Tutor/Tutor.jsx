@@ -1,10 +1,11 @@
 import "./tutor.scss";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Add from "../../../components/add/Add";
 import { userRows } from "../../../data";
 import Edit from "../../../Components/Edit/Edit";
 import View from "../../../Components/View/View";
-import DataTable from "../../../Components/dataTable/DataTable";
+import DataTable from "../../../components/dataTable/DataTable";
+import { useGetAllTutorsQuery } from "../../../features/redux/users/TutorSlice";
 
 const columns = [
     {
@@ -58,7 +59,23 @@ const Tutor = () => {
     const [open, setOpen] = useState(false);
     const [openEdit, setOpenEdit] = useState(false)
     const [openView, setOpenView] = useState(false)
+    const [selectedId, setSelectedId] = useState(null);
+    const { data:tutor, isLoading, isError, refetch } = useGetAllTutorsQuery()
+    const tutorData = tutor?.tutors;
 
+
+    // useEffect(() => {
+    //     console.log("Data:", data);
+    //     console.log("Loading:", isLoading);
+    //     console.log("Error:", isError);
+    // }, [data, isLoading, isError]);
+
+    useEffect(()=>{
+        refetch()
+    },[])
+
+    console.log("selectedId",selectedId);
+    
 
     return (
         <div className="Tutor">
@@ -67,12 +84,11 @@ const Tutor = () => {
                 <button onClick={() => setOpen(true)}>Add New Tutor</button>
             </div>
             <div className="tableContainer">
-                <DataTable slug="Tutor" columns={columns} rows={userRows} setOpenEdit={setOpenEdit} setOpenView={setOpenView} />
+                <DataTable slug="Tutor" columns={columns} rows={tutorData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} />
             </div>
-            {open && <Add slug="Tutor" columns={columns} setOpen={setOpen} />}
-            {openEdit && <Edit slug="Tutor" columns={columns} setOpenEdit={setOpenEdit} />}
-            {openView && <View slug="HOD" columns={columns} setOpenView={setOpenView} />}
-
+            {open && <Add slug="Tutor" columns={columns} setOpen={setOpen} refetch={refetch} />}
+            {openEdit && <Edit slug="Tutor" columns={columns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId} />}
+            {openView && <View slug="HOD" columns={columns} setOpenView={setOpenView} selectedId={selectedId}/>}
         </div>
     );
 };

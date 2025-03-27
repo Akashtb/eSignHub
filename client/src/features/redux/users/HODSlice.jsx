@@ -29,7 +29,7 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
                 method: 'POST',
                 body: HODData,
             }),
-            invalidatesTags: [{ type: 'Student' }],
+            invalidatesTags: [{ type: 'HOD' }],
         }),
     }),
 })

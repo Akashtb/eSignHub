@@ -1,7 +1,11 @@
 import mongoose from "mongoose";
 
 const tutorSchema = mongoose.Schema({
-    name: {
+    firstName: {
+        type: String,
+        required: true
+    },
+    lastName: {
         type: String,
         required: true
     },
@@ -24,7 +28,7 @@ const tutorSchema = mongoose.Schema({
         type: String,
         required: true,
     },
-    role:{
+    role: {
         type: String,
         default: "Tutor"
     }
@@ -33,5 +37,5 @@ const tutorSchema = mongoose.Schema({
     { timestamps: true }
 )
 
-const Tutor = mongoose.model("Tutor",tutorSchema);
+const Tutor = mongoose.model("Tutor", tutorSchema);
 export default Tutor

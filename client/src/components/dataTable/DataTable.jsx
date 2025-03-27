@@ -2,10 +2,12 @@ import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import "./dataTable.scss";
 import { FaEye } from "react-icons/fa";
 import { useDeleteStudentMutation } from "../../features/redux/users/Studentslice";
+import { useDeleteTutorMutation } from "../../features/redux/users/TutorSlice";
 
 const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId,refetch}) => {
   
   const [deleteStudent]=useDeleteStudentMutation();
+  const [deleteTutor] = useDeleteTutorMutation()
 
   const handleView = (id) => {
     setSelectedId(id);  
@@ -24,8 +26,9 @@ const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId,
         refetch()
         break;
   
-      case "teachers":
-        console.log(`Deleting teacher with ID: ${id}`);
+      case "Tutor":
+        await deleteTutor(id).unwrap()
+        refetch()
         break;
   
       case "courses":

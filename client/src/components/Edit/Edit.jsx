@@ -2,26 +2,36 @@ import React, { useEffect, useState } from "react";
 import { FaCamera } from "react-icons/fa";
 import "./edit.scss";
 import { useGetStudentByIdQuery, useUpdateStudentDetailMutation } from "../../features/redux/users/Studentslice";
+import { useGetTutorByIdQuery, useUpdateTutorDetailMutation } from "../../features/redux/users/TutorSlice";
 
-const Edit = ({ slug, columns, setOpenEdit, selectedId,refetch }) => {
+const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   const [image, setImage] = useState(null);
-  const [formData, setFormData] = useState({}); 
+  const [formData, setFormData] = useState({});
   const [updateStudent] = useUpdateStudentDetailMutation();
-  const { data: student, isLoading, isError,refetch:singleStudentRefetch } = useGetStudentByIdQuery(selectedId, {
-    skip: !selectedId, 
+  const [updateTutor] = useUpdateTutorDetailMutation();
+  const { data: student, isLoading, isError, refetch: singleStudentRefetch } = useGetStudentByIdQuery(selectedId, {
+    skip: !selectedId,
+  });
+
+  const { data: tutor, isLoading: tutorLoading, isError: tutorError, refetch: singleTutorRefetch } = useGetTutorByIdQuery(selectedId, {
+    skip: !selectedId,
   });
 
 
-  console.log(student?.student);
+  console.log(selectedId);
   
 
-  
+
+
+
   useEffect(() => {
     if (student?.student) {
-      singleStudentRefetch()
-      setFormData(student?.student);
+      setFormData(student.student);
+    } else if (tutor?.tutor) {
+      setFormData(tutor.tutor);
     }
-  }, [student,refetch]);
+  }, [student, tutor]); 
+  
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -34,24 +44,31 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId,refetch }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting Data:", formData); 
     try {
-
-      
-        const updated = await updateStudent({ id: formData._id, studentData: formData,}).unwrap();
-
-        console.log(updated,"User details updated successfully!");
-        // toast.success("User details updated successfully!"); 
-        refetch(); 
-        setOpenEdit(false); 
+      let updated;
+      if (slug === "Student") {
+        updated = await updateStudent({ id: formData._id, studentData: formData }).unwrap();
         singleStudentRefetch()
+      } else if (slug === "Tutor") {
+        updated = await updateTutor({ id: formData._id, tutorData: formData }).unwrap();
+        singleTutorRefetch()
+      } else {
+        console.error("Invalid slug:", slug);
+        return;
+      }
+  
+      console.log(updated, "User details updated successfully!");
+      refetch();
+      setOpenEdit(false);
     } catch (error) {
-        console.error("Failed to update user:", error);
-        // toast.error("Failed to update user details."); 
+      console.error("Failed to update user:", error);
     }
-};
+  };
+  
 
   return (
     <div className="edit">
@@ -78,7 +95,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId,refetch }) => {
                 <label>{column.headerName}</label>
                 <input
                   type={column.type || "text"}
-                  name={column.field} 
+                  name={column.field}
                   value={formData[column.field] || ""}
                   onChange={handleInputChange}
                 />

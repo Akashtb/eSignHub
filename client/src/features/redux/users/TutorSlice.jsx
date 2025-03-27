@@ -1,8 +1,8 @@
 import { apiSlice } from "../../../api/ApiSlice";
 
-export const StudentApiSlice = apiSlice.injectEndpoints({
+export const TutorApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
-        getAllTutor: builder.query({
+        getAllTutors: builder.query({  
             query: () => '/tutor/viewAll',
             keepUnusedDataFor: 0,
             refetchOnMountOrArgChange: true,
@@ -15,13 +15,13 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
                 url: `/tutor/update/${id}`,
                 method: 'PATCH',
                 body: tutorData,
-            }),
+            })
         }),
         deleteTutor: builder.mutation({
             query: (id) => ({
                 url: `/tutor/delete/${id}`,
                 method: 'DELETE',
-            }),
+            })  
         }),
         createTutor: builder.mutation({
             query: (tutorData) => ({
@@ -32,12 +32,12 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: [{ type: 'Tutor' }],
         }),
     }),
-})
+});
 
 export const {
-    useGetAllTutorQuery,
+    useGetAllTutorsQuery,  
     useGetTutorByIdQuery,
     useUpdateTutorDetailMutation,
     useDeleteTutorMutation,
     useCreateTutorMutation,
-} = StudentApiSlice;
+} = TutorApiSlice;  
