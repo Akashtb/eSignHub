@@ -35,10 +35,9 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
 })
 
 export const {
-    useGetAllStudentsQuery,
-    useGetStudentByIdQuery,
-    useGetRecentStudentsQuery,
-    useUpdateStudentDetailMutation,
-    useDeleteStudentMutation, 
-    useCreateStudentMutation
+   useGetAllHODQuery,
+   useGetHODByIdQuery,
+   useUpdateHODDetailMutation,
+   useDeleteHODMutation,  
+   useCreateHODMutation
 } = StudentApiSlice;
