@@ -1,10 +1,10 @@
-import DataTable from "../../../components/dataTable/DataTable";
 import "./tutor.scss";
 import { useState } from "react";
 import Add from "../../../components/add/Add";
 import { userRows } from "../../../data";
 import Edit from "../../../Components/Edit/Edit";
 import View from "../../../Components/View/View";
+import DataTable from "../../../Components/dataTable/DataTable";
 
 const columns = [
     {
