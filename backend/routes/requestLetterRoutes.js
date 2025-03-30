@@ -13,7 +13,7 @@ router.get('/listOfRecevied',verifyStaff,receviedRequestLetter)//
 // router.get('/listOfSentLetterByUser',verifyStudent,listOfSentRequestLetter)//
 router.patch('/approveRequestLetter/:id',verifyStaff,approveRequestLetter)//
 router.patch('/rejectRequestLetter/:id',verifyStaff,rejectRequestLetter)
-router.get('/markRequestLetterAsSeen/:id',verifyStaff,markRequestLetterAsSeen)//
+router.patch('/markRequestLetterAsSeen/:id',verifyStaff,markRequestLetterAsSeen)//
 router.get('/listForNotification',verifyStaff,getListOfUnseenRequestLetters)//
 
 export default router

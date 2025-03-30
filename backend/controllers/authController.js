@@ -17,8 +17,8 @@ const roleModels = {
 export const Login = async (req, res, next) => {
     try {
         const { email, password, role, regNumber } = req.body;
-        console.log(role,"............role");
-        
+        console.log(role, "............role");
+
         if (!password || !role) {
             return next(createError(400, "All fields are required"));
         }
@@ -48,7 +48,7 @@ export const Login = async (req, res, next) => {
             id: user._id,
             role: user.role,
             email: user.email,
-            departmentName:user.departmentName
+            departmentName: user.departmentName
         }, process.env.JWT_SECRET, { expiresIn: "45m" })
 
         const { password: _, ...otherDetails } = user._doc
@@ -57,7 +57,8 @@ export const Login = async (req, res, next) => {
             {
                 id: user._id,
                 role: user.role,
-                email: user.email
+                email: user.email,
+                departmentName: user.departmentName
             },
             process.env.JWT_SECRET
         )
@@ -66,7 +67,7 @@ export const Login = async (req, res, next) => {
             httpOnly: true,
             secure: true,
             maxAge: 24 * 60 * 60 * 1000
-        }).status(201).json({ message: "Login successfull", accessToken: accessToken, role: otherDetails.role,user:otherDetails._id})
+        }).status(201).json({ message: "Login successfull", accessToken: accessToken, role: otherDetails.role, user: otherDetails._id })
 
     } catch (error) {
         next(createError(500, error.message));
@@ -86,7 +87,8 @@ export const refreshToken = async (req, res, next) => {
         const accessToken = jwt.sign({
             id: user.id,
             role: user.role,
-            email: user.email
+            email: user.email,
+            departmentName: user.departmentName
         }, process.env.JWT_SECRET, { expiresIn: "30s" })
 
         res.status(201).json({ message: "Token refreshed", accessToken: accessToken, role: user.role })

@@ -7,6 +7,11 @@ export const requestLetterApiSlice = apiSlice.injectEndpoints({
             keepUnusedDataFor: 0, 
             refetchOnMountOrArgChange: true,
         }),
+        recipientList: builder.query({
+            query: () => '/requestLetter/recipientList', // ✅ Removed `method: 'GET'`
+            keepUnusedDataFor: 0, 
+            refetchOnMountOrArgChange: true,
+        }),
         getRequestLetterById: builder.query({
             query: (id) => `/requestLetter/view/${id}`,
         }),
@@ -28,22 +33,30 @@ export const requestLetterApiSlice = apiSlice.injectEndpoints({
                 method: 'DELETE',
             }),
         }),
+        markRequestLetterAsSeen: builder.mutation({
+            query: (id) => ({
+                url: `/requestLetter/markRequestLetterAsSeen/${id}`,
+                method: 'PATCH',
+            }),
+        }), 
         createRequestLetter: builder.mutation({
-            query: (HODData) => ({
-                url: '/requestLetter/createStudent',
+            query: ({ subject, messageBody, toUids }) => ({
+                url: '/requestLetter/create',
                 method: 'POST',
-                body: HODData,
+                body: { subject, messageBody, toUids },
             }),
             invalidatesTags: [{ type: 'RequestLetter' }],
         }),
     }),
-})
+});
 
 export const {
-useGetAllRequestLetterQuery,
-useGetRequestLetterByIdQuery,
-useDeleteRequestLetterMutation,
-useCreateRequestLetterMutation,
-useApproveRequestLetterMutation,
-useRejectRequestLetterMutation
+    useGetAllRequestLetterQuery,
+    useGetRequestLetterByIdQuery,
+    useDeleteRequestLetterMutation,
+    useCreateRequestLetterMutation,
+    useApproveRequestLetterMutation,
+    useRejectRequestLetterMutation,
+    useRecipientListQuery,
+    useMarkRequestLetterAsSeenMutation, 
 } = requestLetterApiSlice;

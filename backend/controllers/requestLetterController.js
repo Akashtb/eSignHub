@@ -8,6 +8,8 @@ export const createRequestLetter = async(req,res)=>{
     const fromUid= req.user.id
     const fromRole = req.user.role
     const {subject,messageBody,toUids} = req.body
+    console.log(toUids,"toUids");
+    
     try {
         await RequestLetter.create({
             fromUid,
@@ -125,27 +127,24 @@ export const viewAllRequestLetter = async (req, res, next) => {
 
 export const getLetterRecipients = async (req, res, next) => {
     try {
-        const { departmentName } = req.user; 
+        const { departmentName } = req.user;         
         
-
         if (!departmentName) {
             return res.status(400).json({ message: "Department name is required" });
         }
 
         const hods = await HOD.find({ departmentName }).select("_id firstName lastName email role");
         const tutors = await Tutor.find({ departmentName }).select("_id firstName lastName email role");
-
         const principal = await Principal.findOne().select("_id firstName lastName email role");
 
-        return res.status(200).json({
-            hods,
-            tutors,
-            principal,
-        });
+        const recipients = [...hods, ...tutors, ...(principal ? [principal] : [])];
+
+        return res.status(200).json({ recipients });
     } catch (error) {
         next(createError(500, error.message));
     }
 };
+
 
 
 

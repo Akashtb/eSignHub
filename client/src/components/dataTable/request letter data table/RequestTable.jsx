@@ -10,6 +10,7 @@ const RequestLetterTable = ({ columns, rows }) => {
       <DataGrid
         className="dataGrid"
         autoHeight
+        
         rows={rows}
         getRowId={(row) => row._id}
         columns={[...columns]}
@@ -36,6 +37,7 @@ const RequestLetterTable = ({ columns, rows }) => {
         hideFooter={false}
         sx={{
           "& .MuiDataGrid-columnHeaders": { display: "none" },
+          "& .MuiDataGrid-virtualScroller": { overflow: "auto" }, 
         }}
         getRowClassName={() => "custom-row"}
         onRowClick={(params) => navigate(`/requestLetter/${params.id}`)} 

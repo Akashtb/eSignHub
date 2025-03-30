@@ -3,19 +3,20 @@ import "./SingleLetterView.scss";
 import { Button, Card, CardContent, Typography, Chip } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
-import { useApproveRequestLetterMutation, useGetRequestLetterByIdQuery, useRejectRequestLetterMutation } from "../../features/redux/users/RequestLetter";
+import { useApproveRequestLetterMutation, useGetRequestLetterByIdQuery, useMarkRequestLetterAsSeenMutation, useRejectRequestLetterMutation } from "../../features/redux/users/RequestLetter";
+import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
+import { useSelector } from "react-redux";
 
 const SingleLetterView = () => {
     const { id } = useParams();
     const { data, refetch } = useGetRequestLetterByIdQuery(id, {
         skip: !id
     });
-
-   
-    console.log(data);
+    const role = useSelector(selectCurrentRole);
 
     const [acceptRequestLetter] = useApproveRequestLetterMutation();
     const [rejectRequestLetter] = useRejectRequestLetterMutation();
+    const [markAsSeen] = useMarkRequestLetterAsSeenMutation();
 
     const handleApprove = async () => {
         try {
@@ -36,9 +37,24 @@ const SingleLetterView = () => {
         }
     };
 
+    const seenBy = async () => {
+        try {
+            await markAsSeen(id).unwrap();
+            console.log("Marked as seen successfully");
+        } catch (error) {
+            console.error("Error marking as seen:", error);
+        }
+    };
+
     useEffect(() => {
         if (id) refetch();
     }, [id, refetch]);
+
+    useEffect(() => {
+        if (role !== "Student" && id) {
+            seenBy(); 
+        }
+    }, [id, role]);
 
     return (
         <div className="gmailLetterPage">
@@ -73,8 +89,7 @@ const SingleLetterView = () => {
                     <Typography variant="body1" className="letterMessage">
                         {data?.messageBody}
                     </Typography>
-
-                    <div className="gmailActions">
+                    {role !=="Student" && <div className="gmailActions">
                         <Button 
                             variant="contained" 
                             color="success" 
@@ -86,7 +101,8 @@ const SingleLetterView = () => {
                         <Button variant="contained" color="error" startIcon={<FaTimesCircle />} onClick={handleReject}>
                             Reject
                         </Button>
-                    </div>
+                    </div>}
+                    
                 </CardContent>
             </Card>
         </div>
