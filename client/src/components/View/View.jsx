@@ -1,24 +1,37 @@
 import { useEffect } from "react";
-import { FaCamera } from "react-icons/fa"; 
+import { FaCamera } from "react-icons/fa";
 import "./view.scss";
 import { useGetStudentByIdQuery } from "../../features/redux/users/Studentslice";
+import { useGetTutorByIdQuery } from "../../features/redux/users/TutorSlice";
+import { useGetHODByIdQuery } from "../../features/redux/users/HODSlice";
 
-const View = ({ slug, selectedId, setOpenView }) => {
-  
-  const { data: student, isLoading, isError, refetch } = useGetStudentByIdQuery(selectedId, {
-    skip: !selectedId, 
+const View = ({ slug, selectedId, setOpenView, columns }) => {
+
+  const { data: student, refetch: refetchStudent } = useGetStudentByIdQuery(selectedId, {
+    skip: !selectedId || slug !== "student", 
   });
-  const singleStudentData = student?.student;
-  
 
-  console.log(selectedId,"student details inn vuew");
+  const { data: tutor, refetch: refetchTutor } = useGetTutorByIdQuery(selectedId, {
+    skip: !selectedId || slug !== "Tutor", 
+  });
+
+  const {data:HOD,refetch: refetchHOD} = useGetHODByIdQuery(selectedId,{
+    skip: !selectedId || slug !== "HOD",
+  })
+
+  console.log(HOD);
   
 
   useEffect(() => {
     if (selectedId) {
-      refetch(); 
+      if (slug === "student") refetchStudent();
+      if (slug === "Tutor") refetchTutor();
+      if(slug==="HOD") refetchHOD()
     }
-  }, [selectedId, refetch]);
+  }, [selectedId, slug]);
+
+  // Assign the correct user data
+  const userData = slug === "student" ? student?.student : slug === "Tutor" ? tutor?.tutor :slug === "HOD"?HOD: null;
 
   return (
     <div className="View">
@@ -26,10 +39,11 @@ const View = ({ slug, selectedId, setOpenView }) => {
         <span className="close" onClick={() => setOpenView(false)}>X</span>
         <h1>View {slug} Details</h1>
 
+        {/* Image Upload Section */}
         <div className="image-upload">
           <label className="image-container">
-            {student?.img ? (
-              <img src={student.img} alt="Student Avatar" className="preview-img" />
+            {userData?.img ? (
+              <img src={userData.img} alt={`${slug} Avatar`} className="preview-img" />
             ) : (
               <FaCamera className="upload-icon" />
             )}
@@ -37,45 +51,17 @@ const View = ({ slug, selectedId, setOpenView }) => {
         </div>
 
         <form>
-          <div className="item">
-            <label>First Name</label>
-            <input type="text" value={singleStudentData?.firstName || ""} readOnly />
-          </div>
-
-          <div className="item">
-            <label>Last Name</label>
-            <input type="text" value={singleStudentData?.lastName || ""} readOnly />
-          </div>
-
-          <div className="item">
-            <label>Email</label>
-            <input type="email" value={singleStudentData?.email || ""} readOnly />
-          </div>
-
-          <div className="item">
-            <label>Phone</label>
-            <input type="text" value={singleStudentData?.phone || ""} readOnly />
-          </div>
-
-          <div className="item">
-            <label>Date of Birth</label>
-            <input type="text" value={singleStudentData?.dateOfBirth?.split("T")[0] || ""} readOnly />
-          </div>
-
-          <div className="item">
-            <label>Registration Number</label>
-            <input type="text" value={singleStudentData?.regNumber || ""} readOnly />
-          </div>
-
-          <div className="item">
-            <label>Batch</label>
-            <input type="text" value={singleStudentData?.batch || ""} readOnly />
-          </div>
-
-          <div className="item">
-            <label>Department</label>
-            <input type="text" value={singleStudentData?.departmentName || ""} readOnly />
-          </div>
+          {columns
+            .filter(column => column.field !== "img") // Exclude "img" field
+            .map((column) => {
+              const fieldKey = column.field;
+              return (
+                <div className="item" key={fieldKey}>
+                  <label>{column.headerName}</label>
+                  <input type="text" value={userData?.[fieldKey] || ""} readOnly />
+                </div>
+              );
+            })}
         </form>
       </div>
     </div>

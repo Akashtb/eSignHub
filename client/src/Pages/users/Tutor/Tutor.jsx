@@ -63,13 +63,7 @@ const Tutor = () => {
     const { data:tutor, isLoading, isError, refetch } = useGetAllTutorsQuery()
     const tutorData = tutor?.tutors;
 
-
-    // useEffect(() => {
-    //     console.log("Data:", data);
-    //     console.log("Loading:", isLoading);
-    //     console.log("Error:", isError);
-    // }, [data, isLoading, isError]);
-
+ 
     useEffect(()=>{
         refetch()
     },[])
@@ -88,7 +82,7 @@ const Tutor = () => {
             </div>
             {open && <Add slug="Tutor" columns={columns} setOpen={setOpen} refetch={refetch} />}
             {openEdit && <Edit slug="Tutor" columns={columns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId} />}
-            {openView && <View slug="HOD" columns={columns} setOpenView={setOpenView} selectedId={selectedId}/>}
+            {openView && <View slug="Tutor" columns={columns} setOpenView={setOpenView} selectedId={selectedId}/>}
         </div>
     );
 };

@@ -13,7 +13,7 @@ const columns = [
     renderCell: (params) => (
       <div className="nameContainer">
         <span className="name">{params.value}</span>
-        <span className="designation">{params.row.designation}</span>
+        <span className="designation">Student</span>
       </div>
     ),
   },

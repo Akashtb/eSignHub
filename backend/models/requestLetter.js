@@ -5,11 +5,13 @@ const requestLetterSchema = new mongoose.Schema(
     fromUid: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
+      ref: "Student", 
     },
     fromRole: {
       type: String,
-      enum: ["Student", "Tutor", "HOD"], 
+      enum: ["Student"],
       required: true,
+      default: "Student",
     },
     subject: {
       type: String,
@@ -25,6 +27,7 @@ const requestLetterSchema = new mongoose.Schema(
         userId: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
+          refPath: "toUids.role", 
         },
         role: {
           type: String,
@@ -34,18 +37,40 @@ const requestLetterSchema = new mongoose.Schema(
       },
     ],
     approvedBy: {
+      userId: {
         type: mongoose.Schema.Types.ObjectId,
+        refPath: "approvedBy.role", 
+      },
+      role: {
+        type: String,
+        enum: ["Principal", "Tutor", "HOD"],
+      },
+      name: {
+        type: String,
+        trim: true,
+      },
     },
-    seenBy:{
-        type: [mongoose.Schema.Types.ObjectId],
-        default: []
+    seenBy: {
+      type: [
+        {
+          userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            refPath: "seenBy.role", 
+          },
+          name: String,
+          role: {
+            type: String,
+            enum: ["Principal", "Tutor", "HOD"],
+          },
+        },
+      ],
+      default: [],
     },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
-
   },
   { timestamps: true }
 );

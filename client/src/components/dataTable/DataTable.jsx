@@ -3,43 +3,46 @@ import "./dataTable.scss";
 import { FaEye } from "react-icons/fa";
 import { useDeleteStudentMutation } from "../../features/redux/users/Studentslice";
 import { useDeleteTutorMutation } from "../../features/redux/users/TutorSlice";
+import { useDeleteHODMutation } from "../../features/redux/users/HODSlice";
 
-const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId,refetch}) => {
-  
-  const [deleteStudent]=useDeleteStudentMutation();
-  const [deleteTutor] = useDeleteTutorMutation()
+const DataTable = ({ columns, rows, slug, setOpenEdit, setOpenView, setSelectedId, refetch }) => {
+
+  const [deleteStudent] = useDeleteStudentMutation();
+  const [deleteTutor] = useDeleteTutorMutation();
+  const [deleteHOD] = useDeleteHODMutation();
 
   const handleView = (id) => {
-    setSelectedId(id);  
+    setSelectedId(id);
     setOpenView(true);
   };
 
-  const handleEdit = (id)=>{
-    setSelectedId(id);  
+  const handleEdit = (id) => {
+    setSelectedId(id);
     setOpenEdit(true);
   }
 
-  const handleDelete = async(id) => {
+  const handleDelete = async (id) => {
     switch (slug) {
       case "student":
         await deleteStudent(id).unwrap();
         refetch()
         break;
-  
+
       case "Tutor":
         await deleteTutor(id).unwrap()
         refetch()
         break;
-  
-      case "courses":
-        console.log(`Deleting course with ID: ${id}`);
+
+      case "HOD":
+        await deleteHOD(id).unwrap()
+        refetch()
         break;
-  
+
       default:
         console.warn(`No delete action defined for slug: ${slug}`);
     }
   };
-  
+
 
   const actionColumn = {
     field: "action",
@@ -50,7 +53,7 @@ const DataTable = ({ columns, rows, slug ,setOpenEdit,setOpenView,setSelectedId,
       return (
         <div className="action">
           <div style={{ cursor: "pointer" }}>
-            <FaEye size={18} color="#71c9d5" title="View" onClick={() => handleView(params.row._id)}/>
+            <FaEye size={18} color="#71c9d5" title="View" onClick={() => handleView(params.row._id)} />
           </div>
           <div onClick={() => handleEdit(params.row._id)}>
             <img src="/view.svg" alt="View" />

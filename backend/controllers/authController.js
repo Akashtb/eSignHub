@@ -47,8 +47,9 @@ export const Login = async (req, res, next) => {
         const accessToken = jwt.sign({
             id: user._id,
             role: user.role,
-            email: user.email
-        }, process.env.JWT_SECRET, { expiresIn: "15s" })
+            email: user.email,
+            departmentName:user.departmentName
+        }, process.env.JWT_SECRET, { expiresIn: "45m" })
 
         const { _id, password: _, ...otherDetails } = user._doc
 

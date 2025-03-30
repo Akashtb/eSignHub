@@ -1,4 +1,7 @@
+import HOD from "../models/HOD.js"
+import Principal from "../models/Principal.js"
 import RequestLetter from "../models/requestLetter.js"
+import Tutor from "../models/Tutor.js"
 import { createError } from "../utils/customErrorHandling.js"
 
 export const createRequestLetter = async(req,res)=>{
@@ -87,17 +90,61 @@ export const deleteRequestLetter = async (req, res, next) => {
 
 
 
-//principal
-export const viewAllRequestLetter = async(req,res,next)=>{
+export const viewAllRequestLetter = async (req, res, next) => {
+    const { role, id } = req.user;
+
     try {
-        const allRequestLetter = await RequestLetter.find()
-        return res.status(200).json(allRequestLetter)
+        let filter = {};
+
+        if (role === "Principal") {
+            filter = {};
+        } else if (role === "Tutor" || role === "HOD") {
+            filter = { "toUids.userId": id, "toUids.role": role };
+        } else if (role === "Student") {
+            filter = { fromUid: id };
+        } else {
+            return res.status(403).json({ message: "Unauthorized access" });
+        }
+
+        const allRequestLetter = await RequestLetter.find(filter)
+            .populate("fromUid", "firstName lastName email") 
+            .populate("toUids.userId", "firstName lastName email") 
+            .lean(); 
+
+        return res.status(200).json(allRequestLetter);
     } catch (error) {
         next(createError(500, error.message));
     }
-}
+};
 
-//single 
+
+export const getLetterRecipients = async (req, res, next) => {
+    try {
+        const { departmentName } = req.user; 
+        
+
+        if (!departmentName) {
+            return res.status(400).json({ message: "Department name is required" });
+        }
+
+        const hods = await HOD.find({ departmentName }).select("_id firstName lastName email role");
+        const tutors = await Tutor.find({ departmentName }).select("_id firstName lastName email role");
+
+        const principal = await Principal.findOne().select("_id firstName lastName email role");
+
+        return res.status(200).json({
+            hods,
+            tutors,
+            principal,
+        });
+    } catch (error) {
+        next(createError(500, error.message));
+    }
+};
+
+
+
+
 export const viewRequestLetter= async(req,res,next)=>{
     const {id}=req.params
     try {
