@@ -1,9 +1,9 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./requestLetter.scss";
 
-const RequestLetterTable = ({ columns, rows}) => {
-
-
+const RequestLetterTable = ({ columns, rows }) => {
+  const navigate = useNavigate(); // Initialize navigate
 
   return (
     <div className="dataTable">
@@ -33,11 +33,12 @@ const RequestLetterTable = ({ columns, rows}) => {
         disableColumnFilter
         disableDensitySelector
         disableColumnSelector
-        hideFooter={false} 
+        hideFooter={false}
         sx={{
-          "& .MuiDataGrid-columnHeaders": { display: "none" }, 
+          "& .MuiDataGrid-columnHeaders": { display: "none" },
         }}
-        getRowClassName={() => "custom-row"} 
+        getRowClassName={() => "custom-row"}
+        onRowClick={(params) => navigate(`/requestLetter/${params.id}`)} 
       />
     </div>
   );

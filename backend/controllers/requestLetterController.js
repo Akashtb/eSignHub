@@ -97,18 +97,22 @@ export const viewAllRequestLetter = async (req, res, next) => {
         let filter = {};
 
         if (role === "Principal") {
+            // Principal sees all requests
             filter = {};
         } else if (role === "Tutor" || role === "HOD") {
-            filter = { "toUids.userId": id, "toUids.role": role };
+            // Corrected filter to check if the user's ID exists in toUids array
+            filter = { "toUids.userId": id };
         } else if (role === "Student") {
+            // Student sees only their requests
             filter = { fromUid: id };
         } else {
             return res.status(403).json({ message: "Unauthorized access" });
         }
 
         const allRequestLetter = await RequestLetter.find(filter)
-            .populate("fromUid", "firstName lastName email") 
-            .populate("toUids.userId", "firstName lastName email") 
+            .populate("fromUid", "firstName lastName email")
+            .populate("toUids.userId", "firstName lastName email role")
+            .populate("approvedBy.userId", "firstName lastName email role") // ✅ Fixed
             .lean(); 
 
         return res.status(200).json(allRequestLetter);
@@ -116,6 +120,7 @@ export const viewAllRequestLetter = async (req, res, next) => {
         next(createError(500, error.message));
     }
 };
+
 
 
 export const getLetterRecipients = async (req, res, next) => {
@@ -145,18 +150,52 @@ export const getLetterRecipients = async (req, res, next) => {
 
 
 
-export const viewRequestLetter= async(req,res,next)=>{
-    const {id}=req.params
+export const viewRequestLetter = async (req, res, next) => {
+    const { id } = req.params;
+
     try {
-        const viewRequestLetter = await RequestLetter.findOne({_id:id})
-        if(!viewRequestLetter){
-            return next(createError(404,"Request Letter not found"))
+        const viewRequestLetter = await RequestLetter.findOne({ _id: id })
+            .populate("fromUid", "firstName lastName email")
+            .populate("toUids.userId", "firstName lastName email role")
+            .populate("approvedBy", "firstName lastName email role"); 
+
+        if (!viewRequestLetter) {
+            return next(createError(404, "Request Letter not found"));
         }
-        return res.status(200).json(viewRequestLetter)
+
+        const fromUid = {
+            email: viewRequestLetter.fromUid?.email,
+            fullName: `${viewRequestLetter.fromUid?.firstName} ${viewRequestLetter.fromUid?.lastName}`
+        };
+
+        const toUids = viewRequestLetter.toUids.map(recipient => ({
+            email: recipient.userId?.email,
+            fullName: `${recipient.userId?.firstName} ${recipient.userId?.lastName}`,
+            role: recipient.role
+        }));
+
+        const approvedBy = viewRequestLetter.approvedBy
+            ? {
+                email: viewRequestLetter.approvedBy.email,
+                fullName: `${viewRequestLetter.approvedBy.firstName} ${viewRequestLetter.approvedBy.lastName}`,
+                role: viewRequestLetter.approvedBy.role
+            }
+            : null; // Keep null if not approved yet
+
+        return res.status(200).json({
+            ...viewRequestLetter.toObject(),
+            fromUid,
+            toUids,
+            approvedBy
+        });
+
     } catch (error) {
         next(createError(500, error.message));
     }
-}
+};
+
+
+
 
 
 
@@ -195,15 +234,18 @@ export const approveRequestLetter = async (req, res, next) => {
     const { id } = req.params;
     const { user } = req; 
 
+
     try {
         const requestLetter = await RequestLetter.findById(id);
         if (!requestLetter) {
             return res.status(404).json({ success: false, message: "Request Letter not found" });
         }
 
-        const isAuthorized = requestLetter.toUids.some(
-            (recipient) => recipient.userId.toString() === user.id && recipient.role.toLowerCase() === user.role.toLowerCase()
-        );
+        const isAuthorized = 
+            user.role.toLowerCase() === "principal" || 
+            requestLetter.toUids.some(
+                (recipient) => recipient.userId.toString() === user.id && recipient.role.toLowerCase() === user.role.toLowerCase()
+            );
 
         if (!isAuthorized) {
             return res.status(403).json({ success: false, message: "You are not authorized to approve this request" });
@@ -216,9 +258,12 @@ export const approveRequestLetter = async (req, res, next) => {
             return res.status(400).json({ success: false, message: "Request Letter already rejected" });
         }
 
-        // Approve request
         requestLetter.status = "approved";
-        requestLetter.approvedBy = user.id;
+        requestLetter.approvedBy = {
+            userId: user.id,
+            role: user.role
+        };
+
         await requestLetter.save();
 
         res.status(200).json({ success: true, message: "Request Letter approved successfully" });
@@ -229,19 +274,23 @@ export const approveRequestLetter = async (req, res, next) => {
 };
 
 
+
 export const rejectRequestLetter = async (req, res, next) => {
     const { id } = req.params;
     const { user } = req; 
 
+    console.log(id,"_id rejectRequestLetter");
     try {
         const requestLetter = await RequestLetter.findById(id);
         if (!requestLetter) {
             return res.status(404).json({ success: false, message: "Request Letter not found" });
         }
 
-        const isAuthorized = requestLetter.toUids.some(
-            (recipient) => recipient.userId.toString() === user.id && recipient.role.toLowerCase() === user.role.toLowerCase()
-        );
+        const isAuthorized = 
+            user.role.toLowerCase() === "principal" || 
+            requestLetter.toUids.some(
+                (recipient) => recipient.userId.toString() === user.id && recipient.role.toLowerCase() === user.role.toLowerCase()
+            );
 
         if (!isAuthorized) {
             return res.status(403).json({ success: false, message: "You are not authorized to approve this request" });
@@ -255,10 +304,14 @@ export const rejectRequestLetter = async (req, res, next) => {
         }
 
         requestLetter.status = "rejected";
-        requestLetter.approvedBy = user.id;
+        requestLetter.approvedBy = {
+            userId: user.id,
+            role: user.role
+        };
+
         await requestLetter.save();
 
-        res.status(200).json({ success: true, message: "Request Letter rejected successfully" });
+        res.status(200).json({ success: true, message: "Request Letter approved successfully" });
 
     } catch (error) {
         next(createError(500, error.message));

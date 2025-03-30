@@ -8,11 +8,11 @@ router.get('/view/:id',verifyStudent,viewRequestLetter)//
 router.get('/viewAll',verifyStudent,viewAllRequestLetter)//
 router.delete('/delete/:id',verifyStudent,deleteRequestLetter)//
 router.get('/recipientList',verifyStudent,getLetterRecipients)//
-router.patch('/update/:id',verifyStudent,updateRequestLetter)//
+// router.patch('/update/:id',verifyStudent,updateRequestLetter)//
 router.get('/listOfRecevied',verifyStaff,receviedRequestLetter)// 
-router.get('/listOfSentLetterByUser',verifyStudent,listOfSentRequestLetter)//
-router.get('/approveRequestLetter/:id',verifyStaff,approveRequestLetter)//
-router.get('/rejectRequestLetter/:id',verifyStaff,rejectRequestLetter)
+// router.get('/listOfSentLetterByUser',verifyStudent,listOfSentRequestLetter)//
+router.patch('/approveRequestLetter/:id',verifyStaff,approveRequestLetter)//
+router.patch('/rejectRequestLetter/:id',verifyStaff,rejectRequestLetter)
 router.get('/markRequestLetterAsSeen/:id',verifyStaff,markRequestLetterAsSeen)//
 router.get('/listForNotification',verifyStaff,getListOfUnseenRequestLetters)//
 

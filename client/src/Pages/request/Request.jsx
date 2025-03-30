@@ -57,10 +57,12 @@ const columns = [
     minWidth: 200,
     renderCell: (params) => {
       if (!params.value) return <span>Not Approved</span>;
-      const { name, role } = params.value;
+      console.log(params.value,"params.value");
+      
+      const { firstName,lastName, role } = params.value.userId;
       return (
         <div className="nameContainer">
-          <span className="name">{name}</span>
+          <span className="name">{firstName} {lastName}</span>
           <span className="designation">{role}</span>
         </div>
       );

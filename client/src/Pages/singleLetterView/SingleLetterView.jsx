@@ -1,17 +1,44 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./SingleLetterView.scss";
 import { Button, Card, CardContent, Typography, Chip } from "@mui/material";
 import { useParams } from "react-router-dom";
-import { requestLetter } from "../../data";
-import { FaArrowLeft, FaCheckCircle, FaReply, FaTimesCircle } from "react-icons/fa";
+import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { useApproveRequestLetterMutation, useGetRequestLetterByIdQuery, useRejectRequestLetterMutation } from "../../features/redux/users/RequestLetter";
 
 const SingleLetterView = () => {
     const { id } = useParams();
-    const letter = requestLetter.find((item) => item.id === parseInt(id));
+    const { data, refetch } = useGetRequestLetterByIdQuery(id, {
+        skip: !id
+    });
 
-    if (!letter) {
-        return <div className="notFound">Letter not found!</div>;
-    }
+   
+    console.log(data);
+
+    const [acceptRequestLetter] = useApproveRequestLetterMutation();
+    const [rejectRequestLetter] = useRejectRequestLetterMutation();
+
+    const handleApprove = async () => {
+        try {
+            await acceptRequestLetter(id).unwrap();
+            refetch();
+        } catch (error) {
+            console.error("Error approving request letter:", error);
+        }
+    };
+
+    const handleReject = async () => {
+        console.log("Approving request letter with ID:", id);
+        try {
+            await rejectRequestLetter(id).unwrap();
+            refetch();
+        } catch (error) {
+            console.error("Error approving request letter:", error);
+        }
+    };
+
+    useEffect(() => {
+        if (id) refetch();
+    }, [id, refetch]);
 
     return (
         <div className="gmailLetterPage">
@@ -20,33 +47,43 @@ const SingleLetterView = () => {
                     <div className="headerSection">
                         <FaArrowLeft className="backIcon" />
                         <Typography variant="h5" className="letterTitle">
-                            {letter.subject}
-                            <Chip label={letter.status} className={`statusChip ${letter.status.toLowerCase()}`} />
+                            <strong>{data?.subject}</strong>
+                            <Chip label={data?.status} className={`statusChip ${data?.status.toLowerCase()}`} />
                         </Typography>
                     </div>
 
                     <div className="senderDetails">
                         <Typography variant="subtitle1">
-                            <strong>From:</strong> {letter.sender}
+                            <strong>From:</strong> {data?.fromUid?.fullName}
                         </Typography>
                         <Typography variant="subtitle1" className="recipient">
-                            <strong>To:</strong> {letter.recipient}
+                            <strong>To:</strong>
+                            {data?.toUids?.map((items, index) => (
+                                <span key={index}>
+                                    <Chip label={items.email} className="emailChip" />
+                                    {index < data.toUids.length - 1 ? ", " : ""}
+                                </span>
+                            ))}
                         </Typography>
                         <Typography variant="caption" className="date">
-                            {letter.date}
+                            {data?.date}
                         </Typography>
                     </div>
 
-
                     <Typography variant="body1" className="letterMessage">
-                        {letter.messageBody}
+                        {data?.messageBody}
                     </Typography>
 
                     <div className="gmailActions">
-                        <Button variant="contained" color="success" startIcon={<FaCheckCircle />}>
+                        <Button 
+                            variant="contained" 
+                            color="success" 
+                            startIcon={<FaCheckCircle />} 
+                            onClick={handleApprove}  // ✅ Added Click Event
+                        >
                             Accept
                         </Button>
-                        <Button variant="contained" color="error" startIcon={<FaTimesCircle />}>
+                        <Button variant="contained" color="error" startIcon={<FaTimesCircle />} onClick={handleReject}>
                             Reject
                         </Button>
                     </div>

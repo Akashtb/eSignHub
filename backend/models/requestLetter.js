@@ -5,13 +5,13 @@ const requestLetterSchema = new mongoose.Schema(
     fromUid: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "Student", 
+      ref: "Student", // Ensuring the sender is always a Student
     },
     fromRole: {
       type: String,
       enum: ["Student"],
       required: true,
-      default: "Student",
+      default: "Student", // Since it's always a student
     },
     subject: {
       type: String,
@@ -27,7 +27,7 @@ const requestLetterSchema = new mongoose.Schema(
         userId: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          refPath: "toUids.role", 
+          refPath: "toUids.role", // Dynamic reference to different models
         },
         role: {
           type: String,
@@ -39,7 +39,7 @@ const requestLetterSchema = new mongoose.Schema(
     approvedBy: {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        refPath: "approvedBy.role", 
+        refPath: "approvedBy.role", // Dynamic reference
       },
       role: {
         type: String,
@@ -55,7 +55,7 @@ const requestLetterSchema = new mongoose.Schema(
         {
           userId: {
             type: mongoose.Schema.Types.ObjectId,
-            refPath: "seenBy.role", 
+            refPath: "seenBy.role", // Dynamic reference
           },
           name: String,
           role: {

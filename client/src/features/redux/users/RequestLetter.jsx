@@ -10,6 +10,18 @@ export const requestLetterApiSlice = apiSlice.injectEndpoints({
         getRequestLetterById: builder.query({
             query: (id) => `/requestLetter/view/${id}`,
         }),
+        approveRequestLetter: builder.mutation({ 
+            query: (id) => ({
+                url: `/requestLetter/approveRequestLetter/${id}`,
+                method: 'PATCH',
+            }),
+        }),
+        rejectRequestLetter: builder.mutation({ 
+            query: (id) => ({
+                url: `/requestLetter/rejectRequestLetter/${id}`,
+                method: 'PATCH',
+            }),
+        }),
         deleteRequestLetter: builder.mutation({
             query: (id) => ({
                 url: `/requestLetter/delete/${id}`,
@@ -32,4 +44,6 @@ useGetAllRequestLetterQuery,
 useGetRequestLetterByIdQuery,
 useDeleteRequestLetterMutation,
 useCreateRequestLetterMutation,
+useApproveRequestLetterMutation,
+useRejectRequestLetterMutation
 } = requestLetterApiSlice;
