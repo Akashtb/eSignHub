@@ -71,6 +71,10 @@ const requestLetterSchema = new mongoose.Schema(
       enum: ["pending", "approved", "rejected"],
       default: "pending",
     },
+    uniqueCode :{
+      type:String,
+      unique:true,
+    }
   },
   { timestamps: true }
 );

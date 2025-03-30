@@ -229,10 +229,24 @@ export const listOfSentRequestLetter = async (req, res, next) => {
 }
 
 
+const generateUniqueCode = async () => {
+    let uniqueCode;
+    let isUnique = false;
+
+    while (!isUnique) {
+        uniqueCode = Math.floor(100000 + Math.random() * 900000).toString(); 
+        const existingLetter = await RequestLetter.findOne({ uniqueCode });
+        if (!existingLetter) {
+            isUnique = true; 
+        }
+    }
+
+    return uniqueCode;
+};
+
 export const approveRequestLetter = async (req, res, next) => {
     const { id } = req.params;
-    const { user } = req; 
-
+    const { user } = req;
 
     try {
         const requestLetter = await RequestLetter.findById(id);
@@ -240,10 +254,12 @@ export const approveRequestLetter = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Request Letter not found" });
         }
 
-        const isAuthorized = 
-            user.role.toLowerCase() === "principal" || 
+        const isAuthorized =
+            user.role.toLowerCase() === "principal" ||
             requestLetter.toUids.some(
-                (recipient) => recipient.userId.toString() === user.id && recipient.role.toLowerCase() === user.role.toLowerCase()
+                (recipient) =>
+                    recipient.userId.toString() === user.id &&
+                    recipient.role.toLowerCase() === user.role.toLowerCase()
             );
 
         if (!isAuthorized) {
@@ -260,12 +276,21 @@ export const approveRequestLetter = async (req, res, next) => {
         requestLetter.status = "approved";
         requestLetter.approvedBy = {
             userId: user.id,
-            role: user.role
+            role: user.role,
+            name: user.name,
         };
+
+        if (!requestLetter.uniqueCode) {
+            requestLetter.uniqueCode = await generateUniqueCode();
+        }
 
         await requestLetter.save();
 
-        res.status(200).json({ success: true, message: "Request Letter approved successfully" });
+        res.status(200).json({
+            success: true,
+            message: "Request Letter approved successfully",
+            uniqueCode: requestLetter.uniqueCode,
+        });
 
     } catch (error) {
         next(createError(500, error.message));

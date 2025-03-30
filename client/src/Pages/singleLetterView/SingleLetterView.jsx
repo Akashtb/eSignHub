@@ -89,7 +89,7 @@ const SingleLetterView = () => {
                     <Typography variant="body1" className="letterMessage">
                         {data?.messageBody}
                     </Typography>
-                    {role !=="Student" && <div className="gmailActions">
+                    {role !=="Student" && data?.status === "pending"  && <div className="gmailActions">
                         <Button 
                             variant="contained" 
                             color="success" 
