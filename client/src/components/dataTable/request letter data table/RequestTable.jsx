@@ -11,6 +11,7 @@ const RequestLetterTable = ({ columns, rows}) => {
         className="dataGrid"
         autoHeight
         rows={rows}
+        getRowId={(row) => row._id}
         columns={[...columns]}
         initialState={{
           pagination: {

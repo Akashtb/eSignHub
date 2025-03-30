@@ -35,9 +35,9 @@
   .tableContainer {
     width: 100%;
     max-width: 1200px;
-    height: 750px; // ✅ Set a fixed height
-    min-height: 750px; // ✅ Ensures a minimum height even if empty
-    overflow-y: auto; // ✅ Allows scrolling if rows exceed the height
+    height: 700px; 
+    min-height: 700px;
+    overflow-y: auto;
     background: white;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

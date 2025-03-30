@@ -1,6 +1,6 @@
 import { apiSlice } from "../../../api/ApiSlice";
 
-export const StudentApiSlice = apiSlice.injectEndpoints({
+export const PrincipalApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
  
         getPrincipalById: builder.query({
@@ -20,4 +20,4 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
 export const {
 useGetPrincipalByIdQuery,
 useUpdatePrincipalDetailMutation
-} = StudentApiSlice;
+} = PrincipalApiSlice;

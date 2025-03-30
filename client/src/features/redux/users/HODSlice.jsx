@@ -1,6 +1,6 @@
 import { apiSlice } from "../../../api/ApiSlice";
 
-export const StudentApiSlice = apiSlice.injectEndpoints({
+export const HODApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getAllHOD: builder.query({
             query: () => '/hod/viewAll', 
@@ -40,4 +40,4 @@ export const {
    useUpdateHODDetailMutation,
    useDeleteHODMutation,  
    useCreateHODMutation
-} = StudentApiSlice;
+} = HODApiSlice;

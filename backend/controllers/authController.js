@@ -51,7 +51,7 @@ export const Login = async (req, res, next) => {
             departmentName:user.departmentName
         }, process.env.JWT_SECRET, { expiresIn: "45m" })
 
-        const { _id, password: _, ...otherDetails } = user._doc
+        const { password: _, ...otherDetails } = user._doc
 
         const refreshToken = jwt.sign(
             {
@@ -66,7 +66,7 @@ export const Login = async (req, res, next) => {
             httpOnly: true,
             secure: true,
             maxAge: 24 * 60 * 60 * 1000
-        }).status(201).json({ message: "Login successfull", accessToken: accessToken, role: otherDetails.role })
+        }).status(201).json({ message: "Login successfull", accessToken: accessToken, role: otherDetails.role,user:otherDetails._id})
 
     } catch (error) {
         next(createError(500, error.message));

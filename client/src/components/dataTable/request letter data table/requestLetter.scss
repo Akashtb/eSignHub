@@ -4,7 +4,9 @@
   
     .dataGrid {
       width: 100%;
-      min-width: 300px;
+      height: 100vh; /* Ensure full height */
+      min-height: 500px; /* Prevent collapsing */
+      overflow: auto; /* Allow scrolling */
       padding: 15px;
       background: white;
       border-radius: 8px;

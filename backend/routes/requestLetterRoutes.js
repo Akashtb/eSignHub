@@ -9,7 +9,7 @@ router.get('/viewAll',verifyStudent,viewAllRequestLetter)//
 router.delete('/delete/:id',verifyStudent,deleteRequestLetter)//
 router.get('/recipientList',verifyStudent,getLetterRecipients)//
 router.patch('/update/:id',verifyStudent,updateRequestLetter)//
-router.get('/listOfRecevied',verifyStaff,receviedRequestLetter)//
+router.get('/listOfRecevied',verifyStaff,receviedRequestLetter)// 
 router.get('/listOfSentLetterByUser',verifyStudent,listOfSentRequestLetter)//
 router.get('/approveRequestLetter/:id',verifyStaff,approveRequestLetter)//
 router.get('/rejectRequestLetter/:id',verifyStaff,rejectRequestLetter)
