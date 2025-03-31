@@ -3,13 +3,16 @@ import { FaCamera } from "react-icons/fa";
 import "./edit.scss";
 import { useGetStudentByIdQuery, useUpdateStudentDetailMutation } from "../../features/redux/users/Studentslice";
 import { useGetTutorByIdQuery, useUpdateTutorDetailMutation } from "../../features/redux/users/TutorSlice";
-import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice"; // FIXED
+import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice"; 
+
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload";
+const UPLOAD_PRESET = "upload";
 
 const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(""); 
   const [formData, setFormData] = useState({});
 
-  // Queries based on slug
   const { data: student, refetch: singleStudentRefetch } = useGetStudentByIdQuery(selectedId, {
     skip: !selectedId || slug !== "student",
   });
@@ -19,41 +22,56 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   });
 
   const { data: hod, refetch: singleHODRefetch } = useGetHODByIdQuery(selectedId, {
-    skip: !selectedId || slug !== "HOD", // FIXED
+    skip: !selectedId || slug !== "HOD", 
   });
 
-  // Mutations
   const [updateStudent] = useUpdateStudentDetailMutation();
   const [updateTutor] = useUpdateTutorDetailMutation();
-  const [updateHOD] = useUpdateHODDetailMutation(); // FIXED
+  const [updateHOD] = useUpdateHODDetailMutation();
 
-  // Get user data
   const userData = slug === "student" ? student?.student 
                  : slug === "Tutor" ? tutor?.tutor 
                  : slug === "HOD" ? hod 
                  : null;
 
-  // Populate formData when userData is available
   useEffect(() => {
     if (userData) {
       setFormData(userData);
+      setImageUrl(userData.img || "");  
     }
   }, [userData]);
 
-  // Handle image change
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       setImage(URL.createObjectURL(file));
+
+      const uploadData = new FormData();
+      uploadData.append("file", file);
+      uploadData.append("upload_preset", UPLOAD_PRESET);
+
+      try {
+        const response = await fetch(CLOUDINARY_URL, {
+          method: "POST",
+          body: uploadData,
+        });
+
+        const data = await response.json();
+        if (data.secure_url) {
+          setImageUrl(data.secure_url); 
+          setFormData((prev) => ({ ...prev, img: data.secure_url }));
+          console.log("Uploaded image URL:", data.secure_url);
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
-  // Handle input change
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting Data:", formData);
@@ -67,7 +85,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
         updated = await updateTutor({ id: formData._id, tutorData: formData }).unwrap();
         singleTutorRefetch();
       } else if (slug === "HOD") {
-        updated = await updateHOD({ id: formData._id, HODData: formData }).unwrap(); // FIXED
+        updated = await updateHOD({ id: formData._id, HODData: formData }).unwrap();
         singleHODRefetch();
       } else {
         console.error("Invalid slug:", slug);
@@ -92,8 +110,8 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
         <div className="image-upload">
           <input type="file" accept="image/*" id="fileInput" onChange={handleImageChange} hidden />
           <label htmlFor="fileInput" className="image-container">
-            {image ? (
-              <img src={image} alt="Preview" className="preview-img" />
+            {imageUrl ? (
+              <img src={imageUrl} alt="Profile" className="preview-img" />
             ) : (
               <FaCamera className="upload-icon" />
             )}
