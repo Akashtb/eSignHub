@@ -91,7 +91,7 @@ export const refreshToken = async (req, res, next) => {
             departmentName: user.departmentName
         }, process.env.JWT_SECRET, { expiresIn: "30s" })
 
-        res.status(201).json({ message: "Token refreshed", accessToken: accessToken, role: user.role })
+        res.status(201).json({ message: "Token refreshed", accessToken: accessToken, role: user.role,user:user._id })
     })
 }
 

@@ -24,10 +24,10 @@ export const HODApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         createHOD: builder.mutation({
-            query: (HODData) => ({
-                url: '/hod/createStudent',
+            query: (finalData) => ({
+                url: '/hod/create',
                 method: 'POST',
-                body: HODData,
+                body: finalData,
             }),
             invalidatesTags: [{ type: 'HOD' }],
         }),

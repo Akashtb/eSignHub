@@ -29,10 +29,10 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
             }),
         }),
         createStudent: builder.mutation({
-            query: (studentData) => ({
-                url: '/student/createStudent',
+            query: (finalData) => ({
+                url: '/student/create',
                 method: 'POST',
-                body: studentData,
+                body: finalData,
             }),
             invalidatesTags: [{ type: 'Student' }],
         }),

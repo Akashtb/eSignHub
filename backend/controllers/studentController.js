@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { createError } from "../utils/customErrorHandling.js";
 
 export const createStudent = async (req, res, next) => {
-    const {firstName,lastName, regNumber, email, password, batch, phone, departmentName,dateOfBirth } = req.body;
+    const {firstName,lastName, regNumber, email, password, batch, phone, departmentName,dateOfBirth,img } = req.body;
 
     if (!firstName || !lastName || !regNumber || !email || !password ||!dateOfBirth || !phone || !departmentName) {
         return next(createError(400, "All fields are required"));
@@ -28,6 +28,7 @@ export const createStudent = async (req, res, next) => {
             password: hashedPassword,
             phone,
             departmentName,
+            img
         });
 
         return res.status(201).json({ message: "Student created successfully" });

@@ -353,8 +353,10 @@ export const markRequestLetterAsSeen = async (req, res, next) => {
             return res.status(404).json({ success: false, message: "Request Letter not found" });
         }
 
-        if (!requestLetter.seenBy.includes(user.id)) {
-            requestLetter.seenBy.push(user.id);
+        const alreadySeen = requestLetter.seenBy.some(seenUser => seenUser.userId.toString() === user.id);
+
+        if (!alreadySeen) {
+            requestLetter.seenBy.push({ userId: user.id }); 
             await requestLetter.save();
         }
 
@@ -364,6 +366,7 @@ export const markRequestLetterAsSeen = async (req, res, next) => {
         next(createError(500, error.message));
     }
 };
+
 
 export const getListOfUnseenRequestLetters = async (req, res, next) => {
     try {

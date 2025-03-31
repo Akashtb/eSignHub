@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import "./SingleLetterView.scss";
-import { Button, Card, CardContent, Typography, Chip } from "@mui/material";
-import { useParams } from "react-router-dom";
-import { FaArrowLeft, FaCheckCircle, FaTimesCircle } from "react-icons/fa";
+import { Button, Card, CardContent, Typography, Chip, Dialog, DialogActions, DialogContent } from "@mui/material";
+import { useNavigate, useParams } from "react-router-dom";
+import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaQrcode } from "react-icons/fa";
+import { QRCodeCanvas } from "qrcode.react";
 import { useApproveRequestLetterMutation, useGetRequestLetterByIdQuery, useMarkRequestLetterAsSeenMutation, useRejectRequestLetterMutation } from "../../features/redux/users/RequestLetter";
 import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
 import { useSelector } from "react-redux";
@@ -13,10 +14,13 @@ const SingleLetterView = () => {
         skip: !id
     });
     const role = useSelector(selectCurrentRole);
+    const navigate = useNavigate();
 
     const [acceptRequestLetter] = useApproveRequestLetterMutation();
     const [rejectRequestLetter] = useRejectRequestLetterMutation();
     const [markAsSeen] = useMarkRequestLetterAsSeenMutation();
+
+    const [qrOpen, setQrOpen] = useState(false); 
 
     const handleApprove = async () => {
         try {
@@ -28,19 +32,17 @@ const SingleLetterView = () => {
     };
 
     const handleReject = async () => {
-        console.log("Approving request letter with ID:", id);
         try {
             await rejectRequestLetter(id).unwrap();
             refetch();
         } catch (error) {
-            console.error("Error approving request letter:", error);
+            console.error("Error rejecting request letter:", error);
         }
     };
 
     const seenBy = async () => {
         try {
             await markAsSeen(id).unwrap();
-            console.log("Marked as seen successfully");
         } catch (error) {
             console.error("Error marking as seen:", error);
         }
@@ -52,7 +54,7 @@ const SingleLetterView = () => {
 
     useEffect(() => {
         if (role !== "Student" && id) {
-            seenBy(); 
+            seenBy();
         }
     }, [id, role]);
 
@@ -61,7 +63,7 @@ const SingleLetterView = () => {
             <Card className="gmailLetterCard">
                 <CardContent>
                     <div className="headerSection">
-                        <FaArrowLeft className="backIcon" />
+                        <FaArrowLeft className="backIcon" onClick={() => navigate("/requestLetter")} style={{cursor:"pointer"}}/>
                         <Typography variant="h5" className="letterTitle">
                             <strong>{data?.subject}</strong>
                             <Chip label={data?.status} className={`statusChip ${data?.status.toLowerCase()}`} />
@@ -89,22 +91,42 @@ const SingleLetterView = () => {
                     <Typography variant="body1" className="letterMessage">
                         {data?.messageBody}
                     </Typography>
-                    {role !=="Student" && data?.status === "pending"  && <div className="gmailActions">
-                        <Button 
-                            variant="contained" 
-                            color="success" 
-                            startIcon={<FaCheckCircle />} 
-                            onClick={handleApprove}  // ✅ Added Click Event
-                        >
-                            Accept
-                        </Button>
-                        <Button variant="contained" color="error" startIcon={<FaTimesCircle />} onClick={handleReject}>
-                            Reject
-                        </Button>
-                    </div>}
-                    
+
+                    {/* Show Approve/Reject buttons only if the request is pending */}
+                    {role !== "Student" && data?.status === "pending" && (
+                        <div className="gmailActions">
+                            <Button variant="contained" color="success" startIcon={<FaCheckCircle />} onClick={handleApprove}>
+                                Accept
+                            </Button>
+                            <Button variant="contained" color="error" startIcon={<FaTimesCircle />} onClick={handleReject}>
+                                Reject
+                            </Button>
+                        </div>
+                    )}
+
+                    {/* Show QR Code Button only if the request is approved */}
+                    {data?.status === "approved" && data?.uniqueCode && role==="Student" &&(
+                        <div className="qrCodeSection">
+                            <Button variant="contained" color="primary" startIcon={<FaQrcode />} onClick={() => setQrOpen(true)}>
+                                Generate QR Code
+                            </Button>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
+
+            {/* QR Code Modal */}
+            <Dialog open={qrOpen} onClose={() => setQrOpen(false)}>
+                <DialogContent>
+                    <Typography variant="h6" align="center">Scan QR Code</Typography>
+                    <div className="qrCodeContainer" style={{ display: "flex", justifyContent: "center", padding: "20px" }}>
+                        <QRCodeCanvas value={data?.uniqueCode} size={200} />
+                    </div>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setQrOpen(false)} color="primary">Close</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 };

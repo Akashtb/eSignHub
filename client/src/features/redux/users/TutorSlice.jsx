@@ -24,10 +24,10 @@ export const TutorApiSlice = apiSlice.injectEndpoints({
             })  
         }),
         createTutor: builder.mutation({
-            query: (tutorData) => ({
+            query: (finalData) => ({
                 url: '/tutor/create',
                 method: 'POST',
-                body: tutorData,
+                body: finalData,
             }),
             invalidatesTags: [{ type: 'Tutor' }],
         }),

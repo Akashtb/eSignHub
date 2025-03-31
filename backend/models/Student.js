@@ -2,7 +2,9 @@ import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema(
     {
-
+        img:{
+            type:String
+        },
         firstName: {
             type: String,
             required: true,

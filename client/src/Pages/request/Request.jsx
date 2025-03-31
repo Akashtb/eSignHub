@@ -7,17 +7,20 @@ import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/
 import { useSelector } from "react-redux";
 
 const RequestLetter = () => {
-  const [filter, setFilter] = useState("");
   const [isComposeOpen, setIsComposeOpen] = useState(false);
   const { data, isLoading, isError, refetch: refetchRequestLetter } = useGetAllRequestLetterQuery();
+  console.log(data);
+  
   const role = useSelector(selectCurrentRole);
   const user = useSelector(selectCurrentUser); 
+  console.log(user,"user");
+  
 
   useEffect(() => {
     if (!data) {
       refetchRequestLetter();
     }
-  }, [data, refetchRequestLetter]); 
+  }, [data, refetchRequestLetter,user]); 
 
   const handleComposeClick = () => {
     setIsComposeOpen(true);

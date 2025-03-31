@@ -5,13 +5,13 @@ const requestLetterSchema = new mongoose.Schema(
     fromUid: {
       type: mongoose.Schema.Types.ObjectId,
       required: true,
-      ref: "Student", // Ensuring the sender is always a Student
+      ref: "Student", 
     },
     fromRole: {
       type: String,
       enum: ["Student"],
       required: true,
-      default: "Student", // Since it's always a student
+      default: "Student", 
     },
     subject: {
       type: String,
@@ -27,7 +27,7 @@ const requestLetterSchema = new mongoose.Schema(
         userId: {
           type: mongoose.Schema.Types.ObjectId,
           required: true,
-          refPath: "toUids.role", // Dynamic reference to different models
+          refPath: "toUids.role", 
         },
         role: {
           type: String,
@@ -39,7 +39,7 @@ const requestLetterSchema = new mongoose.Schema(
     approvedBy: {
       userId: {
         type: mongoose.Schema.Types.ObjectId,
-        refPath: "approvedBy.role", // Dynamic reference
+        refPath: "approvedBy.role", 
       },
       role: {
         type: String,
@@ -50,22 +50,13 @@ const requestLetterSchema = new mongoose.Schema(
         trim: true,
       },
     },
-    seenBy: {
-      type: [
-        {
-          userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            refPath: "seenBy.role", // Dynamic reference
-          },
-          name: String,
-          role: {
-            type: String,
-            enum: ["Principal", "Tutor", "HOD"],
-          },
-        },
-      ],
-      default: [],
-    },
+    seenBy: [
+      {
+        userId: {
+          type: mongoose.Schema.Types.ObjectId,
+        }
+      }
+    ],
     status: {
       type: String,
       enum: ["pending", "approved", "rejected"],

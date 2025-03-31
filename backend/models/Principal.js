@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 
 const principalSchema  = new mongoose.Schema({
+    img:{
+        type:String
+    },
     firstName: {
         type: String,
         required: true

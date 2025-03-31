@@ -1,6 +1,9 @@
 import mongoose from "mongoose";
 
 const tutorSchema = mongoose.Schema({
+    img:{
+        type:String
+    },
     firstName: {
         type: String,
         required: true

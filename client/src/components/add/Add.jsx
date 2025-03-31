@@ -1,21 +1,78 @@
 import { useState } from "react";
-import { FaCamera } from "react-icons/fa"; 
+import { FaCamera } from "react-icons/fa";
 import "./add.scss";
+import { useCreateStudentMutation } from "../../features/redux/users/Studentslice";
+import { useCreateTutorMutation } from "../../features/redux/users/TutorSlice";
+import { useCreateHODMutation } from "../../features/redux/users/HODSlice";
 
-const Add = ({ slug, columns, setOpen }) => {
+const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload";
+const UPLOAD_PRESET = "upload";
+
+const batchOptions = ["2021", "2022", "2023", "2024"];
+const departmentOptions = ["Pharmacy", "Engineering", "Science", "Arts"];
+
+const Add = ({ slug, columns, setOpen,refetch }) => {
   const [image, setImage] = useState(null);
+  const [imageUrl, setImageUrl] = useState(""); 
+  const [formData, setFormData] = useState({}); 
 
-  const handleImageChange = (e) => {
+  const [createStudent, { isLoading: isLoadingStudent }] = useCreateStudentMutation();
+  const [createTutor, { isLoading: isLoadingTutor }] = useCreateTutorMutation();
+  const [createHOD, { isLoading: isLoadingHOD }] = useCreateHODMutation();
+
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
-      setImage(URL.createObjectURL(file)); 
+      setImage(URL.createObjectURL(file));
+
+      const uploadData = new FormData();
+      uploadData.append("file", file);
+      uploadData.append("upload_preset", UPLOAD_PRESET);
+
+      try {
+        const response = await fetch(CLOUDINARY_URL, {
+          method: "POST",
+          body: uploadData,
+        });
+
+        const data = await response.json();
+        if (data.secure_url) {
+          setImageUrl(data.secure_url); 
+          console.log("Uploaded image URL:", data.secure_url);
+        }
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted");
-    setOpen(false);
+    const finalData = { ...formData, img: imageUrl };
+
+    console.log(finalData,"finalData");
+    
+
+    try {
+      let create;
+      if (slug === "Tutor") {
+        create = await createTutor(finalData);
+      } else if (slug === "HOD") {
+        create = await createHOD(finalData);
+        console.log("API Response:", create);
+      } else {
+        console.error("Invalid slug:", slug);
+        return;
+      }
+      refetch()
+      setOpen(false);
+    } catch (error) {
+      console.error("Failed to add user:", error);
+    }
   };
 
   return (
@@ -23,7 +80,7 @@ const Add = ({ slug, columns, setOpen }) => {
       <div className="modal">
         <span className="close" onClick={() => setOpen(false)}>X</span>
         <h1>Add new {slug}</h1>
-        
+
         <div className="image-upload">
           <input type="file" accept="image/*" id="fileInput" onChange={handleImageChange} hidden />
           <label htmlFor="fileInput" className="image-container">
@@ -41,10 +98,40 @@ const Add = ({ slug, columns, setOpen }) => {
             .map((column, index) => (
               <div className="item" key={index}>
                 <label>{column.headerName}</label>
-                <input type={column.type || "text"} placeholder={column.field} />
+                
+                {column.field === "batch" ? (
+                  <select name="batch" onChange={handleInputChange}>
+                    <option value="">Select Batch</option>
+                    {batchOptions.map((batch, idx) => (
+                      <option key={idx} value={batch}>{batch}</option>
+                    ))}
+                  </select>
+                ) : column.field === "departmentName" ? (
+                  <select name="departmentName" onChange={handleInputChange}>
+                    <option value="">Select Department</option>
+                    {departmentOptions.map((dept, idx) => (
+                      <option key={idx} value={dept}>{dept}</option>
+                    ))}
+                  </select>
+                ) : column.field === "dateOfBirth" ? (
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    onChange={handleInputChange}
+                  />
+                ) : (
+                  <input
+                    type={column.type || "text"}
+                    name={column.field}
+                    placeholder={column.headerName}
+                    onChange={handleInputChange}
+                  />
+                )}
               </div>
             ))}
-          <button>Send</button>
+          <button type="submit" disabled={ isLoadingTutor || isLoadingHOD}>
+            {(isLoadingStudent || isLoadingTutor || isLoadingHOD) ? "Submitting..." : "Send"}
+          </button>
         </form>
       </div>
     </div>

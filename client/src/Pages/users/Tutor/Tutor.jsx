@@ -7,52 +7,7 @@ import View from "../../../Components/View/View";
 import DataTable from "../../../components/dataTable/DataTable";
 import { useGetAllTutorsQuery } from "../../../features/redux/users/TutorSlice";
 
-const columns = [
-    {
-        field: "img",
-        headerName: "Avatar",
-        width: 100,
-        renderCell: (params) => {
-            return <img src={params.row.img || "/noavatar.png"} alt="avatar" />;
-        },
-    },
-    {
-        field: "firstName",
-        headerName: "First Name",
-        flex: 1.5,
-        minWidth: 150,
-    },
-    {
-        field: "lastName",
-        headerName: "Last Name",
-        flex: 1.5,
-        minWidth: 150,
-    },
-    {
-        field: "email",
-        headerName: "Email",
-        flex: 2.5,
-        minWidth: 200,
-    },
-    {
-        field: "phone",
-        headerName: "Phone",
-        flex: 1.5,
-        minWidth: 150,
-    },
-    {
-        field: "dateOfBirth",
-        headerName: "Date of Birth",
-        flex: 1.5,
-        minWidth: 150,
-    },
-    {
-        field: "departmentName",
-        headerName: "Department",
-        flex: 2,
-        minWidth: 200,
-    },
-];
+
 
 
 const Tutor = () => {
@@ -68,7 +23,62 @@ const Tutor = () => {
         refetch()
     },[])
 
-    console.log("selectedId",selectedId);
+
+    const columns = [
+        {
+            field: "img",
+            headerName: "Avatar",
+            width: 100,
+            renderCell: (params) => {
+                return <img src={params.row.img || "/noavatar.png"} alt="avatar" />;
+            },
+        },
+        {
+            field: "firstName",
+            headerName: "First Name",
+            flex: 1.5,
+            minWidth: 150,
+        },
+        {
+            field: "lastName",
+            headerName: "Last Name",
+            flex: 1.5,
+            minWidth: 150,
+        },
+        {
+            field: "email",
+            headerName: "Email",
+            flex: 2.5,
+            minWidth: 200,
+        },
+        {
+            field: "phone",
+            headerName: "Phone",
+            flex: 1.5,
+            minWidth: 150,
+        },
+        {
+            field: "password",
+            headerName: "password",
+            flex: 1.5,
+            minWidth: 150,
+          },
+        {
+            field: "dateOfBirth",
+            headerName: "Date of Birth",
+            flex: 1.5,
+            minWidth: 150,
+        },
+        {
+            field: "departmentName",
+            headerName: "Department",
+            flex: 2,
+            minWidth: 200,
+        },
+    ];
+
+
+    const filteredColumns = columns.filter(col => col.field !== "password");
     
 
     return (
@@ -78,11 +88,11 @@ const Tutor = () => {
                 <button onClick={() => setOpen(true)}>Add New Tutor</button>
             </div>
             <div className="tableContainer">
-                <DataTable slug="Tutor" columns={columns} rows={tutorData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} />
+                <DataTable slug="Tutor" columns={filteredColumns} rows={tutorData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} />
             </div>
             {open && <Add slug="Tutor" columns={columns} setOpen={setOpen} refetch={refetch} />}
-            {openEdit && <Edit slug="Tutor" columns={columns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId} />}
-            {openView && <View slug="Tutor" columns={columns} setOpenView={setOpenView} selectedId={selectedId}/>}
+            {openEdit && <Edit slug="Tutor" columns={filteredColumns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId} />}
+            {openView && <View slug="Tutor" columns={filteredColumns} setOpenView={setOpenView} selectedId={selectedId}/>}
         </div>
     );
 };
