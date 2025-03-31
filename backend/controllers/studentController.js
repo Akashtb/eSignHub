@@ -107,3 +107,14 @@ export const viewStudent = async (req, res, next) => {
         next(createError(500, error.message));
     }
 };
+
+
+export const getRecentStudents = async (req, res) => {
+    try {
+        const students = await Student.find().sort({ createdAt: -1 }).limit(8);
+        res.status(200).json(students);
+    } catch (error) {
+        console.error("Error retrieving recent students:", error);
+        res.status(500).json({ message: "Error retrieving recent students" });
+    }
+};

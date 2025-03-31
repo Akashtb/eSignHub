@@ -1,6 +1,9 @@
 import Principal from "../models/Principal.js";
 import bcrypt from "bcrypt";
 import { createError } from "../utils/customErrorHandling.js";
+import Tutor from "../models/Tutor.js";
+import HOD from "../models/HOD.js";
+import Student from "../models/Student.js";
 
 export const createPrincipal = async (req, res, next) => {
     const { name, email, password, phone } = req.body;
@@ -80,3 +83,40 @@ export const deletePrincipal = async (req, res, next) => {
         next(createError(500, error.message));
     }
 };
+
+export const totalEachUser = async(req,res,next)=>{
+    try {
+        const tutor = await Tutor.find()
+        const Hod = await HOD.find()
+        const student = await Student.find()
+        
+        return res.status(201).json({
+            tutor: tutor.length,
+            Hod: Hod.length,
+            student: student.length
+        })
+
+    } catch (error) {
+        next(createError(500, error.message));
+    }
+}
+
+
+
+export const eachDepartmentTotalStudent = async (req, res, next) => {
+    try {
+        const studentCounts = await Student.aggregate([
+            {
+                $group: {
+                    _id: "$departmentName", 
+                    totalStudents: { $sum: 1 } 
+                }
+            }
+        ]);
+
+        res.status(200).json(studentCounts);
+    } catch (error) {
+        next(createError(500, error.message)) 
+    }
+};
+

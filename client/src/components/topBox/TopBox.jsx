@@ -2,6 +2,8 @@
 import "./topBox.scss"
 import { topDealUsers } from '../../data'
 const TopBox = () => {
+
+  
 return (
     <div className="topBox">
       <h1>Recents Students</h1>
