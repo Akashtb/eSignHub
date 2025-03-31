@@ -27,6 +27,9 @@ const tutorSchema = mongoose.Schema({
     status: {
         type: Boolean,
     },
+    dateOfBirth: {
+        type: Date,
+    },
     departmentName: {
         type: String,
         required: true,

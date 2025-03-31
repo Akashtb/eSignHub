@@ -59,9 +59,9 @@ const Students = () => {
       headerName: "Date of Birth",
       flex: 1.5,
       minWidth: 150,
-      // renderCell: (params) => {      
-      //   return new Date(params?.value).toISOString().split("T")[0]; 
-      // },
+      renderCell: (params) => {      
+        return new Date(params?.value).toISOString().split("T")[0]; 
+      },
     },
 
     {

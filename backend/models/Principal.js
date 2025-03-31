@@ -21,6 +21,9 @@ const principalSchema  = new mongoose.Schema({
         type: String,
         required: true
     },
+    dateOfBirth: {
+        type: Date,
+    },
     phone: {
         type: Number,
     },

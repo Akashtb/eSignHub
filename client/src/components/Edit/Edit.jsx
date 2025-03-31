@@ -3,14 +3,14 @@ import { FaCamera } from "react-icons/fa";
 import "./edit.scss";
 import { useGetStudentByIdQuery, useUpdateStudentDetailMutation } from "../../features/redux/users/Studentslice";
 import { useGetTutorByIdQuery, useUpdateTutorDetailMutation } from "../../features/redux/users/TutorSlice";
-import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice"; 
+import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload";
 const UPLOAD_PRESET = "upload";
 
 const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   const [image, setImage] = useState(null);
-  const [imageUrl, setImageUrl] = useState(""); 
+  const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({});
 
   const { data: student, refetch: singleStudentRefetch } = useGetStudentByIdQuery(selectedId, {
@@ -22,22 +22,22 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   });
 
   const { data: hod, refetch: singleHODRefetch } = useGetHODByIdQuery(selectedId, {
-    skip: !selectedId || slug !== "HOD", 
+    skip: !selectedId || slug !== "HOD",
   });
 
   const [updateStudent] = useUpdateStudentDetailMutation();
   const [updateTutor] = useUpdateTutorDetailMutation();
   const [updateHOD] = useUpdateHODDetailMutation();
 
-  const userData = slug === "student" ? student?.student 
-                 : slug === "Tutor" ? tutor?.tutor 
-                 : slug === "HOD" ? hod 
-                 : null;
+  const userData = slug === "student" ? student?.student
+    : slug === "Tutor" ? tutor?.tutor
+      : slug === "HOD" ? hod
+        : null;
 
   useEffect(() => {
     if (userData) {
       setFormData(userData);
-      setImageUrl(userData.img || "");  
+      setImageUrl(userData.img || "");
     }
   }, [userData]);
 
@@ -58,7 +58,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
 
         const data = await response.json();
         if (data.secure_url) {
-          setImageUrl(data.secure_url); 
+          setImageUrl(data.secure_url);
           setFormData((prev) => ({ ...prev, img: data.secure_url }));
           console.log("Uploaded image URL:", data.secure_url);
         }
@@ -75,7 +75,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting Data:", formData);
-    
+
     try {
       let updated;
       if (slug === "student") {
@@ -125,12 +125,22 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
             .map((column, index) => (
               <div className="item" key={index}>
                 <label>{column.headerName}</label>
-                <input
-                  type={column.type || "text"}
-                  name={column.field}
-                  value={formData[column.field] || ""}
-                  onChange={handleInputChange}
-                />
+
+                {column.field === "dateOfBirth" ? (
+                  <input
+                    type="date"
+                    name="dateOfBirth"
+                    value={formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString().split("T")[0] : ""}
+                    onChange={handleInputChange}
+                  />
+                ) : (
+                  <input
+                    type={column.type || "text"}
+                    name={column.field}
+                    value={formData[column.field] || ""}
+                    onChange={handleInputChange}
+                  />
+                )}
               </div>
             ))}
           <button type="submit">Save Changes</button>

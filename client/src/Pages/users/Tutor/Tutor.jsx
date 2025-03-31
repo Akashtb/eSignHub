@@ -63,12 +63,19 @@ const Tutor = () => {
             flex: 1.5,
             minWidth: 150,
           },
-        {
+          {
             field: "dateOfBirth",
             headerName: "Date of Birth",
             flex: 1.5,
             minWidth: 150,
-        },
+            renderCell: (params) => {      
+              const dateValue = params?.value ? new Date(params.value) : null;
+              return dateValue && !isNaN(dateValue) 
+                ? dateValue.toISOString().split("T")[0] 
+                : "Invalid Date"; 
+            },
+          },
+          
         {
             field: "departmentName",
             headerName: "Department",

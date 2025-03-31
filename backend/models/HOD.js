@@ -24,6 +24,9 @@ const hodSchema = mongoose.Schema({
     phone: {
         type: Number,
     },
+    dateOfBirth: {
+        type: Date,
+    },
     status: {
         type: Boolean,
     },
