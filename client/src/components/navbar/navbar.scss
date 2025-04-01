@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 
   .logo {
     display: flex;
@@ -13,19 +14,22 @@
     font-weight: bold;
     gap: 10px;
   }
+
   .icons {
     display: flex;
     align-items: center;
     gap: 20px;
+    position: relative;
 
-    .icon{
-      @include sm{
+    .icon {
+      @include sm {
         display: none;
       }
     }
 
     .notification {
       position: relative;
+      cursor: pointer;
 
       span {
         background-color: red;
@@ -34,19 +38,73 @@
         height: 16px;
         border-radius: 50%;
         position: absolute;
-        top: -10px;
-        right: -10px;
+        top: -5px;
+        right: -5px;
         display: flex;
         align-items: center;
         justify-content: center;
         font-size: 12px;
+      }
+
+      .notification-dropdown {
+        position: absolute;
+        top: 35px;
+        right: 0;
+        width: 260px;
+        background: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        z-index: 1000;
+
+        .notification-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 10px;
+          border-bottom: 1px solid #ddd;
+
+          &:last-child {
+            border-bottom: none;
+          }
+
+          .notif-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;  // Ensures text takes up available space
+
+            strong {
+              font-size: 14px;
+              color: #333;
+            }
+            p {
+              font-size: 12px;
+              color: #555;
+              margin: 2px 0;
+            }
+            span {
+              font-size: 11px;
+              color: gray;
+            }
+          }
+
+          .close-icon {
+            color: red;
+            cursor: pointer;
+            transition: 0.3s;
+            
+            &:hover {
+              color: darkred;
+            }
+          }
+        }
       }
     }
 
     .user {
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 10px;
 
       img {
         width: 26px;

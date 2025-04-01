@@ -1,27 +1,27 @@
-import { LogOut, Bell, User } from "lucide-react"; 
+import { LogOut, User } from "lucide-react"; 
 import "./navbar.scss";
 import { useLogOutMutation } from "../../features/redux/auth/AuthApiSlice";
 import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../features/redux/auth/AuthSlice";
+import NotificationDropdown from "../NotificationDropdown/NotificationDropdown";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
   const [logOutAPi] = useLogOutMutation(); 
 
+  // Logout Handler
   const handleLogout = async () => {
     try {
-      await logOutAPi().unwrap(); 
-      dispatch(logOut()); 
-      localStorage.removeItem("persist:root"); 
+      await logOutAPi().unwrap();
+      dispatch(logOut());
+      localStorage.removeItem("persist:root");
       navigate("/landingPage");
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
-  
 
   return (
     <div className="navbar">
@@ -31,21 +31,14 @@ const Navbar = () => {
       </div>
 
       <div className="icons">
-        <div className="notification">
-          <span>1</span>
-          <Bell size={24} style={{ cursor: "pointer" }} />
-        </div>
+        {/* Notification Component */}
+        <NotificationDropdown/>
 
         <div className="user">
           <User size={24} style={{ cursor: "pointer" }} />
         </div>
 
-        <LogOut 
-          size={24} 
-          className="icon logout-icon" 
-          onClick={handleLogout} 
-          style={{ cursor: "pointer" }}
-        />
+        <LogOut size={24} className="icon logout-icon" onClick={handleLogout} style={{ cursor: "pointer" }} />
       </div>
     </div>
   );
