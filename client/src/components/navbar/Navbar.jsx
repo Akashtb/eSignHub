@@ -1,28 +1,54 @@
-import "./navbar.scss"
+import { LogOut, Bell, User } from "lucide-react"; 
+import "./navbar.scss";
+import { useLogOutMutation } from "../../features/redux/auth/AuthApiSlice";
+import { useNavigate } from "react-router";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../features/redux/auth/AuthSlice";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch()
+
+  const [logOutAPi] = useLogOutMutation(); 
+
+  const handleLogout = async () => {
+    try {
+      await logOutAPi().unwrap(); 
+      dispatch(logOut()); 
+      localStorage.removeItem("persist:root"); 
+      navigate("/landingPage");
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+  
+
   return (
     <div className="navbar">
       <div className="logo">
-        <img src="logo.svg" alt=""  />
-        <span>applicaton</span>
+        <img src="logo.svg" alt="Logo" />
+        <span>Application</span>
       </div>
+
       <div className="icons">
-         {/* <img src="/search.svg" alt="" className="icon" /> */}
-         {/* <img src="/app.svg" alt="" className="icon" />
-         <img src="/expand.svg" alt="" className="icon" /> */}
-         <div className="notification">
+        <div className="notification">
           <span>1</span>
-          <img src="/notifications.svg" alt="" />
-         </div>
-         <div className="user">
-          <img src="https://images.pexels.com/photos/11038549/pexels-photo-11038549.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load" alt="" />
-          <span>User</span>
-         </div>
-         <img src="/settings.svg" alt="" className="icon" />
+          <Bell size={24} style={{ cursor: "pointer" }} />
+        </div>
+
+        <div className="user">
+          <User size={24} style={{ cursor: "pointer" }} />
+        </div>
+
+        <LogOut 
+          size={24} 
+          className="icon logout-icon" 
+          onClick={handleLogout} 
+          style={{ cursor: "pointer" }}
+        />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;
