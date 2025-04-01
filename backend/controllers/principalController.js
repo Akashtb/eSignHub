@@ -105,18 +105,27 @@ export const totalEachUser = async(req,res,next)=>{
 
 export const eachDepartmentTotalStudent = async (req, res, next) => {
     try {
-        const studentCounts = await Student.aggregate([
+        const departmentCounts = await Student.aggregate([
             {
                 $group: {
                     _id: "$departmentName", 
-                    totalStudents: { $sum: 1 } 
+                    totalStudents: { $sum: 1 }
                 }
             }
         ]);
 
-        res.status(200).json(studentCounts);
+        const batchCounts = await Student.aggregate([
+            {
+                $group: {
+                    _id: "$batch", 
+                    totalStudents: { $sum: 1 }
+                }
+            }
+        ]);
+
+        res.status(200).json({ departmentCounts, batchCounts });
     } catch (error) {
-        next(createError(500, error.message)) 
+        next(createError(500, error.message));
     }
 };
 

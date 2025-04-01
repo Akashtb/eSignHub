@@ -11,7 +11,7 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
             query: (id) => `/student/view/${id}`,
         }),
         getRecentStudents: builder.query({
-            query: () => '/student/getRecentStudents',
+            query: () => '/student/recentStudent',
             keepUnusedDataFor: 0, 
             refetchOnMountOrArgChange: true,
         }),

@@ -14,10 +14,18 @@ export const PrincipalApiSlice = apiSlice.injectEndpoints({
             }),
             invalidatesTags: [{ type: 'Principal' }],
         }),
+        totalEachUser:builder.query({
+            query: () => `/principal/totalEachUser`,
+        }),
+        eachDepartmentTotalStudent:builder.query({
+            query: () => `/principal/departmentWise`,
+        })
     }),
 })
 
 export const {
 useGetPrincipalByIdQuery,
-useUpdatePrincipalDetailMutation
+useUpdatePrincipalDetailMutation,
+useTotalEachUserQuery,
+useEachDepartmentTotalStudentQuery
 } = PrincipalApiSlice;
