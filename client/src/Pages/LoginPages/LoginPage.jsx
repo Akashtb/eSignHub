@@ -16,7 +16,11 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const formattedRole = role?.charAt(0).toUpperCase() + role?.slice(1).toLowerCase();
+  const formattedRole = role
+  ? role.toUpperCase() === "HOD"
+    ? "HOD"
+    : role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
+  : "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();

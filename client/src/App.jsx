@@ -13,6 +13,9 @@ import SingleLetterView from "./Pages/singleLetterView/SingleLetterView";
 import LandingPage from "./Pages/LandingPage/LandingPage"
 import StudentRegister from "./Pages/StudentRegister/StudentRegister";
 import Layout from "./Layout";
+import UserUpdatePage from "./Pages/userUpdatePage/UserupdatePage";
+import StudentUpdatePage from "./Pages/userUpdatePage/StudentUpdatePage";
+import PrincipaUpdatePage from "./Pages/userUpdatePage/PrincipalUpdatePage";
 
 
 function App() {
@@ -30,6 +33,9 @@ function App() {
         { path: "/users/:id", element: <User /> },
         { path: "/requestLetter", element: <RequestLetter /> },
         { path: "/requestLetter/:id", element: <SingleLetterView /> },
+        // {path:"/updateDetails",element:<UserUpdatePage/>}
+        // {path:"/updateDetails",element:<StudentUpdatePage/>}
+        {path:"/updateDetails",element:<PrincipaUpdatePage/>}
 
       ]
     },

@@ -27,13 +27,6 @@ const principalSchema  = new mongoose.Schema({
     phone: {
         type: Number,
     },
-    status: {
-        type: Boolean,
-        default: false
-    },
-    address: {
-        type: String
-    },
     role:{
         type: String,
         default: "Principal"
