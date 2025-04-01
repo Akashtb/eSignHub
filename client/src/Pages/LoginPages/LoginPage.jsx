@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Link
 import img1 from '../../assets/principal.webp';
 import './login.css';
-import { useLocation, useNavigate } from 'react-router';
 import { useLoginMutation } from '../../features/redux/auth/AuthApiSlice';
 import { useDispatch } from 'react-redux';
 import { setCredentials } from '../../features/redux/auth/AuthSlice';
-
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -13,53 +12,48 @@ function Login() {
   const [regNumber, setRegNumber] = useState('');
   const location = useLocation();
   const { role } = location.state || {};
-  const [login] = useLoginMutation()
+  const [login] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const formattedRole = role?.charAt(0).toUpperCase() + role?.slice(1).toLowerCase();
-   
+  const formattedRole = role?.toUpperCase(); // Convert role to uppercase for consistency
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-      try {
-        const userData = await login({ email, password,role:formattedRole,regNumber }).unwrap();
-        console.log(userData);
-        dispatch(setCredentials({ ...userData }));
-        // toast.success("successfully logged in ...")
-        navigate('/'); 
-      } catch (error) {
-        // setLoginError(error?.data?.message || 'Login failed, please try again.');
-        console.error('Error logging in:', error);
-      }
+    try {
+      const userData = await login({ email, password, role: formattedRole, regNumber }).unwrap();
+      console.log(userData);
+      dispatch(setCredentials({ ...userData }));
+      navigate('/'); 
+    } catch (error) {
+      console.error('Error logging in:', error);
+    }
   };
 
   return (
     <div className="login-container">
       <div className="login-box">
         <div className="login-form">
-          <h2>Welcome back, {role}!</h2>
+          <h2>Welcome back, {formattedRole}!</h2>
           <p>Please enter your details</p>
 
-        {
-            role==="STUDENT" ?(
-              <input 
+          {formattedRole === "STUDENT" ? (
+            <input 
               type="text" 
               placeholder="Enter your Register number" 
               value={regNumber} 
               onChange={(e) => setRegNumber(e.target.value)}
               required 
             />
-            ):(
-              <input 
+          ) : (
+            <input 
               type="email" 
               placeholder="Enter your e-mail" 
               value={email} 
               onChange={(e) => setEmail(e.target.value)} 
               required
-              />
-            )
-          }
+            />
+          )}
 
           <input 
             type="password" 
@@ -75,9 +69,9 @@ function Login() {
 
           <button className="login-btn" onClick={handleSubmit}>Sign in</button>
 
-          {role === "Student" && (
+          {formattedRole === "STUDENT" && (
             <p className="signup-text">
-              Don't have an account? <span>Sign up for free</span>
+              Don't have an account? <Link to="/studentregister" className="signup-link" style={{color:"black"}}>Sign up for free</Link>
             </p>
           )}
         </div>

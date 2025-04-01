@@ -14,6 +14,7 @@ import RequestLetter from "./Pages/request/Request";
 import SingleLetterView from "./Pages/singleLetterView/SingleLetterView";
 import LandingPage from "./Pages/LandingPage/LandingPage"
 import Navbar from "./Components/navbar/Navbar";
+import StudentRegister from "./Pages/StudentRegister/StudentRegister";
 
 
 function App() {
@@ -56,6 +57,10 @@ function App() {
     {
       path: "/login",
       element: <Login />
+    },
+    {
+      path: "/studentRegister",
+      element: <StudentRegister/>
     }
 
 
