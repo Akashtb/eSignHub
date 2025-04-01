@@ -16,12 +16,12 @@ function Login() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const formattedRole = role?.toUpperCase(); // Convert role to uppercase for consistency
+  const formattedRole = role?.charAt(0).toUpperCase() + role?.slice(1).toLowerCase();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userData = await login({ email, password, role: formattedRole, regNumber }).unwrap();
+      const userData = await login({ email, password, role:formattedRole, regNumber }).unwrap();
       console.log(userData);
       dispatch(setCredentials({ ...userData }));
       navigate('/'); 
@@ -37,7 +37,7 @@ function Login() {
           <h2>Welcome back, {formattedRole}!</h2>
           <p>Please enter your details</p>
 
-          {formattedRole === "STUDENT" ? (
+          {formattedRole === "Student" ? (
             <input 
               type="text" 
               placeholder="Enter your Register number" 

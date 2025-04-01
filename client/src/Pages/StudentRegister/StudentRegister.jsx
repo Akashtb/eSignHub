@@ -85,7 +85,7 @@ const StudentRegister = () => {
                     img: "",
                 });
                 setImagePreview(null);
-                navigate('/login')
+                navigate('/landingPage')
             }
         } catch (error) {
             console.error("Error:", error);

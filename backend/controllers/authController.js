@@ -35,6 +35,9 @@ export const Login = async (req, res, next) => {
             user = await Model.findOne({ email });
         }
 
+        console.log(user);
+        
+
         if (!user) {
             return next(createError(400, "User not found"))
         }
