@@ -87,6 +87,7 @@ export const refreshToken = async (req, res, next) => {
         if (err) {
             return next(createError(400, "Please Login"))
         }
+        
         const accessToken = jwt.sign({
             id: user.id,
             role: user.role,
@@ -94,7 +95,7 @@ export const refreshToken = async (req, res, next) => {
             departmentName: user.departmentName
         }, process.env.JWT_SECRET, { expiresIn: "30s" })
 
-        res.status(201).json({ message: "Token refreshed", accessToken: accessToken, role: user.role,user:user._id })
+        res.status(201).json({ message: "Token refreshed", accessToken: accessToken, role: user.role,user:user.id })
     })
 }
 

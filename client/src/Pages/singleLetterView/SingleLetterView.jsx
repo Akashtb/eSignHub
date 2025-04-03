@@ -5,11 +5,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FaArrowLeft, FaCheckCircle, FaTimesCircle, FaQrcode } from "react-icons/fa";
 import { QRCodeCanvas } from "qrcode.react";
 import { useApproveRequestLetterMutation, useGetRequestLetterByIdQuery, useMarkRequestLetterAsSeenMutation, useRejectRequestLetterMutation } from "../../features/redux/users/RequestLetter";
-import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
+import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
 import { useSelector } from "react-redux";
 
 const SingleLetterView = () => {
     const { id } = useParams();
+    const user = useSelector(selectCurrentUser)
     const { data, refetch } = useGetRequestLetterByIdQuery(id, {
         skip: !id
     });
@@ -58,11 +59,18 @@ const SingleLetterView = () => {
     }, [id, refetch]);
 
     useEffect(() => {
-        if (role !== "Student" && id && !hasSeen) {
-            seenBy();
-            setHasSeen(true)
+        if (role !== "Student" && id && data && data?.seenBy) {
+            const alreadySeen = data.seenBy.some(entry => {
+                return entry.userId === user; 
+            });            
+            console.log(alreadySeen);
+            
+            if (!alreadySeen) {
+                seenBy();
+            }
         }
-    }, [id, role]);
+    }, [id, role, data]); 
+    
 
     return (
         <div className="gmailLetterPage">

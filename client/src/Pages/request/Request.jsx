@@ -53,7 +53,7 @@ const RequestLetter = () => {
       minWidth: 300,
       renderCell: (params) => {
         const seenByArray = params.row.seenBy || [];
-        const isSeen = seenByArray.some((seenUser) => seenUser._id === user); 
+        const isSeen = seenByArray.some((seenUser) => seenUser.userId === user); 
 
         return (
           <span style={{ fontWeight: isSeen ? "normal" : "bold" }}>
