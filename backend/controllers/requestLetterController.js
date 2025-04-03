@@ -354,11 +354,13 @@ export const markRequestLetterAsSeen = async (req, res, next) => {
         }
 
         const alreadySeen = requestLetter.seenBy.some(seenUser => seenUser.userId.toString() === user.id);
-
-        if (!alreadySeen) {
-            requestLetter.seenBy.push({ userId: user.id }); 
-            await requestLetter.save();
+        
+        if (alreadySeen) {
+            return res.status(200).json({ success: true, message: "Request Letter marked as seen already" });
         }
+
+        requestLetter.seenBy.push({ userId: user.id }); 
+        await requestLetter.save();
 
         res.status(200).json({ success: true, message: "Request Letter marked as seen successfully" });
 
@@ -366,6 +368,7 @@ export const markRequestLetterAsSeen = async (req, res, next) => {
         next(createError(500, error.message));
     }
 };
+
 
 
 export const getListOfUnseenRequestLetters = async (req, res, next) => {

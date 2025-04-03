@@ -13,6 +13,9 @@ const SingleLetterView = () => {
     const { data, refetch } = useGetRequestLetterByIdQuery(id, {
         skip: !id
     });
+
+    const [hasSeen, setHasSeen] = useState(false);
+
     const role = useSelector(selectCurrentRole);
     const navigate = useNavigate();
 
@@ -42,7 +45,9 @@ const SingleLetterView = () => {
 
     const seenBy = async () => {
         try {
-            await markAsSeen(id).unwrap();
+            const seen = await markAsSeen(id).unwrap();
+            console.log(seen, "seen letter as action is performed");
+            
         } catch (error) {
             console.error("Error marking as seen:", error);
         }
@@ -53,8 +58,9 @@ const SingleLetterView = () => {
     }, [id, refetch]);
 
     useEffect(() => {
-        if (role !== "Student" && id) {
+        if (role !== "Student" && id && !hasSeen) {
             seenBy();
+            setHasSeen(true)
         }
     }, [id, role]);
 
