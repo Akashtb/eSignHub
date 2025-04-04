@@ -10,11 +10,11 @@
 
     .title {
       font-size: 12px;
-      font-weight: 200;
+      font-weight: 600; 
       color: $soft-color;
       text-transform: uppercase;
 
-      @include lg{
+      @include lg {
         display: none;
       }
     }
@@ -25,13 +25,24 @@
       gap: 10px;
       padding: 10px;
       border-radius: 5px;
+      text-decoration: none;
 
       &:hover {
         background-color: $soft-bg;
       }
 
-      .listItemTitle{
-        @include lg{
+      svg, img {
+        width: 25px; 
+        height: 25px;
+       
+        
+      }
+      .colored-icon {
+        filter: grayscale(100%) brightness(0) invert(1); 
+      }
+
+      .listItemTitle {
+        @include lg {
           display: none;
         }
       }

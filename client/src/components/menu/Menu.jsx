@@ -1,23 +1,56 @@
-import "./menu.scss"
-import { Link } from "react-router-dom";
-import { menu } from "../../data";
+
+import "./menu.scss";
+import StaffSideBar from "../sideBars/ForStaff/StaffSideBar";
+import PrincipalSidebar from "../sideBars/ForPrincipal/PrincipalSidebar";
+import StudentSideBar from "../sideBars/ForStudent/StudentSideBar";
+import { useSelector } from "react-redux";
+import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
 
 const Menu = () => {
-  return (
-    <div className="menu">
-     {menu.map((item) => (
-        <div className="item" key={item.id} >
-          <span className="title">{item.title}</span>
-          {item.listItems.map((listItem) => (
-            <Link to={listItem.url} className="listItem" key={listItem.id}>
-              <img src={listItem.icon} alt="" />
-              <span className="listItemTitle">{listItem.title}</span>
-            </Link>
-          ))}
-        </div>
-     ))}
-    </div>
-  )
-}
+  const user = useSelector(selectCurrentRole)
 
-export default Menu
+  const getSidebarItems = () => {
+    switch (user) {
+      case "Principal":
+        return (
+          <>
+            <PrincipalSidebar />
+          </>
+        );
+
+      case "Student":
+        return (
+          <>
+            <StudentSideBar />
+          </>
+        );
+
+      case "Tutor":
+        return (
+          <StaffSideBar />
+        );
+      case "HOD":
+        return (
+          <StaffSideBar />
+        );
+
+
+      default:
+        return (
+          <>
+            <div className="item">
+              <span className="title main-heading">MAIN</span>
+              <Link to="/" className="listItem">
+                <Home />
+                <span className="listItemTitle">Homepage</span>
+              </Link>
+            </div>
+          </>
+        );
+    }
+  };
+
+  return <div className="menu">{getSidebarItems()}</div>;
+};
+
+export default Menu;
