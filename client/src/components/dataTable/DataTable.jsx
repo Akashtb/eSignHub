@@ -4,12 +4,17 @@ import { FaEye } from "react-icons/fa";
 import { useDeleteStudentMutation } from "../../features/redux/users/Studentslice";
 import { useDeleteTutorMutation } from "../../features/redux/users/TutorSlice";
 import { useDeleteHODMutation } from "../../features/redux/users/HODSlice";
+import { useSearchParams } from "react-router";
+import { useSelector } from "react-redux";
+import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
 
 const DataTable = ({ columns, rows, slug, setOpenEdit, setOpenView, setSelectedId, refetch ,isLoading}) => {
 
   const [deleteStudent] = useDeleteStudentMutation();
   const [deleteTutor] = useDeleteTutorMutation();
   const [deleteHOD] = useDeleteHODMutation();
+
+  const user = useSelector(selectCurrentRole)
 
   const handleView = (id) => {
     setSelectedId(id);

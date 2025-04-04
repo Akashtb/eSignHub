@@ -38,7 +38,7 @@ const PrincipalSidebar = () => {
 
       <div className="item">
         <span className="title general-heading">GENERAL</span>
-        <Link to="/request-letters" className="listItem">
+        <Link to="/requestLetter" className="listItem">
           <PenTool />
           <span className="listItemTitle">Request Letters</span>
         </Link>

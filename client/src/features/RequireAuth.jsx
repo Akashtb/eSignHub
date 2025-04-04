@@ -28,7 +28,7 @@ const RequireAuth = ({ allowedRoles }) => {
     }
 
     if (!token) {
-        return <Navigate to="/landingPage"replace />;
+        return <Navigate to="/landingPage" replace />;
     }
 
     if (!allowedRoles.includes(role)) {

@@ -7,7 +7,7 @@ const StudentSideBar = () => {
         <div className="menu">
             <div className="item">
                 <span className="title main-heading">MAIN</span>
-                <Link to="/request-letters" className="listItem">
+                <Link to="/requestLetter" className="listItem">
                     <PenTool />
                     <span className="listItemTitle">Request Letters</span>
                 </Link>
