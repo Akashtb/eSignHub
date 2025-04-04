@@ -55,21 +55,32 @@ const DataTable = ({ columns, rows, slug, setOpenEdit, setOpenView, setSelectedI
     width: 120,
     sortable: false,
     renderCell: (params) => {
+      const isStudentSlug = slug === "student";
+      const canEditDelete =
+        user === "Principal" || (isStudentSlug && (user === "HOD" || user === "Tutor"));
+  
       return (
         <div className="action">
           <div style={{ cursor: "pointer" }}>
             <FaEye size={18} color="#71c9d5" title="View" onClick={() => handleView(params.row._id)} />
           </div>
-          <div onClick={() => handleEdit(params.row._id)}>
-            <img src="/view.svg" alt="View" />
-          </div>
-          <div className="delete" onClick={() => handleDelete(params.row._id)}>
-            <img src="/delete.svg" alt="Delete" />
-          </div>
+  
+          {canEditDelete && (
+            <>
+              <div onClick={() => handleEdit(params.row._id)}>
+                <img src="/view.svg" alt="Edit" title="Edit" />
+              </div>
+              <div className="delete" onClick={() => handleDelete(params.row._id)}>
+                <img src="/delete.svg" alt="Delete" title="Delete" />
+              </div>
+            </>
+          )}
         </div>
       );
     },
   };
+  
+  
 
   return (
     <div className="dataTable">

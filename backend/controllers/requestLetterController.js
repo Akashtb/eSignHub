@@ -393,7 +393,7 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
             },
             {
                 $lookup: {
-                    from: "students", // ✅ Ensure this matches your actual collection name
+                    from: "students", 
                     localField: "fromUid",
                     foreignField: "_id",
                     as: "fromUser"
@@ -402,7 +402,7 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
             {
                 $unwind: {
                     path: "$fromUser",
-                    preserveNullAndEmptyArrays: true // ✅ Keeps documents even if there's no match
+                    preserveNullAndEmptyArrays: true 
                 }
             },
             {
@@ -421,7 +421,7 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
             },
             {
                 $project: {
-                    fromUid: 0, // ✅ Hide original fromUid field
+                    fromUid: 0, 
                 }
             }
         ]);
