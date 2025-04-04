@@ -1,3 +1,4 @@
+import mongoose from "mongoose"
 import HOD from "../models/HOD.js"
 import Principal from "../models/Principal.js"
 import RequestLetter from "../models/requestLetter.js"
@@ -371,22 +372,63 @@ export const markRequestLetterAsSeen = async (req, res, next) => {
 
 
 
+
 export const getListOfUnseenRequestLetters = async (req, res, next) => {
     try {
-        const { user } = req; 
+        const { user } = req;
 
         if (!user || user.role !== "Principal") {
             return res.status(403).json({ success: false, message: "Access denied" });
         }
 
-        const unseenLetters = await RequestLetter.find({
-            "toUids.userId": user.id,
-            "toUids.role": user.role,
-            seenBy: { $ne: user.id } 
-        })
-        .sort({ createdAt: -1 }); 
+        const userId = new mongoose.Types.ObjectId(user.id);
 
-        if (unseenLetters.length === 0) {
+        const unseenLetters = await RequestLetter.aggregate([
+            {
+                $match: {
+                    "toUids.userId": userId,  
+                    "toUids.role": user.role,  
+                    seenBy: { $not: { $elemMatch: { userId } } } 
+                }
+            },
+            {
+                $lookup: {
+                    from: "students", // ✅ Ensure this matches your actual collection name
+                    localField: "fromUid",
+                    foreignField: "_id",
+                    as: "fromUser"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$fromUser",
+                    preserveNullAndEmptyArrays: true // ✅ Keeps documents even if there's no match
+                }
+            },
+            {
+                $addFields: {
+                    "fromUser.fullName": {
+                        $concat: [
+                            { $ifNull: ["$fromUser.firstName", ""] }, 
+                            " ", 
+                            { $ifNull: ["$fromUser.lastName", ""] }
+                        ]
+                    }
+                }
+            },
+            {
+                $sort: { createdAt: -1 }
+            },
+            {
+                $project: {
+                    fromUid: 0, // ✅ Hide original fromUid field
+                }
+            }
+        ]);
+        console.log(unseenLetters,"unseenLetters list");
+        
+
+        if (!unseenLetters.length) {
             return res.status(404).json({ success: false, message: "No unseen request letters found" });
         }
 
@@ -396,6 +438,3 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
         next(createError(500, error.message));
     }
 };
-
-
-

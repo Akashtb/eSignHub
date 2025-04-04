@@ -39,6 +39,12 @@ export const requestLetterApiSlice = apiSlice.injectEndpoints({
                 method: 'PATCH',
             }),
         }), 
+        listForNotification:builder.query({
+            query: () => ({
+                url: `/requestLetter/listForNotification`,
+                method: 'GET',
+                })
+        }),
         createRequestLetter: builder.mutation({
             query: ({ subject, messageBody, toUids }) => ({
                 url: '/requestLetter/create',
@@ -48,7 +54,7 @@ export const requestLetterApiSlice = apiSlice.injectEndpoints({
             invalidatesTags: [{ type: 'RequestLetter' }],
         }),
     }),
-});
+})
 
 export const {
     useGetAllRequestLetterQuery,
@@ -59,4 +65,5 @@ export const {
     useRejectRequestLetterMutation,
     useRecipientListQuery,
     useMarkRequestLetterAsSeenMutation, 
+    useListForNotificationQuery
 } = requestLetterApiSlice;

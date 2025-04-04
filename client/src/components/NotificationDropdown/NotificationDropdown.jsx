@@ -1,19 +1,37 @@
 import { useState, useEffect, useRef } from "react";
 import { Bell, X } from "lucide-react";
 import "./NotificationDropdown.scss";
+import { useListForNotificationQuery, useMarkRequestLetterAsSeenMutation } from "../../features/redux/users/RequestLetter";
+import { useNavigate } from "react-router";
 
 const NotificationDropdown = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
 
-  const [notifications, setNotifications] = useState([
-    { id: 1, sender: "John Doe", subject: "Project Update", time: "10:30 AM" },
-    { id: 2, sender: "Jane Smith", subject: "Meeting Reminder", time: "11:00 AM" },
-    { id: 3, sender: "Admin", subject: "System Maintenance", time: "1:00 PM" },
-  ]);
+  const { data, isLoading, isError, refetch } = useListForNotificationQuery();
+  const [markAsSeen] = useMarkRequestLetterAsSeenMutation();
 
-  const removeNotification = (id) => {
-    setNotifications((prev) => prev.filter((notification) => notification.id !== id));
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    refetch();
+  }, []);
+
+  const notificationList = data?.unseenLetters || [];
+
+  const [filteredNotifications, setFilteredNotifications] = useState(notificationList);
+
+  useEffect(() => {
+    setFilteredNotifications(notificationList);
+  }, [data]);
+
+  const removeNotification = async(id) => {
+    try {
+      const seen = await markAsSeen(id).unwrap();
+      setFilteredNotifications((prev) => prev.filter((notif) => notif._id !== id));      
+  } catch (error) {
+      console.error("Error marking as seen:", error);
+  }
   };
 
   useEffect(() => {
@@ -34,22 +52,33 @@ const NotificationDropdown = () => {
     };
   }, [showNotifications]);
 
+
+  const navigateToLetter = (id) => {
+    navigate(`/requestLetter/${id}`)
+    setFilteredNotifications((prev) => prev.filter((notif) => notif._id !== id));
+  }
+
+
+
   return (
     <div className="notification" ref={dropdownRef}>
       <div className="bell-icon" onClick={() => setShowNotifications((prev) => !prev)}>
-        {notifications.length > 0 && <span>{notifications.length}</span>}
+        {filteredNotifications.length > 0 && <span>{filteredNotifications.length}</span>}
         <Bell size={24} style={{ cursor: "pointer" }} />
       </div>
 
-      {showNotifications && notifications.length > 0 && (
+      {filteredNotifications.length > 0 && showNotifications && (
         <div className="notification-dropdown">
-          {notifications.map((notif) => (
-            <div className="notification-item" key={notif.id}>
+          {filteredNotifications.map((notif) => (
+            <div className="notification-item" key={notif._id} onClick={()=>navigateToLetter(notif._id)}>
               <div className="notif-info">
-                <strong>{notif.sender}</strong>
+                <strong>{notif?.fromUser?.fullName || "Unknown Sender"}</strong>
                 <p>{notif.subject}</p>
               </div>
-              <X size={18} className="close-icon" onClick={() => removeNotification(notif.id)} />
+              <X size={18} className="close-icon" onClick={(e) =>{
+                 e.stopPropagation()
+                 removeNotification(notif._id)}
+              } />
             </div>
           ))}
         </div>

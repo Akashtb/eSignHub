@@ -95,7 +95,7 @@ const Tutor = () => {
                 <button onClick={() => setOpen(true)}>Add New Tutor</button>
             </div>
             <div className="tableContainer">
-                <DataTable slug="Tutor" columns={filteredColumns} rows={tutorData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} />
+                <DataTable slug="Tutor" columns={filteredColumns} rows={tutorData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} isLoading={isLoading}/>
             </div>
             {open && <Add slug="Tutor" columns={columns} setOpen={setOpen} refetch={refetch} />}
             {openEdit && <Edit slug="Tutor" columns={filteredColumns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId} />}

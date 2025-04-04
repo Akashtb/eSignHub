@@ -17,10 +17,10 @@ const RequestLetter = () => {
   
 
   useEffect(() => {
-    if (!data) {
+  
       refetchRequestLetter();
-    }
-  }, [data, refetchRequestLetter,user]); 
+
+  }, []); 
 
   const handleComposeClick = () => {
     setIsComposeOpen(true);

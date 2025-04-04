@@ -5,7 +5,7 @@ import { useDeleteStudentMutation } from "../../features/redux/users/Studentslic
 import { useDeleteTutorMutation } from "../../features/redux/users/TutorSlice";
 import { useDeleteHODMutation } from "../../features/redux/users/HODSlice";
 
-const DataTable = ({ columns, rows, slug, setOpenEdit, setOpenView, setSelectedId, refetch }) => {
+const DataTable = ({ columns, rows, slug, setOpenEdit, setOpenView, setSelectedId, refetch ,isLoading}) => {
 
   const [deleteStudent] = useDeleteStudentMutation();
   const [deleteTutor] = useDeleteTutorMutation();

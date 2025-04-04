@@ -6,7 +6,7 @@ import Edit from "../../../Components/Edit/Edit";
 import View from "../../../Components/View/View";
 import { useGetAllStudentsQuery } from "../../../features/redux/users/Studentslice";
 import DataTable from "../../../Components/dataTable/DataTable";
-
+import {Riple} from "react-loading-indicators"
 
 
 const Students = () => {
@@ -89,13 +89,15 @@ const Students = () => {
 
 
 
+
+
   return (
     <div className="students">
       <div className="info">
         <h1>Student</h1>
       </div>
       <div className="tableContainer">
-        <DataTable slug="student" columns={columns} rows={studentData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} />
+        <DataTable slug="student" columns={columns} rows={studentData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} isLoading={isLoading}/>
       </div>
       {openEdit && <Edit slug="student" selectedId={selectedId} columns={columns} setOpenEdit={setOpenEdit} refetch={refetch} />}
       {openView && <View slug="student" selectedId={selectedId} columns={columns} setOpenView={setOpenView} />}

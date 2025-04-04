@@ -91,7 +91,7 @@ const HOD = () => {
         <button onClick={() => setOpen(true)}>Add New HOD</button>
       </div>
       <div className="tableContainer">
-        <DataTable slug="HOD" columns={filteredColumns} rows={HODData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} />
+        <DataTable slug="HOD" columns={filteredColumns} rows={HODData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} isLoading={isLoading}/>
       </div>
       {open && <Add slug="HOD" columns={columns} setOpen={setOpen} refetch={refetch}/>}
       {openEdit && <Edit slug="HOD" columns={filteredColumns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId}/>}
