@@ -1,13 +1,17 @@
 
-import { Link } from "react-router"; 
+import { Link } from "react-router";
 import "../../menu/menu.scss";
-import { PenTool } from "lucide-react";
-const StudentSideBar = () => {
+import { PenTool, User } from "lucide-react";
+const StudentSideBar = ({pathPrefix}) => {
     return (
         <div className="menu">
             <div className="item">
                 <span className="title main-heading">MAIN</span>
-                <Link to="/requestLetter" className="listItem">
+                <Link to={`${pathPrefix}/updateDetails`} className="listItem">
+                    <User/>
+                    <span className="listItemTitle">Profile</span>
+                </Link>
+                <Link to={`${pathPrefix}/requestLetter`} className="listItem">
                     <PenTool />
                     <span className="listItemTitle">Request Letters</span>
                 </Link>

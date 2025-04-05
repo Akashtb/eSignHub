@@ -11,13 +11,12 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [logOutAPi] = useLogOutMutation(); 
 
-  // Logout Handler
   const handleLogout = async () => {
     try {
       await logOutAPi().unwrap();
       dispatch(logOut());
       localStorage.removeItem("persist:root");
-      navigate("/landingPage");
+      navigate("/");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -31,13 +30,10 @@ const Navbar = () => {
       </div>
 
       <div className="icons">
-        {/* Notification Component */}
         <NotificationDropdown/>
-
         <div className="user">
           <User size={24} style={{ cursor: "pointer" }} />
         </div>
-
         <LogOut size={24} className="icon logout-icon" onClick={handleLogout} style={{ cursor: "pointer" }} />
       </div>
     </div>

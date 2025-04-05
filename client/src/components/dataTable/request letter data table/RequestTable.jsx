@@ -1,9 +1,13 @@
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./requestLetter.scss";
+import { useSelector } from "react-redux";
+import { selectCurrentRole } from "../../../features/redux/auth/AuthSlice";
 
 const RequestLetterTable = ({ columns, rows }) => {
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate(); 
+  const role = useSelector(selectCurrentRole)
+  const pathPrefix = role === "Student" ? "/student" : "/dashboard";
 
   return (
     <div className="dataTable">
@@ -40,7 +44,7 @@ const RequestLetterTable = ({ columns, rows }) => {
           "& .MuiDataGrid-virtualScroller": { overflow: "auto" }, 
         }}
         getRowClassName={() => "custom-row"}
-        onRowClick={(params) => navigate(`/requestLetter/${params.id}`)} 
+        onRowClick={(params) => navigate(`${pathPrefix}/requestLetter/${params.id}`)} 
       />
     </div>
   );

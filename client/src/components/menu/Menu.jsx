@@ -8,30 +8,30 @@ import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
 
 const Menu = () => {
   const user = useSelector(selectCurrentRole)
-
+  const pathPrefix = user === "Student" ? "/student" : "/dashboard";
   const getSidebarItems = () => {
     switch (user) {
       case "Principal":
         return (
           <>
-            <PrincipalSidebar />
+            <PrincipalSidebar pathPrefix={pathPrefix}/>
           </>
         );
 
       case "Student":
         return (
           <>
-            <StudentSideBar />
+            <StudentSideBar pathPrefix={pathPrefix}/>
           </>
         );
 
       case "Tutor":
         return (
-          <StaffSideBar />
+          <StaffSideBar pathPrefix={pathPrefix}/>
         );
       case "HOD":
         return (
-          <StaffSideBar />
+          <StaffSideBar pathPrefix={pathPrefix}/>
         );
 
 
@@ -40,7 +40,7 @@ const Menu = () => {
           <>
             <div className="item">
               <span className="title main-heading">MAIN</span>
-              <Link to="/" className="listItem">
+              <Link to={`${pathPrefix}`} className="listItem">
                 <Home />
                 <span className="listItemTitle">Homepage</span>
               </Link>

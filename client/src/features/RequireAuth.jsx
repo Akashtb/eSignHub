@@ -1,14 +1,20 @@
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import { selectCurrentRole, selectCurrentToken } from "./AuthSLice";
 import Layout from "../Layout";
 import { Navigate, Outlet, useLocation } from "react-router";
+import { selectCurrentRole, selectCurrentToken } from "./redux/auth/AuthSlice";
 
 const RequireAuth = ({ allowedRoles }) => {
+
     const token = useSelector(selectCurrentToken);
     const location = useLocation();
     const [isLoading, setIsLoading] = useState(true);
     const role = useSelector(selectCurrentRole);
+    const pathPrefix = role === "Student" ? "/student" : "/dashboard";
+    console.log(role);
+    console.log(allowedRoles);
+    
+    
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -32,7 +38,7 @@ const RequireAuth = ({ allowedRoles }) => {
     }
 
     if (!allowedRoles.includes(role)) {
-        return <Navigate to="/" replace />;
+        return <Navigate to={`${pathPrefix}`} replace />;
     }
 
     return (

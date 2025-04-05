@@ -100,13 +100,10 @@ export const viewAllRequestLetter = async (req, res, next) => {
         let filter = {};
 
         if (role === "Principal") {
-            // Principal sees all requests
             filter = {};
         } else if (role === "Tutor" || role === "HOD") {
-            // Corrected filter to check if the user's ID exists in toUids array
             filter = { "toUids.userId": id };
         } else if (role === "Student") {
-            // Student sees only their requests
             filter = { fromUid: id };
         } else {
             return res.status(403).json({ message: "Unauthorized access" });
@@ -115,7 +112,7 @@ export const viewAllRequestLetter = async (req, res, next) => {
         const allRequestLetter = await RequestLetter.find(filter)
             .populate("fromUid", "firstName lastName email")
             .populate("toUids.userId", "firstName lastName email role")
-            .populate("approvedBy.userId", "firstName lastName email role") // ✅ Fixed
+            .populate("approvedBy.userId", "firstName lastName email role")
             .lean(); 
 
         return res.status(200).json(allRequestLetter);

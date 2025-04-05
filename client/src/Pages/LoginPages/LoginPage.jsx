@@ -3,8 +3,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'; // Import Lin
 import img1 from '../../assets/principal.webp';
 import './login.css';
 import { useLoginMutation } from '../../features/redux/auth/AuthApiSlice';
-import { useDispatch } from 'react-redux';
-import { setCredentials } from '../../features/redux/auth/AuthSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectCurrentRole, setCredentials } from '../../features/redux/auth/AuthSlice';
 
 function Login() {
   const [email, setEmail] = useState('');
@@ -15,6 +15,7 @@ function Login() {
   const [login] = useLoginMutation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const userRole = useSelector(selectCurrentRole)
 
   const formattedRole = role
   ? role.toUpperCase() === "HOD"
@@ -28,8 +29,11 @@ function Login() {
       const userData = await login({ email, password, role:formattedRole, regNumber }).unwrap();
       console.log(userData);
       dispatch(setCredentials({ ...userData }));
-      navigate('/'); 
-    } catch (error) {
+      if (userRole === "Student") {
+        navigate("/student");
+      } else if (["Principal", "Tutor", "HOD"].includes(userRole)) {
+        navigate("/dashboard");
+      }    } catch (error) {
       console.error('Error logging in:', error);
     }
   };

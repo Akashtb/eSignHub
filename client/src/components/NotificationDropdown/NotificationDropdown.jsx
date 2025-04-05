@@ -3,10 +3,14 @@ import { Bell, X } from "lucide-react";
 import "./NotificationDropdown.scss";
 import { useListForNotificationQuery, useMarkRequestLetterAsSeenMutation } from "../../features/redux/users/RequestLetter";
 import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
+import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
 
 const NotificationDropdown = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
+  const role = useSelector(selectCurrentRole)
+  const pathPrefix = role === "Student" ? "/student" : "/dashboard";
 
   const { data, isLoading, isError, refetch } = useListForNotificationQuery();
   const [markAsSeen] = useMarkRequestLetterAsSeenMutation();
@@ -54,7 +58,7 @@ const NotificationDropdown = () => {
 
 
   const navigateToLetter = (id) => {
-    navigate(`/requestLetter/${id}`)
+    navigate(`${pathPrefix}/requestLetter/${id}`)
     setFilteredNotifications((prev) => prev.filter((notif) => notif._id !== id));
   }
 

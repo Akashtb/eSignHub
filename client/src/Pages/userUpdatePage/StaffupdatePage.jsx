@@ -5,7 +5,7 @@ import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/
 import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice";
 import { useGetTutorByIdQuery, useUpdateTutorDetailMutation } from "../../features/redux/users/TutorSlice";
 
-const UserUpdatePage = () => {
+const StaffUpdatePage = () => {
     const user = useSelector(selectCurrentUser);
     const role = useSelector(selectCurrentRole);
 
@@ -150,4 +150,4 @@ const UserUpdatePage = () => {
     );
 };
 
-export default UserUpdatePage;
+export default StaffUpdatePage;
