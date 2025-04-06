@@ -4,7 +4,7 @@ import { createError } from "../utils/customErrorHandling.js"
 
 
 export const createHod = async(req,res,next)=>{
-    const{email,password,firstName,lastName,phone,departmentName,img} = req.body
+    const{email,password,firstName,lastName,phone,departmentName,img,dateOfBirth} = req.body
     try {
         const existingUser = await HOD.findOne({email})
         if(existingUser){
@@ -20,7 +20,8 @@ export const createHod = async(req,res,next)=>{
             password:hashedPassword,
             phone,
             departmentName,
-            img
+            img,
+            dateOfBirth
         })
         return  res.status(201).json({message:"User created successfully"})
     } catch (error) {

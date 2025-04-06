@@ -46,6 +46,7 @@ const HOD = () => {
     {
       field: "email",
       headerName: "Email",
+      type: "email",
       flex: 2.5,
       minWidth: 200,
     },
@@ -67,7 +68,7 @@ const HOD = () => {
       flex: 1.5,
       minWidth: 150,
       renderCell: (params) => {      
-        const dateValue = params?.value ? new Date(params.value) : null;
+        const dateValue = params?.value ? new Date(params?.value) : null;
         return dateValue && !isNaN(dateValue) 
           ? dateValue.toISOString().split("T")[0] 
           : "Invalid Date"; 

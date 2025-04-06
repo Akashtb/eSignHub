@@ -113,6 +113,7 @@ export const viewAllRequestLetter = async (req, res, next) => {
             .populate("fromUid", "firstName lastName email")
             .populate("toUids.userId", "firstName lastName email role")
             .populate("approvedBy.userId", "firstName lastName email role")
+            .sort({ createdAt: -1 }) 
             .lean(); 
 
         return res.status(200).json(allRequestLetter);

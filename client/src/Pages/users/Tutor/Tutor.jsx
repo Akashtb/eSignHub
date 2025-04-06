@@ -48,6 +48,7 @@ const Tutor = () => {
         {
             field: "email",
             headerName: "Email",
+            type: "email",
             flex: 2.5,
             minWidth: 200,
         },

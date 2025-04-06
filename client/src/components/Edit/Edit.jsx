@@ -13,7 +13,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({});
   const departmentOptions = ["Computer Science", "Electronics and Communication"];
-  const batchOptions = ["2021-2025", "2022-2026", "2023-2027", "2024-2028" ]
+  const batchOptions = ["2021-2025", "2022-2026", "2023-2027", "2024-2028"]
 
 
 
@@ -42,6 +42,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
     if (userData) {
       setFormData(userData);
       setImageUrl(userData.img || "");
+      console.log("form data on edit", formData);
     }
   }, [userData]);
 
@@ -72,6 +73,9 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
     }
   };
 
+
+
+
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -79,6 +83,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting Data:", formData);
+
 
     try {
       let updated;
@@ -131,32 +136,47 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
                 <label>{column.headerName}</label>
 
                 {column.field === "batch" ? (
-                  <select name="batch" onChange={handleInputChange}>
+                  <select
+                    name="batch"
+                    onChange={handleInputChange}
+                    value={formData.batch || ""}
+                    required
+                  >
                     <option value="">Select Batch</option>
                     {batchOptions.map((batch, idx) => (
                       <option key={idx} value={batch}>{batch}</option>
                     ))}
                   </select>
-                )  : column.field === "departmentName" ? (
-                  <select name="departmentName" onChange={handleInputChange}>
+
+                ) : column.field === "departmentName" ? (
+                  <select
+                    name="departmentName"
+                    onChange={handleInputChange}
+                    value={formData.departmentName || ""}
+                    required
+                  >
                     <option value="">Select Department</option>
                     {departmentOptions.map((dept, idx) => (
                       <option key={idx} value={dept}>{dept}</option>
                     ))}
                   </select>
+
                 ) : column.field === "dateOfBirth" ? (
                   <input
                     type="date"
                     name="dateOfBirth"
-                    value={formData.dateOfBirth ? new Date(formData.dateOfBirth).toISOString().split("T")[0] : ""}
+                    value={formData.dateOfBirth ? formData.dateOfBirth.slice(0, 10) : ""}
                     onChange={handleInputChange}
+                    required
                   />
+
                 ) : (
                   <input
                     type={column.type || "text"}
                     name={column.field}
                     value={formData[column.field] || ""}
                     onChange={handleInputChange}
+                    required
                   />
                 )}
               </div>
