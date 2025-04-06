@@ -3,21 +3,23 @@ import "./composeLetter.scss";
 import { TextField, Button, IconButton, Autocomplete, Chip, CircularProgress } from "@mui/material";
 import { GridCloseIcon } from "@mui/x-data-grid";
 import { useCreateRequestLetterMutation, useRecipientListQuery } from "../../features/redux/users/RequestLetter";
+import { toast } from "react-toastify";
+
 
 const ComposeLetter = ({ isOpen, onClose, refetchRequestLetter }) => {
   const [recipients, setRecipients] = useState([]);
   const [subject, setSubject] = useState("");
   const [message, setMessage] = useState("");
-  
 
-  const { data: RecipientList, isLoading, isError,error, refetch } = useRecipientListQuery();
-  const [createRequestLetter, { isLoading: isSubmitting, isSuccess, isError: submitError,error:createRequestError }] = useCreateRequestLetterMutation();
+
+  const { data: RecipientList, isLoading, isError, error, refetch } = useRecipientListQuery();
+  const [createRequestLetter, { isLoading: isSubmitting, isSuccess, isError: submitError, error: createRequestError }] = useCreateRequestLetterMutation();
 
   useEffect(() => {
     refetch();
   }, []);
 
-  if(submitError){
+  if (submitError) {
     console.log(createRequestError);
   }
   if (isError) {
@@ -31,13 +33,13 @@ const ComposeLetter = ({ isOpen, onClose, refetchRequestLetter }) => {
 
   const handleSend = async () => {
     if (!subject || !message || recipients.length === 0) {
-      alert("Please fill in all fields.");
+      toast.warn("Please fill in all fields.");
       return;
     }
 
-    const toUids = recipients.map(({ _id, role }) => ({ userId: _id, role })); // Convert recipients to user IDs
-    console.log(toUids,"toUids");
-    
+
+    const toUids = recipients.map(({ _id, role }) => ({ userId: _id, role })); 
+
 
     try {
       await createRequestLetter({
@@ -46,16 +48,15 @@ const ComposeLetter = ({ isOpen, onClose, refetchRequestLetter }) => {
         toUids,
       }).unwrap();
 
-      alert("Letter sent successfully!");
+      toast.success("Letter sent successfully!");
       setRecipients([]);
       setSubject("");
       setMessage("");
       refetchRequestLetter()
-      onClose(); // Close popup after sending
+      onClose(); 
     } catch (error) {
       console.error("Error sending request:", error);
-      alert("Failed to send letter.");
-    }
+      toast.error("Failed to send letter.");    }
   };
 
 

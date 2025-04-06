@@ -5,6 +5,8 @@ import { useNavigate } from "react-router";
 import { useDispatch } from "react-redux";
 import { logOut } from "../../features/redux/auth/AuthSlice";
 import NotificationDropdown from "../NotificationDropdown/NotificationDropdown";
+import { toast } from "react-toastify";
+
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,8 +18,10 @@ const Navbar = () => {
       await logOutAPi().unwrap();
       dispatch(logOut());
       localStorage.removeItem("persist:root");
+      toast.success("Logged out successfully!");
       navigate("/landingPage");
     } catch (error) {
+      toast.error("Logout failed. Please try again.");
       console.error("Logout failed:", error);
     }
   };

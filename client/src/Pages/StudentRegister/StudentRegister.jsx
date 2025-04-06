@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { Camera } from "lucide-react"; 
+import { Camera } from "lucide-react";
 import "./StudentRegister.css";
 import { useCreateStudentMutation } from "../../features/redux/users/Studentslice";
 import { useNavigate } from "react-router";
+import { toast } from "react-toastify";
+
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload";
 const UPLOAD_PRESET = "upload";
 
 const StudentRegister = () => {
     const [imagePreview, setImagePreview] = useState(null);
-    const [imageUrl, setImageUrl] = useState(""); 
+    const [imageUrl, setImageUrl] = useState("");
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -43,7 +45,7 @@ const StudentRegister = () => {
 
                 const data = await response.json();
                 console.log(data.secure_url);
-                
+
                 if (data.secure_url) {
                     setImageUrl(data.secure_url);
                     setFormData((prev) => ({ ...prev, img: data.secure_url }));
@@ -61,7 +63,7 @@ const StudentRegister = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!formData.img) {
-            alert("Please upload a profile picture.");
+            toast.warn("Please upload a profile picture.");
             return;
         }
 
@@ -69,9 +71,9 @@ const StudentRegister = () => {
             const response = await createStudent(formData);
             if (response?.error) {
                 console.error("Error creating student:", response.error);
-                alert("Failed to register student.");
+                toast.error("Failed to register student.");
             } else {
-                alert("Student registered successfully!");
+                toast.success("Student registered successfully!");
                 setFormData({
                     firstName: "",
                     lastName: "",

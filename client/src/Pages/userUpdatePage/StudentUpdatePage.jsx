@@ -5,6 +5,8 @@ import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/
 import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice";
 import { useGetTutorByIdQuery, useUpdateTutorDetailMutation } from "../../features/redux/users/TutorSlice";
 import { useGetStudentByIdQuery, useUpdateStudentDetailMutation } from "../../features/redux/users/Studentslice";
+import { toast } from "react-toastify";
+
 
 const StudentUpdatePage = () => {
     const user = useSelector(selectCurrentUser);
@@ -71,7 +73,7 @@ const StudentUpdatePage = () => {
         e.preventDefault();
         try {
             if (!userData) {
-                alert("User data not found!");
+                toast.error("User data not found!");
                 return;
             }
 
@@ -79,9 +81,10 @@ const StudentUpdatePage = () => {
             await updateStudent(updatedUser).unwrap();
             refetch()
 
-            alert("User updated successfully!");
+            toast.success("User updated successfully!"); 
         } catch (error) {
             console.error("Update failed:", error);
+            toast.error("Update failed. Please try again.");
         }
     };
 

@@ -4,6 +4,8 @@ import "./edit.scss";
 import { useGetStudentByIdQuery, useUpdateStudentDetailMutation } from "../../features/redux/users/Studentslice";
 import { useGetTutorByIdQuery, useUpdateTutorDetailMutation } from "../../features/redux/users/TutorSlice";
 import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice";
+import { toast } from "react-toastify";
+
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload";
 const UPLOAD_PRESET = "upload";
@@ -100,12 +102,11 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
         console.error("Invalid slug:", slug);
         return;
       }
-
-      console.log(updated, "User details updated successfully!");
+      toast.success(`${slug} updated successfully!`);
       refetch();
       setOpenEdit(false);
     } catch (error) {
-      console.error("Failed to update user:", error);
+      toast.error("Failed to update. Please try again.");
     }
   };
 

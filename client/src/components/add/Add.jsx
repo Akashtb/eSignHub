@@ -4,6 +4,7 @@ import "./add.scss";
 import { useCreateStudentMutation } from "../../features/redux/users/Studentslice";
 import { useCreateTutorMutation } from "../../features/redux/users/TutorSlice";
 import { useCreateHODMutation } from "../../features/redux/users/HODSlice";
+import { toast } from "react-toastify";
 
 const CLOUDINARY_URL = "https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload";
 const UPLOAD_PRESET = "upload";
@@ -17,7 +18,7 @@ const Add = ({ slug, columns, setOpen, refetch }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({});
 
-  const [createStudent, { isLoading: isLoadingStudent }] = useCreateStudentMutation();
+  // const [createStudent, { isLoading: isLoadingStudent }] = useCreateStudentMutation();
   const [createTutor, { isLoading: isLoadingTutor }] = useCreateTutorMutation();
   const [createHOD, { isLoading: isLoadingHOD }] = useCreateHODMutation();
 
@@ -64,15 +65,16 @@ const Add = ({ slug, columns, setOpen, refetch }) => {
         create = await createTutor(finalData);
       } else if (slug === "HOD") {
         create = await createHOD(finalData);
-        console.log("API Response:", create);
       } else {
         console.error("Invalid slug:", slug);
         return;
       }
+      toast.success(`New ${slug} added successfully!`);
       refetch()
       setOpen(false);
     } catch (error) {
       console.error("Failed to add user:", error);
+      toast.error(`Failed to add ${slug}. Please try again.`);
     }
   };
 

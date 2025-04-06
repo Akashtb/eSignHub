@@ -7,6 +7,8 @@ import { useDeleteHODMutation } from "../../features/redux/users/HODSlice";
 import { useSearchParams } from "react-router";
 import { useSelector } from "react-redux";
 import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
+import { toast } from "react-toastify";
+
 
 const DataTable = ({ columns, rows, slug, setOpenEdit, setOpenView, setSelectedId, refetch ,isLoading}) => {
 
@@ -27,26 +29,35 @@ const DataTable = ({ columns, rows, slug, setOpenEdit, setOpenView, setSelectedI
   }
 
   const handleDelete = async (id) => {
-    switch (slug) {
-      case "student":
-        await deleteStudent(id).unwrap();
-        refetch()
-        break;
-
-      case "Tutor":
-        await deleteTutor(id).unwrap()
-        refetch()
-        break;
-
-      case "HOD":
-        await deleteHOD(id).unwrap()
-        refetch()
-        break;
-
-      default:
-        console.warn(`No delete action defined for slug: ${slug}`);
+    try {
+      switch (slug) {
+        case "student":
+          await deleteStudent(id).unwrap();
+          toast.success("Student deleted successfully");
+          break;
+  
+        case "Tutor":
+          await deleteTutor(id).unwrap();
+          toast.success("Tutor deleted successfully");
+          break;
+  
+        case "HOD":
+          await deleteHOD(id).unwrap();
+          toast.success("HOD deleted successfully");
+          break;
+  
+        default:
+          toast.error("Invalid role type for delete operation");
+          return;
+      }
+  
+      refetch();
+    } catch (error) {
+      console.error("Delete failed:", error);
+      toast.error("Failed to delete. Please try again.");
     }
   };
+  
 
 
   const actionColumn = {

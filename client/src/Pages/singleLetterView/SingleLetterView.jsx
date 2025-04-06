@@ -7,6 +7,8 @@ import { QRCodeCanvas } from "qrcode.react";
 import { useApproveRequestLetterMutation, useGetRequestLetterByIdQuery, useMarkRequestLetterAsSeenMutation, useRejectRequestLetterMutation } from "../../features/redux/users/RequestLetter";
 import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
 import { useSelector } from "react-redux";
+import { toast } from "react-toastify";
+
 
 const SingleLetterView = () => {
     const { id } = useParams();
@@ -29,26 +31,28 @@ const SingleLetterView = () => {
     const handleApprove = async () => {
         try {
             await acceptRequestLetter(id).unwrap();
+            toast.success("Letter approved successfully.");
             refetch();
         } catch (error) {
             console.error("Error approving request letter:", error);
+            toast.error("Failed to approve the letter.");
         }
     };
 
     const handleReject = async () => {
         try {
             await rejectRequestLetter(id).unwrap();
+            toast.success("Letter rejected successfully.");
             refetch();
         } catch (error) {
             console.error("Error rejecting request letter:", error);
+            toast.error("Failed to reject the letter.");  
         }
     };
 
     const seenBy = async () => {
         try {
-            const seen = await markAsSeen(id).unwrap();
-            console.log(seen, "seen letter as action is performed");
-            
+            const seen = await markAsSeen(id).unwrap();            
         } catch (error) {
             console.error("Error marking as seen:", error);
         }

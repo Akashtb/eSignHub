@@ -18,22 +18,25 @@ function Login() {
   const userRole = useSelector(selectCurrentRole)
 
   const formattedRole = role
-  ? role.toUpperCase() === "HOD"
-    ? "HOD"
-    : role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
-  : "";
+    ? role.toUpperCase() === "HOD"
+      ? "HOD"
+      : role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
+    : "";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userData = await login({ email, password, role:formattedRole, regNumber }).unwrap();
+      const userData = await login({ email, password, role: formattedRole, regNumber }).unwrap();
       console.log(userData);
       dispatch(setCredentials({ ...userData }));
-      if (userRole === "Student") {
+      toast.success(`Welcome back, ${userData.role}!`);
+      if (userData.role === "Student") {
         navigate("/student");
       } else if (["Principal", "Tutor", "HOD"].includes(userRole)) {
         navigate("/dashboard");
-      }    } catch (error) {
+      }
+    } catch (error) {
+      toast.error("Login failed. Please check your credentials.");
       console.error('Error logging in:', error);
     }
   };
@@ -46,28 +49,28 @@ function Login() {
           <p>Please enter your details</p>
 
           {formattedRole === "Student" ? (
-            <input 
-              type="text" 
-              placeholder="Enter your Register number" 
-              value={regNumber} 
+            <input
+              type="text"
+              placeholder="Enter your Register number"
+              value={regNumber}
               onChange={(e) => setRegNumber(e.target.value)}
-              required 
+              required
             />
           ) : (
-            <input 
-              type="email" 
-              placeholder="Enter your e-mail" 
-              value={email} 
-              onChange={(e) => setEmail(e.target.value)} 
+            <input
+              type="email"
+              placeholder="Enter your e-mail"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           )}
 
-          <input 
-            type="password" 
-            placeholder="Password" 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)} 
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
 
@@ -79,7 +82,7 @@ function Login() {
 
           {formattedRole === "Student" && (
             <p className="signup-text">
-              Don't have an account? <Link to="/studentregister" className="signup-link" style={{color:"black"}}>Sign up for free</Link>
+              Don't have an account? <Link to="/studentregister" className="signup-link" style={{ color: "black" }}>Sign up for free</Link>
             </p>
           )}
         </div>

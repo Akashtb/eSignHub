@@ -2,10 +2,9 @@ import { useEffect, useState } from "react";
 import "./userUpdatePage.scss";
 import { useSelector } from "react-redux";
 import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
-import { useGetHODByIdQuery, useUpdateHODDetailMutation } from "../../features/redux/users/HODSlice";
-import { useGetTutorByIdQuery, useUpdateTutorDetailMutation } from "../../features/redux/users/TutorSlice";
-import { useGetStudentByIdQuery, useUpdateStudentDetailMutation } from "../../features/redux/users/Studentslice";
 import { useGetPrincipalByIdQuery, useUpdatePrincipalDetailMutation } from "../../features/redux/users/PrincipalSlice";
+import { toast } from "react-toastify";
+
 
 const PrincipaUpdatePage = () => {
     const user = useSelector(selectCurrentUser);
@@ -16,7 +15,7 @@ const PrincipaUpdatePage = () => {
     const [updatePrincipal] = useUpdatePrincipalDetailMutation();
 
     const userData = data?.principal
-    
+
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -68,7 +67,7 @@ const PrincipaUpdatePage = () => {
         e.preventDefault();
         try {
             if (!userData) {
-                alert("User data not found!");
+                toast.error("User data not found!");
                 return;
             }
 
@@ -76,9 +75,10 @@ const PrincipaUpdatePage = () => {
             await updatePrincipal(updatedUser).unwrap();
             refetch()
 
-            alert("User updated successfully!");
+            toast.success("User updated successfully!"); 
         } catch (error) {
             console.error("Update failed:", error);
+            toast.error("Update failed. Please try again.");
         }
     };
 
@@ -109,16 +109,16 @@ const PrincipaUpdatePage = () => {
                 <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
 
                 <label>Last Name</label>
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required/>
+                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
 
                 <label>Email</label>
                 <input type="email" name="email" value={formData.email} onChange={handleChange} required />
 
                 <label>Phone</label>
-                <input type="text" name="phone" value={formData.phone} onChange={handleChange} required/>
+                <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
 
                 <label>Date of Birth</label>
-                <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required/>
+                <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
 
                 <button type="submit">Update</button>
             </form>
