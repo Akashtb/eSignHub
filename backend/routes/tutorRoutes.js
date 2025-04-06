@@ -4,8 +4,8 @@ import { verifyPrincipal, verifyStaff } from "../middleware/token.js"
 
 const router = express.Router()
 
-router.post('/create',createTutor)
-router.patch('/update/:id',updateTutor)
+router.post('/create',verifyPrincipal,createTutor)
+router.patch('/update/:id',verifyStaff,updateTutor)
 router.delete('/delete/:id',verifyPrincipal,deleteTutor)
 router.get('/view/:id',verifyStaff,viewTutor)
 router.get('/viewAll',viewAllTutors)

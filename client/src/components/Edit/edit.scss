@@ -105,9 +105,9 @@
           color: white;
         }
 
-        input {
+        input,select {
           padding: 10px;
-          background: rgba(255, 255, 255, 0.2);
+          background: rgba(80, 77, 77, 0.2);
           color: white;
           outline: none;
           border: 1px solid rgba(255, 255, 255, 0.3);
@@ -115,12 +115,12 @@
           transition: 0.3s ease;
 
           &::placeholder {
-            color: rgba(255, 255, 255, 0.6);
+            color: rgba(190, 181, 181, 0.6);
           }
 
           &:focus {
             border-color: white;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(24, 23, 23, 0.3);
           }
         }
       }

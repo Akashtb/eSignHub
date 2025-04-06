@@ -16,7 +16,7 @@ const Navbar = () => {
       await logOutAPi().unwrap();
       dispatch(logOut());
       localStorage.removeItem("persist:root");
-      navigate("/");
+      navigate("/landingPage");
     } catch (error) {
       console.error("Logout failed:", error);
     }

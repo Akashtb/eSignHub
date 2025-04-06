@@ -197,20 +197,20 @@ export const viewRequestLetter = async (req, res, next) => {
 
 
 
-export const receviedRequestLetter = async (req, res, next) => {
-    try {
-        const requestLetters = await RequestLetter.find({ "toUids.role": req.user.role });
+// export const receviedRequestLetter = async (req, res, next) => {
+//     try {
+//         const requestLetters = await RequestLetter.find({ "toUids.role": req.user.role });
 
-        res.status(200).json({ 
-            success: true,
-            message: requestLetters.length ? "Request letters retrieved successfully" : "No request letters found",
-            requestLetters 
-        });
+//         res.status(200).json({ 
+//             success: true,
+//             message: requestLetters.length ? "Request letters retrieved successfully" : "No request letters found",
+//             requestLetters 
+//         });
 
-    } catch (error) {
-        next(createError(500, error.message));
-    }
-};
+//     } catch (error) {
+//         next(createError(500, error.message));
+//     }
+// };
 
 
 export const listOfSentRequestLetter = async (req, res, next) => {

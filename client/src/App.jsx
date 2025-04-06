@@ -13,8 +13,10 @@ import StudentRegister from "./Pages/StudentRegister/StudentRegister";
 import UserUpdatePage from "./Pages/userUpdatePage/UserUpdationPage";
 import RequireAuth from "./features/RequireAuth";
 import Layout from "./Layout";
+import RoleRedirect from "./features/StartRoute";
 
 const router = createBrowserRouter([
+  { path: "/", element: <RoleRedirect/> },
   {
     path: "/student",
     element: <RequireAuth allowedRoles={["Student"]} />,
@@ -38,7 +40,7 @@ const router = createBrowserRouter([
       { path: "updateDetails", element: <UserUpdatePage /> }
     ]
   },
-  { path: "/", element: <LandingPage /> },
+  { path: "/landingPage", element: <LandingPage /> },
   { path: "/login", element: <Login /> },
   { path: "/studentRegister", element: <StudentRegister /> }
 ]);
