@@ -77,7 +77,7 @@ function Login() {
 
           <button className="login-btn" onClick={handleSubmit}>Sign in</button>
 
-          {formattedRole === "STUDENT" && (
+          {formattedRole === "Student" && (
             <p className="signup-text">
               Don't have an account? <Link to="/studentregister" className="signup-link" style={{color:"black"}}>Sign up for free</Link>
             </p>

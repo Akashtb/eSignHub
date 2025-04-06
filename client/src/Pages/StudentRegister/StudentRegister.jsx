@@ -132,9 +132,8 @@ const StudentRegister = () => {
 
                     <select name="departmentName" className="fullWidth" value={formData.departmentName} onChange={handleChange} required>
                         <option value="" disabled>Select Department</option>
-                        <option value="Pharmacy">Pharmacy</option>
-                        <option value="Biomedical Engineering">Biomedical Engineering</option>
-                        <option value="Other">Other</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Electronics and Communication">Electronics and Communication</option>
                     </select>
 
                     <input type="date" name="dateOfBirth" className="fullWidth" value={formData.dateOfBirth} onChange={handleChange} required />
