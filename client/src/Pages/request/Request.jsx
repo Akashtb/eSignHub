@@ -5,22 +5,23 @@ import ComposeLetter from "../../Components/composeLetter/ComposeLetter";
 import { useGetAllRequestLetterQuery } from "../../features/redux/users/RequestLetter";
 import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
 import { useSelector } from "react-redux";
+import LoadingSpinner from "../../Components/loadingSpinner/LoadingSpinner";
 
 const RequestLetter = () => {
   const [isComposeOpen, setIsComposeOpen] = useState(false);
   const { data, isLoading, isError, refetch: refetchRequestLetter } = useGetAllRequestLetterQuery();
   console.log(data);
-  
+
   const role = useSelector(selectCurrentRole);
-  const user = useSelector(selectCurrentUser); 
-  console.log(user,"user");
-  
+  const user = useSelector(selectCurrentUser);
+  console.log(user, "user");
+
 
   useEffect(() => {
-  
-      refetchRequestLetter();
 
-  }, []); 
+    refetchRequestLetter();
+
+  }, []);
 
   const handleComposeClick = () => {
     setIsComposeOpen(true);
@@ -53,7 +54,7 @@ const RequestLetter = () => {
       minWidth: 300,
       renderCell: (params) => {
         const seenByArray = params.row.seenBy || [];
-        const isSeen = seenByArray.some((seenUser) => seenUser.userId === user); 
+        const isSeen = seenByArray.some((seenUser) => seenUser.userId === user);
 
         return (
           <span style={{ fontWeight: isSeen ? "normal" : "bold" }}>
@@ -100,12 +101,17 @@ const RequestLetter = () => {
       </div>
 
       <div className="tableContainer">
-        {data?.length > 0 ? (
+        {isLoading ? (
+          <div className="spinnerWrapper">
+            <LoadingSpinner/>
+          </div>
+        ) : data?.length > 0 ? (
           <RequestLetterTable slug="letter" columns={columns} rows={data} />
         ) : (
           <span className="noDataMessage">No Data Available</span>
         )}
       </div>
+
 
       {/* Compose Popup */}
       {role === "Student" && <ComposeLetter isOpen={isComposeOpen} onClose={handleCloseCompose} refetchRequestLetter={refetchRequestLetter} />}

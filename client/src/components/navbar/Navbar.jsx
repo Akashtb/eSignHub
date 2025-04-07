@@ -29,15 +29,12 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <div className="logo">
-        <img src="logo.svg" alt="Logo" />
-        <span>Application</span>
+        <img src="/logo.svg" alt="Logo" />
+        <span>OUTPOST</span>
       </div>
 
       <div className="icons">
         <NotificationDropdown/>
-        <div className="user">
-          <User size={24} style={{ cursor: "pointer" }} />
-        </div>
         <LogOut size={24} className="icon logout-icon" onClick={handleLogout} style={{ cursor: "pointer" }} />
       </div>
     </div>

@@ -57,7 +57,35 @@ const Add = ({ slug, columns, setOpen, refetch }) => {
     const finalData = { ...formData, img: imageUrl };
 
     console.log(finalData, "finalData");
-
+    if (finalData.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(finalData.email)) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+    }
+  
+    if (finalData.password && finalData.password.length < 8) {
+      toast.error("Password must be at least 8 characters long.");
+      return;
+    }
+  
+    if (finalData.dateOfBirth) {
+      const dob = new Date(finalData.dateOfBirth);
+      const today = new Date();
+      const age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      const dayDiff = today.getDate() - dob.getDate();
+  
+      if (
+        age < 25 ||
+        (age === 25 && monthDiff < 0) ||
+        (age === 25 && monthDiff === 0 && dayDiff < 0)
+      ) {
+        toast.error("Date of Birth must be at least 25 years ago.");
+        return;
+      }
+    }
 
     try {
       let create;

@@ -78,6 +78,7 @@ const ComposeLetter = ({ isOpen, onClose, refetchRequestLetter }) => {
           margin="dense"
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
+          required
         />
 
         <Autocomplete
@@ -103,6 +104,7 @@ const ComposeLetter = ({ isOpen, onClose, refetchRequestLetter }) => {
               variant="outlined"
               margin="dense"
               placeholder="Type to search..."
+              required
               InputProps={{
                 ...params.InputProps,
                 endAdornment: (
@@ -122,6 +124,7 @@ const ComposeLetter = ({ isOpen, onClose, refetchRequestLetter }) => {
           variant="outlined"
           multiline
           rows={8}
+          required
           margin="dense"
           value={message}
           onChange={(e) => setMessage(e.target.value)}

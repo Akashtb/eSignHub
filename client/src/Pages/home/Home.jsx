@@ -14,18 +14,18 @@ const departmentColors = {
   "Electronics": "#9b59b6",
   "Information Technology": "#1abc9c",
   "Biomedical Engineering": "#8e44ad",
-  "Others": "#95a5a6",
+  "Others": "#e7c530",
 };
 
 // Define fixed colors for batches
 const batchColors = {
-  "2020": "#e67e22",
-  "2021": "#27ae60",
-  "2022": "#2980b9",
-  "2023": "#8e44ad",
-  "2024": "#f1c40f",
-  "2025": "#16a085",
-  "2026": "#d35400",
+  "2020-2024": "#e67e22",
+  "2021-2025": "#27ae60",
+  "2022-2026": "#2980b9",
+  "2023-2027": "#8e44ad",
+  "2024-2028": "#f1c40f",
+  "2025-2029": "#16a085",
+  "2026-2030": "#d35400",
   "Others": "#7f8c8d",
 };
 
@@ -65,13 +65,13 @@ const Home = () => {
         <PieChartBox title="Students by Batch" data={batchData} />
       </div>
       <div className="box box5">
-        <ChartBox title="Students" number={students} color="#3498db" icon={<FaUserGraduate size={24} color="#41bf99" />} />
+        <ChartBox title="Students" number={students} color="#3498db" icon={<FaUserGraduate size={24} color="#41bf99" />}slug="students" />
       </div>
       <div className="box box2">
-        <ChartBox title="Tutors" number={tutor} color="#b5c34e" icon={<FaChalkboardTeacher size={24} color="#c4d82d" />} />
+        <ChartBox title="Tutors" number={tutor} color="#b5c34e" icon={<FaChalkboardTeacher size={24} color="#c4d82d" />}slug="Tutor" />
       </div>
       <div className="box box3">
-        <ChartBox title="HOD" number={HOD} color="#cb9a51" icon={<FaUserTie size={24} color="#f0a536" />} />
+        <ChartBox title="HOD" number={HOD} color="#cb9a51" icon={<FaUserTie size={24} color="#f0a536" />} slug="HOD"/>
       </div>
     </div>
   );

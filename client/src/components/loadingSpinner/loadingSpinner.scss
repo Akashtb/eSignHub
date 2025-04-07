@@ -1,0 +1,19 @@
+.loading-spinner {
+    width: 4rem;
+    height: 4rem;
+    border: 6px solid rgba(218, 228, 27, 0.1); 
+    border-top: 6px solid #f0e285; 
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: auto;
+  
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  }
+  

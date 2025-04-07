@@ -6,6 +6,7 @@ import Edit from "../../../Components/Edit/Edit";
 import View from "../../../Components/View/View";
 import DataTable from "../../../components/dataTable/DataTable";
 import { useGetAllTutorsQuery } from "../../../features/redux/users/TutorSlice";
+import LoadingSpinner from "../../../Components/loadingSpinner/LoadingSpinner";
 
 
 
@@ -15,13 +16,13 @@ const Tutor = () => {
     const [openEdit, setOpenEdit] = useState(false)
     const [openView, setOpenView] = useState(false)
     const [selectedId, setSelectedId] = useState(null);
-    const { data:tutor, isLoading, isError, refetch } = useGetAllTutorsQuery()
+    const { data: tutor, isLoading, isError, refetch } = useGetAllTutorsQuery()
     const tutorData = tutor?.tutors;
 
- 
-    useEffect(()=>{
+
+    useEffect(() => {
         refetch()
-    },[])
+    }, [])
 
 
     const columns = [
@@ -63,20 +64,20 @@ const Tutor = () => {
             headerName: "password",
             flex: 1.5,
             minWidth: 150,
-          },
-          {
+        },
+        {
             field: "dateOfBirth",
             headerName: "Date of Birth",
             flex: 1.5,
             minWidth: 150,
-            renderCell: (params) => {      
-              const dateValue = params?.value ? new Date(params.value) : null;
-              return dateValue && !isNaN(dateValue) 
-                ? dateValue.toISOString().split("T")[0] 
-                : "Invalid Date"; 
+            renderCell: (params) => {
+                const dateValue = params?.value ? new Date(params.value) : null;
+                return dateValue && !isNaN(dateValue)
+                    ? dateValue.toISOString().split("T")[0]
+                    : "Invalid Date";
             },
-          },
-          
+        },
+
         {
             field: "departmentName",
             headerName: "Department",
@@ -87,7 +88,7 @@ const Tutor = () => {
 
 
     const filteredColumns = columns.filter(col => col.field !== "password");
-    
+
 
     return (
         <div className="Tutor">
@@ -96,11 +97,26 @@ const Tutor = () => {
                 <button onClick={() => setOpen(true)}>Add New Tutor</button>
             </div>
             <div className="tableContainer">
-                <DataTable slug="Tutor" columns={filteredColumns} rows={tutorData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} isLoading={isLoading}/>
+                {isLoading ? (
+                    <div className="spinner-wrapper">
+                        <LoadingSpinner/>
+                    </div>
+                ) : (
+                    <DataTable slug="Tutor"
+                        columns={filteredColumns}
+                        rows={tutorData}
+                        setOpenEdit={setOpenEdit}
+                        setOpenView={setOpenView}
+                        setSelectedId={setSelectedId}
+                        refetch={refetch}
+                        isLoading={isLoading} />
+
+                )}
             </div>
+
             {open && <Add slug="Tutor" columns={columns} setOpen={setOpen} refetch={refetch} />}
             {openEdit && <Edit slug="Tutor" columns={filteredColumns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId} />}
-            {openView && <View slug="Tutor" columns={filteredColumns} setOpenView={setOpenView} selectedId={selectedId}/>}
+            {openView && <View slug="Tutor" columns={filteredColumns} setOpenView={setOpenView} selectedId={selectedId} />}
         </div>
     );
 };

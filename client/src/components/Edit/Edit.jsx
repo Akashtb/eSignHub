@@ -86,7 +86,36 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
     e.preventDefault();
     console.log("Submitting Data:", formData);
 
+    if (formData.email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        toast.error("Please enter a valid email address.");
+        return;
+      }
+    }
 
+  
+    if (formData.dateOfBirth) {
+      const dob = new Date(formData.dateOfBirth);
+      const today = new Date();
+      const age = today.getFullYear() - dob.getFullYear();
+      const monthDiff = today.getMonth() - dob.getMonth();
+      const dayDiff = today.getDate() - dob.getDate();
+  
+      const isBirthdayPassedThisYear =
+        monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0);
+      const actualAge = isBirthdayPassedThisYear ? age : age - 1;
+  
+      if (slug === "Student" && actualAge < 18) {
+        toast.error("Student must be at least 18 years old.");
+        return;
+      }
+  
+      if ((slug === "Tutor" || slug === "HOD") && actualAge < 25) {
+        toast.error(`${slug} must be at least 25 years old.`);
+        return;
+      }
+    }
     try {
       let updated;
       if (slug === "student") {

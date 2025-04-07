@@ -6,6 +6,7 @@ import { userRows } from "../../../data";
 import Edit from "../../../Components/Edit/Edit";
 import View from "../../../Components/View/View";
 import { useGetAllHODQuery } from "../../../features/redux/users/HODSlice";
+import LoadingSpinner from "../../../Components/loadingSpinner/LoadingSpinner";
 
 
 
@@ -67,14 +68,14 @@ const HOD = () => {
       headerName: "Date of Birth",
       flex: 1.5,
       minWidth: 150,
-      renderCell: (params) => {      
+      renderCell: (params) => {
         const dateValue = params?.value ? new Date(params?.value) : null;
-        return dateValue && !isNaN(dateValue) 
-          ? dateValue.toISOString().split("T")[0] 
-          : "Invalid Date"; 
+        return dateValue && !isNaN(dateValue)
+          ? dateValue.toISOString().split("T")[0]
+          : "Invalid Date";
       },
     },
-    
+
     {
       field: "departmentName",
       headerName: "Department",
@@ -92,11 +93,26 @@ const HOD = () => {
         <button onClick={() => setOpen(true)}>Add New HOD</button>
       </div>
       <div className="tableContainer">
-        <DataTable slug="HOD" columns={filteredColumns} rows={HODData} setOpenEdit={setOpenEdit} setOpenView={setOpenView} setSelectedId={setSelectedId} refetch={refetch} isLoading={isLoading}/>
+        {isLoading ? (
+          <div className="spinner-wrapper">
+            <LoadingSpinner />
+          </div>
+        ) : (
+          <DataTable slug="HOD"
+            columns={filteredColumns}
+            rows={HODData}
+            setOpenEdit={setOpenEdit}
+            setOpenView={setOpenView}
+            setSelectedId={setSelectedId}
+            refetch={refetch}
+            isLoading={isLoading} />
+
+        )}
       </div>
-      {open && <Add slug="HOD" columns={columns} setOpen={setOpen} refetch={refetch}/>}
-      {openEdit && <Edit slug="HOD" columns={filteredColumns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId}/>}
-      {openView && <View slug="HOD" columns={filteredColumns} setOpenView={setOpenView} selectedId={selectedId}/>}
+
+      {open && <Add slug="HOD" columns={columns} setOpen={setOpen} refetch={refetch} />}
+      {openEdit && <Edit slug="HOD" columns={filteredColumns} setOpenEdit={setOpenEdit} refetch={refetch} selectedId={selectedId} />}
+      {openView && <View slug="HOD" columns={filteredColumns} setOpenView={setOpenView} selectedId={selectedId} />}
     </div>
   );
 };

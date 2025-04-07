@@ -62,11 +62,36 @@ const StudentRegister = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.img) {
-            toast.warn("Please upload a profile picture.");
+        // if (!formData.img) {
+        //     toast.warn("Please upload a profile picture.");
+        //     return;
+        // }
+
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            toast.error("Please enter a valid email address.");
+            return;
+        }
+    
+        if (formData.password.length < 8) {
+            toast.error("Password must be at least 8 characters long.");
             return;
         }
 
+        const dob = new Date(formData.dateOfBirth);
+        const today = new Date();
+        const age = today.getFullYear() - dob.getFullYear();
+        const monthDiff = today.getMonth() - dob.getMonth();
+        const dayDiff = today.getDate() - dob.getDate();
+    
+        if (
+            age < 18 ||
+            (age === 18 && monthDiff < 0) ||
+            (age === 18 && monthDiff === 0 && dayDiff < 0)
+        ) {
+            toast.error("You must be at least 18 years old to register.");
+            return;
+        }
         try {
             const response = await createStudent(formData);
             if (response?.error) {

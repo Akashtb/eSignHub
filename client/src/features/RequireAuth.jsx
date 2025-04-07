@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Layout from "../Layout";
 import { Navigate, Outlet, useLocation } from "react-router";
 import { selectCurrentRole, selectCurrentToken } from "./redux/auth/AuthSlice";
+import LoadingSpinner from "../Components/loadingSpinner/LoadingSpinner";
 
 const RequireAuth = ({ allowedRoles }) => {
 
@@ -30,8 +31,12 @@ const RequireAuth = ({ allowedRoles }) => {
     }, [role, allowedRoles]);
 
     if (isLoading) {
-        return <div>Loading...</div>;
-    }
+        return (
+          <div className="spinner-overlay">
+            <LoadingSpinner />
+          </div>
+        );
+      }
 
     if (!token) {
         return <Navigate to="/landingPage" replace />;
