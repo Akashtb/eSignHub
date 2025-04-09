@@ -1,22 +1,17 @@
-import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { selectCurrentRole } from "./redux/auth/AuthSlice";
+import { Navigate } from "react-router";
 
-const RoleRedirect = () => {
-  const navigate = useNavigate();
-  const role = useSelector(selectCurrentRole)
-  useEffect(() => {
-    if (role === "Student") {
-      navigate("/student");
-    } else if (role === "Tutor" || role === "HOD" || role === "Principal") {
-      navigate("/dashboard");
-    } else {
-      navigate("/landingPage");
-    }
-  }, [role, navigate]);
+const RoleRedirect = ({children}) =>{
+  const role = useSelector(selectCurrentRole);
 
-  return null; 
+  if (role === "Student") {
+    return <Navigate to="/student" replace />;
+  } else if (["Principal", "Tutor", "HOD"].includes(role)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  return children;
 };
 
 export default RoleRedirect;
