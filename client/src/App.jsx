@@ -41,9 +41,30 @@ const router = createBrowserRouter([
       { path: "updateDetails", element: <UserUpdatePage /> }
     ]
   },
-  { path: "/landingPage", element: <LandingPage /> },
-  { path: "/login", element: <Login /> },
-  { path: "/studentRegister", element: <StudentRegister /> },
+  {
+    path: "/landingPage",
+    element: (
+      <RoleRedirect>
+        <LandingPage />
+      </RoleRedirect>
+    )
+  },
+  {
+    path: "/login",
+    element: (
+      <RoleRedirect>
+        <Login />
+      </RoleRedirect>
+    )
+  },
+  {
+    path: "/studentRegister",
+    element: (
+      <RoleRedirect>
+        <StudentRegister />
+      </RoleRedirect>
+    )
+  },
 
   { path: "*", element: <NotFoundPage /> },
 ]);
