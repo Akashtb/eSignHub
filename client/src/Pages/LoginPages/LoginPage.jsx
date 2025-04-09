@@ -33,7 +33,7 @@ function Login() {
       toast.success(`Welcome back, ${userData.role}!`);
       if (userData.role === "Student") {
         navigate("/student");
-      } else if (["Principal", "Tutor", "HOD"].includes(userRole)) {
+      } else if (userData.role === "Principal"|| "HOD" || "Tutor") {
         navigate("/dashboard");
       }
     } catch (error) {
