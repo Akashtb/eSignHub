@@ -382,7 +382,7 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
                 $match: {
                     "toUids.userId": userId,
                     "toUids.role": user.role,
-                    seenBy: { $not: { $elemMatch: { userId } } }
+                    seenBy: { $not: { $elemMatch: { userId: userId } } }
                 }
             },
             {
@@ -421,10 +421,6 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
         ]);
         console.log(unseenLetters, "unseenLetters list");
 
-
-        if (!unseenLetters.length) {
-            return res.status(404).json({ success: false, message: "No unseen request letters found" });
-        }
 
         res.status(200).json({ success: true, count: unseenLetters.length, unseenLetters });
 

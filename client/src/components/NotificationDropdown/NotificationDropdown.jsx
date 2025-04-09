@@ -33,8 +33,8 @@ const NotificationDropdown = () => {
 
   const removeNotification = async(id) => {
     try {
-      const seen = await markAsSeen(id).unwrap();
-      setFilteredNotifications((prev) => prev.filter((notif) => notif._id !== id));      
+      await markAsSeen(id).unwrap();
+      await refetch()
   } catch (error) {
       console.error("Error marking as seen:", error);
   }
@@ -59,9 +59,16 @@ const NotificationDropdown = () => {
   }, [showNotifications]);
 
 
-  const navigateToLetter = (id) => {
-    navigate(`${pathPrefix}/requestLetter/${id}`)
-    setFilteredNotifications((prev) => prev.filter((notif) => notif._id !== id));
+  const navigateToLetter = async(id) => {
+    try {
+      await markAsSeen(id).unwrap();
+      await refetch()
+      navigate(`${pathPrefix}/requestLetter/${id}`)
+      setFilteredNotifications((prev) => prev.filter((notif) => notif._id !== id));
+    } catch (error) {
+      console.error("Error marking as seen:", error);
+    }
+ 
   }
 
 

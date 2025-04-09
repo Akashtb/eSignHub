@@ -8,7 +8,7 @@ export const requestLetterApiSlice = apiSlice.injectEndpoints({
             refetchOnMountOrArgChange: true,
         }),
         recipientList: builder.query({
-            query: () => '/requestLetter/recipientList', // ✅ Removed `method: 'GET'`
+            query: () => '/requestLetter/recipientList', 
             keepUnusedDataFor: 0, 
             refetchOnMountOrArgChange: true,
         }),
@@ -35,17 +35,21 @@ export const requestLetterApiSlice = apiSlice.injectEndpoints({
         }),
         markRequestLetterAsSeen: builder.mutation({
             query: (id) => ({
-                url: `/requestLetter/markRequestLetterAsSeen/${id}`,
-                method: 'PATCH',
+              url: `/requestLetter/markRequestLetterAsSeen/${id}`,
+              method: 'PATCH',
             }),
-        }), 
-        listForNotification:builder.query({
+            invalidatesTags: ['UnseenLetters'],
+          }), 
+          
+          listForNotification: builder.query({
             query: () => ({
-                url: `/requestLetter/listForNotification`,
-                method: 'GET',
-                })
-        }),
-        createRequestLetter: builder.mutation({
+              url: `/requestLetter/listForNotification`,
+              method: 'GET',
+            }),
+            providesTags: ['UnseenLetters'],
+            refetchOnMountOrArgChange: true,
+          }),
+          createRequestLetter: builder.mutation({
             query: ({ subject, messageBody, toUids }) => ({
                 url: '/requestLetter/create',
                 method: 'POST',
