@@ -52,7 +52,9 @@ const SingleLetterView = () => {
 
     const seenBy = async () => {
         try {
-            const seen = await markAsSeen(id).unwrap();            
+            const seen = await markAsSeen(id).unwrap();
+            console.log("make as seen response",seen);
+                        
         } catch (error) {
             console.error("Error marking as seen:", error);
         }

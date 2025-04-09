@@ -5,12 +5,12 @@ import RequestLetter from "../models/requestLetter.js"
 import Tutor from "../models/Tutor.js"
 import { createError } from "../utils/customErrorHandling.js"
 
-export const createRequestLetter = async(req,res)=>{
-    const fromUid= req.user.id
+export const createRequestLetter = async (req, res) => {
+    const fromUid = req.user.id
     const fromRole = req.user.role
-    const {subject,messageBody,toUids} = req.body
-    console.log(toUids,"toUids");
-    
+    const { subject, messageBody, toUids } = req.body
+    console.log(toUids, "toUids");
+
     try {
         await RequestLetter.create({
             fromUid,
@@ -18,9 +18,9 @@ export const createRequestLetter = async(req,res)=>{
             subject,
             messageBody,
             toUids,
-            status:"pending"
+            status: "pending"
         })
-        return res.status(201).json({message:"Request Letter created successfully"})
+        return res.status(201).json({ message: "Request Letter created successfully" })
     } catch (error) {
         next(createError(500, error.message));
     }
@@ -28,7 +28,7 @@ export const createRequestLetter = async(req,res)=>{
 
 export const updateRequestLetter = async (req, res, next) => {
     const { id } = req.params;
-    const { user } = req; 
+    const { user } = req;
 
     try {
         const existingRequest = await RequestLetter.findById(id);
@@ -63,7 +63,7 @@ export const updateRequestLetter = async (req, res, next) => {
 
 export const deleteRequestLetter = async (req, res, next) => {
     const { id } = req.params;
-    const { user } = req; 
+    const { user } = req;
 
     try {
         const existingRequest = await RequestLetter.findById(id);
@@ -113,8 +113,8 @@ export const viewAllRequestLetter = async (req, res, next) => {
             .populate("fromUid", "firstName lastName email")
             .populate("toUids.userId", "firstName lastName email role")
             .populate("approvedBy.userId", "firstName lastName email role")
-            .sort({ createdAt: -1 }) 
-            .lean(); 
+            .sort({ createdAt: -1 })
+            .lean();
 
         return res.status(200).json(allRequestLetter);
     } catch (error) {
@@ -126,8 +126,8 @@ export const viewAllRequestLetter = async (req, res, next) => {
 
 export const getLetterRecipients = async (req, res, next) => {
     try {
-        const { departmentName } = req.user;         
-        
+        const { departmentName } = req.user;
+
         if (!departmentName) {
             return res.status(400).json({ message: "Department name is required" });
         }
@@ -155,7 +155,7 @@ export const viewRequestLetter = async (req, res, next) => {
         const viewRequestLetter = await RequestLetter.findOne({ _id: id })
             .populate("fromUid", "firstName lastName email")
             .populate("toUids.userId", "firstName lastName email role")
-            .populate("approvedBy", "firstName lastName email role"); 
+            .populate("approvedBy", "firstName lastName email role");
 
         if (!viewRequestLetter) {
             return next(createError(404, "Request Letter not found"));
@@ -216,11 +216,11 @@ export const viewRequestLetter = async (req, res, next) => {
 
 export const listOfSentRequestLetter = async (req, res, next) => {
     try {
-        const requestLetters = await RequestLetter.find({ fromUid: req.user.id});
-        res.status(200).json({ 
+        const requestLetters = await RequestLetter.find({ fromUid: req.user.id });
+        res.status(200).json({
             success: true,
             message: requestLetters.length ? "Request letters retrieved successfully" : "No request letters found",
-            requestLetters 
+            requestLetters
         });
     } catch (error) {
         next(createError(500, error.message));
@@ -233,10 +233,10 @@ const generateUniqueCode = async () => {
     let isUnique = false;
 
     while (!isUnique) {
-        uniqueCode = Math.floor(100000 + Math.random() * 900000).toString(); 
+        uniqueCode = Math.floor(100000 + Math.random() * 900000).toString();
         const existingLetter = await RequestLetter.findOne({ uniqueCode });
         if (!existingLetter) {
-            isUnique = true; 
+            isUnique = true;
         }
     }
 
@@ -300,17 +300,17 @@ export const approveRequestLetter = async (req, res, next) => {
 
 export const rejectRequestLetter = async (req, res, next) => {
     const { id } = req.params;
-    const { user } = req; 
+    const { user } = req;
 
-    console.log(id,"_id rejectRequestLetter");
+    console.log(id, "_id rejectRequestLetter");
     try {
         const requestLetter = await RequestLetter.findById(id);
         if (!requestLetter) {
             return res.status(404).json({ success: false, message: "Request Letter not found" });
         }
 
-        const isAuthorized = 
-            user.role.toLowerCase() === "principal" || 
+        const isAuthorized =
+            user.role.toLowerCase() === "principal" ||
             requestLetter.toUids.some(
                 (recipient) => recipient.userId.toString() === user.id && recipient.role.toLowerCase() === user.role.toLowerCase()
             );
@@ -353,12 +353,12 @@ export const markRequestLetterAsSeen = async (req, res, next) => {
         }
 
         const alreadySeen = requestLetter.seenBy.some(seenUser => seenUser.userId.toString() === user.id);
-        
+
         if (alreadySeen) {
             return res.status(200).json({ success: true, message: "Request Letter marked as seen already" });
         }
 
-        requestLetter.seenBy.push({ userId: user.id }); 
+        requestLetter.seenBy.push({ userId: user.id });
         await requestLetter.save();
 
         res.status(200).json({ success: true, message: "Request Letter marked as seen successfully" });
@@ -375,23 +375,19 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
     try {
         const { user } = req;
 
-        if (!user || user.role !== "Principal") {
-            return res.status(403).json({ success: false, message: "Access denied" });
-        }
-
         const userId = new mongoose.Types.ObjectId(user.id);
 
         const unseenLetters = await RequestLetter.aggregate([
             {
                 $match: {
-                    "toUids.userId": userId,  
-                    "toUids.role": user.role,  
-                    seenBy: { $not: { $elemMatch: { userId } } } 
+                    "toUids.userId": userId,
+                    "toUids.role": user.role,
+                    seenBy: { $not: { $elemMatch: { userId } } }
                 }
             },
             {
                 $lookup: {
-                    from: "students", 
+                    from: "students",
                     localField: "fromUid",
                     foreignField: "_id",
                     as: "fromUser"
@@ -400,15 +396,15 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
             {
                 $unwind: {
                     path: "$fromUser",
-                    preserveNullAndEmptyArrays: true 
+                    preserveNullAndEmptyArrays: true
                 }
             },
             {
                 $addFields: {
                     "fromUser.fullName": {
                         $concat: [
-                            { $ifNull: ["$fromUser.firstName", ""] }, 
-                            " ", 
+                            { $ifNull: ["$fromUser.firstName", ""] },
+                            " ",
                             { $ifNull: ["$fromUser.lastName", ""] }
                         ]
                     }
@@ -419,12 +415,12 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
             },
             {
                 $project: {
-                    fromUid: 0, 
+                    fromUid: 0,
                 }
             }
         ]);
-        console.log(unseenLetters,"unseenLetters list");
-        
+        console.log(unseenLetters, "unseenLetters list");
+
 
         if (!unseenLetters.length) {
             return res.status(404).json({ success: false, message: "No unseen request letters found" });

@@ -14,8 +14,8 @@ const RequireAuth = ({ allowedRoles }) => {
     const pathPrefix = role === "Student" ? "/student" : "/dashboard";
     console.log(role);
     console.log(allowedRoles);
-    
-    
+
+
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -32,12 +32,13 @@ const RequireAuth = ({ allowedRoles }) => {
 
     if (isLoading) {
         return (
-          <div className="spinner-overlay">
-            <LoadingSpinner />
-          </div>
+            <div className="spinner-overlay">
+                <LoadingSpinner />
+            </div>
         );
-      }
+    }
 
+   
     if (!token) {
         return <Navigate to="/landingPage" replace />;
     }
@@ -46,9 +47,10 @@ const RequireAuth = ({ allowedRoles }) => {
         return <Navigate to={`${pathPrefix}`} replace />;
     }
 
+
     return (
         <Layout>
-            <Outlet/>
+            <Outlet />
         </Layout>
     );
 };

@@ -164,7 +164,7 @@ const Add = ({ slug, columns, setOpen, refetch }) => {
               </div>
             ))}
           <button type="submit" disabled={isLoadingTutor || isLoadingHOD}>
-            {(isLoadingStudent || isLoadingTutor || isLoadingHOD) ? "Submitting..." : "Send"}
+            {( isLoadingTutor || isLoadingHOD) ? "Submitting..." : "Send"}
           </button>
         </form>
       </div>

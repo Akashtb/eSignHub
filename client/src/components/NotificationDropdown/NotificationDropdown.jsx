@@ -13,6 +13,8 @@ const NotificationDropdown = () => {
   const pathPrefix = role === "Student" ? "/student" : "/dashboard";
 
   const { data, isLoading, isError, refetch } = useListForNotificationQuery();
+  console.log(data, "notification data");
+  
   const [markAsSeen] = useMarkRequestLetterAsSeenMutation();
 
   const navigate = useNavigate()
