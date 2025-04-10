@@ -14,7 +14,7 @@ const Edit = ({ slug, columns, setOpenEdit, selectedId, refetch }) => {
   const [image, setImage] = useState(null);
   const [imageUrl, setImageUrl] = useState("");
   const [formData, setFormData] = useState({});
-  const departmentOptions = ["Computer Science", "Electronics and Communication"];
+  const departmentOptions = ["Computer Science", "Electronics and Communication","Electrical And Electronical Engineering"];
   const batchOptions = ["2021-2025", "2022-2026", "2023-2027", "2024-2028"]
 
 

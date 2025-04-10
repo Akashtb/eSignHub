@@ -11,7 +11,7 @@ const UPLOAD_PRESET = "upload";
 
 const batchOptions = ["2021-2025", "2022-2026", "2023-2027", "2024-2028"]
 
-const departmentOptions = ["Computer Science", "Electronics and Communication"];
+const departmentOptions = ["Computer Science", "Electronics and Communication","Electrical And Electronical Engineering"];
 
 const Add = ({ slug, columns, setOpen, refetch }) => {
   const [image, setImage] = useState(null);

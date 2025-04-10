@@ -3,6 +3,8 @@ import { createError } from "../utils/customErrorHandling.js";
 
 export const verifyToken = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
+    console.log("Auth Header", authHeader);
+    
 
     if (!authHeader) {
         return res.status(401).json({ error: "No token provided" }); 
