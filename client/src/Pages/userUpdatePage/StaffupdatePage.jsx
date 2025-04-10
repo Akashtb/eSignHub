@@ -92,7 +92,7 @@ const StaffUpdatePage = () => {
                 refetchTutor()
             }
 
-            toast.success("User updated successfully!"); 
+            toast.success("User updated successfully!");
         } catch (error) {
             console.error("Update failed:", error);
             toast.error("Update failed. Please try again.");
@@ -123,28 +123,27 @@ const StaffUpdatePage = () => {
 
 
                 <label>First Name</label>
-                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required/>
+                <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
 
                 <label>Last Name</label>
-                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required/>
+                <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
 
                 <label>Email</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required/>
+                <input type="email" name="email" value={formData.email} onChange={handleChange} required />
 
                 <label>Phone</label>
-                <input type="text" name="phone" value={formData.phone} onChange={handleChange} required/>
+                <input type="text" name="phone" value={formData.phone} onChange={handleChange} required />
 
                 <label>Date of Birth</label>
-                <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required/>
+                <input type="date" name="dateOfBirth" value={formData.dateOfBirth} onChange={handleChange} required />
 
                 <label>Department</label>
                 <select name="departmentName" value={formData.departmentName} onChange={handleChange} required>
                     <option value="">Select Department</option>
                     <option value="Computer Science">Computer Science</option>
-                    <option value="Biomedical Engineering">Biomedical Engineering</option>
-                    <option value="Pharmacy">Pharmacy</option>
-                    <option value="Mechanical Engineering">Mechanical Engineering</option>
-                    <option value="Electrical Engineering">Electrical Engineering</option>
+                    <option value="Electronics and Communication">Electronics and Communication</option>
+                    <option value="Electrical And Electronical Engineering">Electrical And Electronical Engineering</option>
+
                 </select>
 
                 <button type="submit">Update</button>
