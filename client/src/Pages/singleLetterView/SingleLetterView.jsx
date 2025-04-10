@@ -83,7 +83,7 @@ const SingleLetterView = () => {
             <Card className="gmailLetterCard">
                 <CardContent>
                     <div className="headerSection">
-                        <FaArrowLeft className="backIcon" onClick={() => navigate("/requestLetter")} style={{cursor:"pointer"}}/>
+                        <FaArrowLeft className="backIcon" onClick={() => navigate(-1)} style={{cursor:"pointer"}}/>
                         <Typography variant="h5" className="letterTitle">
                             <strong>{data?.subject}</strong>
                             <Chip label={data?.status} className={`statusChip ${data?.status.toLowerCase()}`} />

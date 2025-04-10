@@ -64,7 +64,6 @@ const requestLetterSchema = new mongoose.Schema(
     },
     uniqueCode :{
       type:String,
-      unique:true,
     }
   },
   { timestamps: true }

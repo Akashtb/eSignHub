@@ -5,7 +5,7 @@ import RequestLetter from "../models/requestLetter.js"
 import Tutor from "../models/Tutor.js"
 import { createError } from "../utils/customErrorHandling.js"
 
-export const createRequestLetter = async (req, res) => {
+export const createRequestLetter = async (req, res,next) => {
     const fromUid = req.user.id
     const fromRole = req.user.role
     const { subject, messageBody, toUids } = req.body
@@ -22,6 +22,8 @@ export const createRequestLetter = async (req, res) => {
         })
         return res.status(201).json({ message: "Request Letter created successfully" })
     } catch (error) {
+        console.error(error.message, "error message");
+        
         next(createError(500, error.message));
     }
 }
@@ -377,13 +379,19 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
 
         const userId = new mongoose.Types.ObjectId(user.id);
 
+        
+
         const unseenLetters = await RequestLetter.aggregate([
             {
                 $match: {
-                    "toUids.userId": userId,
-                    "toUids.role": user.role,
+                    toUids: {
+                      $elemMatch: {
+                        userId: userId,
+                        role: user.role
+                      }
+                    },
                     seenBy: { $not: { $elemMatch: { userId: userId } } }
-                }
+                  }
             },
             {
                 $lookup: {

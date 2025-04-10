@@ -17,7 +17,13 @@ import RoleRedirect from "./features/StartRoute";
 import NotFoundPage from "./Pages/ErrorPages/ErrorPage";
 
 const router = createBrowserRouter([
-  { path: "/", element: <RoleRedirect /> },
+  {
+    path: "/", element: (
+      <RequireAuth allowedRoles={["Student","Principal", "Tutor", "HOD"]}>
+        <RoleRedirect />
+      </RequireAuth>
+    )
+  },
   {
     path: "/student",
     element: <RequireAuth allowedRoles={["Student"]} />,
