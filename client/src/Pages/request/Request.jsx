@@ -80,8 +80,8 @@ const RequestLetter = () => {
       flex: 2,
       minWidth: 200,
       renderCell: (params) => {
-        if (!params.value) return <span>Not Approved</span>;
-
+        if (!params.value || !params.value.userId) return <span>Not Approved</span>;
+      
         const { firstName, lastName, role } = params.value.userId;
         return (
           <div className="nameContainer">
