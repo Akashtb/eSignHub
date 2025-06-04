@@ -51,4 +51,5 @@
 
 1. Clone the repo  
    git clone https://github.com/Akashtb/eSignHub.git
-   cd esignhub
+   
+3. cd esignhub
