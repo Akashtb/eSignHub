@@ -15,7 +15,8 @@ import RequireAuth from "./features/RequireAuth";
 import Layout from "./Layout";
 import RoleRedirect from "./features/StartRoute";
 import NotFoundPage from "./Pages/ErrorPages/ErrorPage";
-
+import { useEffect } from "react";
+import { io } from "socket.io-client";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -73,6 +74,17 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
+ useEffect(() => {
+    const socket = io("http://localhost:3007");
+
+    console.log("Socket connected:", socket.id);
+
+    // cleanup to prevent multiple connections
+    return () => {
+      socket.disconnect();
+      console.log("Socket disconnected");
+    };
+  }, []);
   return <RouterProvider router={router} />;
 }
 

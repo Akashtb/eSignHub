@@ -10,6 +10,9 @@ import requestLetterRoutes from "./routes/requestLetterRoutes.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
 const app = express()
+import http from "http";
+import { Server as SocketIO } from "socket.io";
+import { socketHandler } from "./socket.js"
 
 
 dotenv.config()
@@ -46,7 +49,17 @@ app.use((err,req,res,next)=>{
     })
 })
 
+const server = http.createServer(app);
+
+const io = new SocketIO(server, {
+  cors: {
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST"],
+  },
+});
+
+socketHandler(io);
 connect();
-app.listen(process.env.PORT,()=>{
+server.listen(process.env.PORT,()=>{
     console.log(`server is running on ${process.env.PORT}`)
 })
