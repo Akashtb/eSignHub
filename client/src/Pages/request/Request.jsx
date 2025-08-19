@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./request.scss";
 import RequestLetterTable from "../../Components/dataTable/request letter data table/RequestTable";
 import ComposeLetter from "../../Components/composeLetter/ComposeLetter";
@@ -6,15 +6,18 @@ import { useGetAllRequestLetterQuery } from "../../features/redux/users/RequestL
 import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "../../Components/loadingSpinner/LoadingSpinner";
+import { SocketContext } from "../../features/context/SocketContext";
 
 const RequestLetter = () => {
   const [isComposeOpen, setIsComposeOpen] = useState(false);
   const { data, isLoading, isError, refetch: refetchRequestLetter } = useGetAllRequestLetterQuery();
-  console.log(data);
+  // console.log(data);
 
   const role = useSelector(selectCurrentRole);
   const user = useSelector(selectCurrentUser);
-  console.log(user, "user");
+  const {socketRef} = useContext(SocketContext);
+  console.log(socketRef, "Socket in RequestLetter");
+  
 
 
   useEffect(() => {
@@ -22,6 +25,32 @@ const RequestLetter = () => {
     refetchRequestLetter();
 
   }, []);
+
+ useEffect(() => {
+    if (!socketRef.current) return;
+
+    const socket = socketRef.current;
+
+    // Listen for new letters
+    const handleNewLetter = (letter) => {
+      console.log("📩 Received new letter:", letter);
+
+      // Check if current user is a recipient
+      const isRecipient = letter?.toUids?.some(
+        (recipient) => recipient.userId === user
+      );
+
+      if (isRecipient) {
+        refetchRequestLetter();
+      }
+    };
+
+    socket.on("newRequestLetter", handleNewLetter);
+
+    return () => {
+      socket.off("newRequestLetter", handleNewLetter);
+    };
+  }, [socketRef, user]);
 
   const handleComposeClick = () => {
     setIsComposeOpen(true);
@@ -81,7 +110,7 @@ const RequestLetter = () => {
       minWidth: 200,
       renderCell: (params) => {
         if (!params.value || !params.value.userId) return <span>Not Approved</span>;
-      
+
         const { firstName, lastName, role } = params.value.userId;
         return (
           <div className="nameContainer">
@@ -103,7 +132,7 @@ const RequestLetter = () => {
       <div className="tableContainer">
         {isLoading ? (
           <div className="spinnerWrapper">
-            <LoadingSpinner/>
+            <LoadingSpinner />
           </div>
         ) : data?.length > 0 ? (
           <RequestLetterTable slug="letter" columns={columns} rows={data} />

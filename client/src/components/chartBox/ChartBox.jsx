@@ -6,7 +6,7 @@ import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
 
 
 const ChartBox = ({title,number,color,icon,slug}) => {
-  console.log(slug);
+
   
   const user = useSelector(selectCurrentRole)
   const pathPrefix = user === "Student" ? "/student" : "/dashboard";

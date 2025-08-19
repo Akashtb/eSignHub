@@ -13,9 +13,7 @@ const RoleRedirect = ({ children }) => {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // If no role (not logged in)
   if (role === null) {
-    // Allow login, register, landing page
     if (
       location.pathname === "/login" ||
       location.pathname === "/studentRegister" ||
@@ -23,12 +21,10 @@ const RoleRedirect = ({ children }) => {
     ) {
       return children;
     }
-    // Otherwise → send to login
     return <Navigate to="/landingPage" replace />;
   }
 
-  // fallback
-  return children ?? <Navigate to="/login" replace />;
+  return children ?? <Navigate to="/landingPage" replace />;
 };
 
 export default RoleRedirect;

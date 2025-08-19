@@ -10,6 +10,11 @@ const removeUser = (socketId) => {
   users = users.filter(user => user.socketId !== socketId);
 }
 
+const getUser = (recipientUserId) => {
+  return users.find(user => user.userId?.userId === recipientUserId);
+};
+
+
 export const socketHandler = (io) => {
   io.on("connection", (socket) => {
     console.log("User connected:", socket.id);
@@ -26,3 +31,4 @@ export const socketHandler = (io) => {
     socket.emit("welcome", "Welcome! You are connected to the server 🚀");
   });
 };
+export { getUser };

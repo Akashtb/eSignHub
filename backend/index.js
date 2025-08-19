@@ -59,6 +59,7 @@ const io = new SocketIO(server, {
 });
 
 socketHandler(io);
+app.set("io", io);
 connect();
 server.listen(process.env.PORT,()=>{
     console.log(`server is running on ${process.env.PORT}`)

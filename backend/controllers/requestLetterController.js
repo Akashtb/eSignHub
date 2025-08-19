@@ -4,12 +4,13 @@ import Principal from "../models/Principal.js"
 import RequestLetter from "../models/requestLetter.js"
 import Tutor from "../models/Tutor.js"
 import { createError } from "../utils/customErrorHandling.js"
+import { getUser } from "../socket.js";
 
-export const createRequestLetter = async (req, res,next) => {
+
+export const createRequestLetter = async (req, res, next) => {
     const fromUid = req.user.id
     const fromRole = req.user.role
     const { subject, messageBody, toUids } = req.body
-    console.log(toUids, "toUids");
 
     try {
         await RequestLetter.create({
@@ -20,10 +21,31 @@ export const createRequestLetter = async (req, res,next) => {
             toUids,
             status: "pending"
         })
+        toUids.forEach((recipient) => {
+            console.log(recipient, "recipient in createRequestLetter");
+            
+            const user = getUser(recipient.userId);
+            console.log(user, "user in createRequestLetter");
+            
+            const socket = req.app.get("io")
+
+            if (user) {
+                const socketId = user.socketId;
+                console.log("Socket ID:", socketId, "Recipient User ID:", recipient.userId);
+                socket.to(socketId).emit('newRequestLetter', {
+                    fromUid,
+                    subject,
+                    messageBody,
+                    toUids,
+                    status: "pending"
+                })
+            }
+
+        })
         return res.status(201).json({ message: "Request Letter created successfully" })
     } catch (error) {
         console.error(error.message, "error message");
-        
+
         next(createError(500, error.message));
     }
 }
@@ -379,19 +401,19 @@ export const getListOfUnseenRequestLetters = async (req, res, next) => {
 
         const userId = new mongoose.Types.ObjectId(user.id);
 
-        
+
 
         const unseenLetters = await RequestLetter.aggregate([
             {
                 $match: {
                     toUids: {
-                      $elemMatch: {
-                        userId: userId,
-                        role: user.role
-                      }
+                        $elemMatch: {
+                            userId: userId,
+                            role: user.role
+                        }
                     },
                     seenBy: { $not: { $elemMatch: { userId: userId } } }
-                  }
+                }
             },
             {
                 $lookup: {

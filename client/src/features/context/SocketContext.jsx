@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useRef } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { io } from "socket.io-client";
 import { selectCurrentRole, selectCurrentUser } from "../redux/auth/AuthSlice";
 import { useSelector } from "react-redux";
@@ -14,10 +14,14 @@ export const SocketProvider = ({ children }) => {
     socketRef.current = io("http://localhost:3007");
 
     socketRef.current.on("connect", () => {
-      console.log("Socket connected:", socketRef.current.id);
+      console.log("Socket connected:", socketRef.current);
 
       socketRef.current.emit("addUser", { userId, userType });
     });
+
+    //  socketRef.current.on("newRequestLetter", (letter) => {
+    //   console.log("📩 New Request Letter:", letter);
+    // });
 
     socketRef.current.on("disconnect", () => {
       console.log("Socket disconnected");
@@ -29,7 +33,7 @@ export const SocketProvider = ({ children }) => {
   }, [userId, userType]);
 
   return (
-    <SocketContext.Provider value={{ socket: socketRef.current }}>
+    <SocketContext.Provider value={{socketRef }}>
       {children}
     </SocketContext.Provider>
   );
