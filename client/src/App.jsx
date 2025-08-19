@@ -18,11 +18,8 @@ import NotFoundPage from "./Pages/ErrorPages/ErrorPage";
 
 const router = createBrowserRouter([
   {
-    path: "/", element: (
-      <RequireAuth allowedRoles={["Student","Principal", "Tutor", "HOD"]}>
-        <RoleRedirect />
-      </RequireAuth>
-    )
+    path: "/",
+    element: <RoleRedirect />
   },
   {
     path: "/student",

@@ -12,8 +12,8 @@ const RequireAuth = ({ allowedRoles }) => {
     const [isLoading, setIsLoading] = useState(true);
     const role = useSelector(selectCurrentRole);
     const pathPrefix = role === "Student" ? "/student" : "/dashboard";
-    console.log(role);
-    console.log(allowedRoles);
+    // console.log(role);
+    // console.log(allowedRoles);
 
 
 
