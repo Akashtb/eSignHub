@@ -1,19 +1,33 @@
 import { useSelector } from "react-redux";
 import { selectCurrentRole } from "./redux/auth/AuthSlice";
-import { Navigate } from "react-router";
+import { Navigate, useLocation } from "react-router";
 
 const RoleRedirect = ({ children }) => {
   const role = useSelector(selectCurrentRole);
-
+  const location = useLocation();
+  console.log("Current Role:", role, "Path:", location.pathname);
 
   if (role === "Student") {
     return <Navigate to="/student/requestLetter" replace />;
   } else if (["Principal", "Tutor", "HOD"].includes(role)) {
     return <Navigate to="/dashboard" replace />;
-  } else if (role === null) {
-    return children;
   }
 
+  // If no role (not logged in)
+  if (role === null) {
+    // Allow login, register, landing page
+    if (
+      location.pathname === "/login" ||
+      location.pathname === "/studentRegister" ||
+      location.pathname === "/landingPage"
+    ) {
+      return children;
+    }
+    // Otherwise → send to login
+    return <Navigate to="/landingPage" replace />;
+  }
+
+  // fallback
   return children ?? <Navigate to="/login" replace />;
 };
 
