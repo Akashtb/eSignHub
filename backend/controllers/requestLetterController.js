@@ -315,12 +315,8 @@ export const approveRequestLetter = async (req, res, next) => {
 
 
         await requestLetter.save();
-        console.log(requestLetter, "requestLetter after approval");
-        const userSocket = getUser(requestLetter?.fromUid?.toString());
-        console.log(userSocket, "userSocket in approveRequestLetter");
-        
-        
 
+        const userSocket = getUser(requestLetter?.fromUid?.toString());
         const socket = req.app.get("io");
 
         if (user) {
@@ -377,6 +373,15 @@ export const rejectRequestLetter = async (req, res, next) => {
         };
 
         await requestLetter.save();
+
+        const userSocket = getUser(requestLetter?.fromUid?.toString());
+        const socket = req.app.get("io");
+
+        if (user) {
+            const socketId = userSocket.socketId;
+
+            socket.to(socketId).emit('RequestLetterRejected', requestLetter)
+        }
 
         res.status(200).json({ success: true, message: "Request Letter approved successfully" });
 

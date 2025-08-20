@@ -14,9 +14,9 @@ const RequestLetter = () => {
 
   const role = useSelector(selectCurrentRole);
   const user = useSelector(selectCurrentUser);
-  const {socketRef} = useContext(SocketContext);
+  const { socketRef } = useContext(SocketContext);
   // console.log(socketRef, "Socket in RequestLetter");
-  
+
 
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const RequestLetter = () => {
 
   }, []);
 
- useEffect(() => {
+  useEffect(() => {
     if (!socketRef.current) return;
 
     const socket = socketRef.current;
@@ -42,10 +42,26 @@ const RequestLetter = () => {
       }
     };
 
+    const letterUpdation = (letter) => {
+      console.log("📩 RequestLetterAccepted event received:", letter);
+
+      const isFromUid = letter?.fromUid === user;
+      console.log("Is from current user?", isFromUid);
+
+      if (isFromUid) {
+        refetchRequestLetter();
+      }
+    };
+
     socket.on("newRequestLetter", handleNewLetter);
+    socket.on("RequestLetterAccepted", letterUpdation);
+    socket.on("RequestLetterRejected", letterUpdation);
 
     return () => {
       socket.off("newRequestLetter", handleNewLetter);
+      socket.off("RequestLetterAccepted", letterUpdation);
+      socket.off("RequestLetterRejected", letterUpdation)
+
     };
   }, [socketRef, user]);
 

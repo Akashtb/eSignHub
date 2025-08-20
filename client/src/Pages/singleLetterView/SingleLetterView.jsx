@@ -51,10 +51,12 @@ const SingleLetterView = () => {
         };
 
         socket.on("RequestLetterAccepted", letterUpdation);
+        socket.on("RequestLetterRejected", letterUpdation);
 
         return () => {
             console.log("Cleaning up socket listener");
             socket.off("RequestLetterAccepted", letterUpdation);
+            socket.off("RequestLetterRejected",letterUpdation)
         };
     }, [socketRef, user]);
 
