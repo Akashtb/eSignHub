@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Bell, X } from "lucide-react";
 import "./NotificationDropdown.scss";
-import { useListForNotificationQuery, useMarkRequestLetterAsSeenMutation } from "../../features/redux/users/RequestLetter";
+import { useGetAllRequestLetterQuery, useListForNotificationQuery, useMarkRequestLetterAsSeenMutation } from "../../features/redux/users/RequestLetter";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
 import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
@@ -15,6 +15,8 @@ const NotificationDropdown = () => {
   const { socketRef } = useContext(SocketContext);
   const user = useSelector(selectCurrentUser);
   const pathPrefix = role === "Student" ? "/student" : "/dashboard";
+  const {refetch: refetchRequestLetter } = useGetAllRequestLetterQuery();
+
 
   const { data, isLoading, isError, refetch } = useListForNotificationQuery();
   // console.log(data, "notification data");
@@ -46,7 +48,7 @@ const NotificationDropdown = () => {
     socket.on("newRequestLetter", handleNewLetter);
 
 
-  },[socketRef,user])
+  }, [socketRef, user])
 
   const notificationList = data?.unseenLetters || [];
 
@@ -60,6 +62,7 @@ const NotificationDropdown = () => {
     try {
       await markAsSeen(id).unwrap();
       await refetch()
+      await refetchRequestLetter();
     } catch (error) {
       console.error("Error marking as seen:", error);
     }
