@@ -32,6 +32,7 @@
 
 4. If **rejected**, the student is notified.
 
+
 ---
 
 ## 🚀 Tech Stack
@@ -44,6 +45,7 @@
   - Role-Based Access Control Middleware
   - QR Code Generator & Scanner
   - Request status tracking system
+  - Realtime feature using socket.io
 
 ---
 
