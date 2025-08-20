@@ -11,12 +11,11 @@ import { SocketContext } from "../../features/context/SocketContext";
 const RequestLetter = () => {
   const [isComposeOpen, setIsComposeOpen] = useState(false);
   const { data, isLoading, isError, refetch: refetchRequestLetter } = useGetAllRequestLetterQuery();
-  // console.log(data);
 
   const role = useSelector(selectCurrentRole);
   const user = useSelector(selectCurrentUser);
   const {socketRef} = useContext(SocketContext);
-  console.log(socketRef, "Socket in RequestLetter");
+  // console.log(socketRef, "Socket in RequestLetter");
   
 
 
@@ -31,11 +30,9 @@ const RequestLetter = () => {
 
     const socket = socketRef.current;
 
-    // Listen for new letters
     const handleNewLetter = (letter) => {
-      console.log("📩 Received new letter:", letter);
+      // console.log("📩 Received new letter:", letter);
 
-      // Check if current user is a recipient
       const isRecipient = letter?.toUids?.some(
         (recipient) => recipient.userId === user
       );

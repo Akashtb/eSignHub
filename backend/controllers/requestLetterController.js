@@ -23,10 +23,10 @@ export const createRequestLetter = async (req, res, next) => {
         })
         toUids.forEach((recipient) => {
             console.log(recipient, "recipient in createRequestLetter");
-            
+
             const user = getUser(recipient.userId);
             console.log(user, "user in createRequestLetter");
-            
+
             const socket = req.app.get("io")
 
             if (user) {
@@ -273,9 +273,12 @@ export const approveRequestLetter = async (req, res, next) => {
 
     try {
         const requestLetter = await RequestLetter.findById(id);
+
         if (!requestLetter) {
             return res.status(404).json({ success: false, message: "Request Letter not found" });
         }
+
+        // console.log(requestLetter, "requestLetter in approveRequestLetter");
 
         const isAuthorized =
             user.role.toLowerCase() === "principal" ||
@@ -303,11 +306,28 @@ export const approveRequestLetter = async (req, res, next) => {
             name: user.name,
         };
 
+
+
         if (!requestLetter.uniqueCode) {
             requestLetter.uniqueCode = await generateUniqueCode();
         }
 
+
+
         await requestLetter.save();
+        console.log(requestLetter, "requestLetter after approval");
+        const userSocket = getUser(requestLetter?.fromUid?.toString());
+        console.log(userSocket, "userSocket in approveRequestLetter");
+        
+        
+
+        const socket = req.app.get("io");
+
+        if (user) {
+            const socketId = userSocket.socketId;
+
+            socket.to(socketId).emit('RequestLetterAccepted', requestLetter)
+        }
 
         res.status(200).json({
             success: true,

@@ -8,6 +8,8 @@ import { useApproveRequestLetterMutation, useGetRequestLetterByIdQuery, useMarkR
 import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
+import { useContext } from "react";
+import { SocketContext } from "../../features/context/SocketContext";
 
 
 const SingleLetterView = () => {
@@ -26,7 +28,36 @@ const SingleLetterView = () => {
     const [rejectRequestLetter] = useRejectRequestLetterMutation();
     const [markAsSeen] = useMarkRequestLetterAsSeenMutation();
 
-    const [qrOpen, setQrOpen] = useState(false); 
+    const [qrOpen, setQrOpen] = useState(false);
+    const { socketRef } = useContext(SocketContext);
+
+    useEffect(() => {
+        console.log("Socket effect triggered", socketRef.current, user);
+
+        if (!socketRef.current) return;
+
+        const socket = socketRef.current;
+
+        const letterUpdation = (letter) => {
+            console.log("📩 RequestLetterAccepted event received:", letter);
+
+            const isFromUid = letter?.fromUid === user;
+            console.log("Is from current user?", isFromUid);
+
+            if (isFromUid) {
+                console.log("Refetching request letters...");
+                refetch();
+            }
+        };
+
+        socket.on("RequestLetterAccepted", letterUpdation);
+
+        return () => {
+            console.log("Cleaning up socket listener");
+            socket.off("RequestLetterAccepted", letterUpdation);
+        };
+    }, [socketRef, user]);
+
 
     const handleApprove = async () => {
         try {
@@ -46,15 +77,15 @@ const SingleLetterView = () => {
             refetch();
         } catch (error) {
             console.error("Error rejecting request letter:", error);
-            toast.error("Failed to reject the letter.");  
+            toast.error("Failed to reject the letter.");
         }
     };
 
     const seenBy = async () => {
         try {
             const seen = await markAsSeen(id).unwrap();
-            console.log("make as seen response",seen);
-                        
+            // console.log("make as seen response", seen);
+
         } catch (error) {
             console.error("Error marking as seen:", error);
         }
@@ -67,23 +98,23 @@ const SingleLetterView = () => {
     useEffect(() => {
         if (role !== "Student" && id && data && data?.seenBy) {
             const alreadySeen = data.seenBy.some(entry => {
-                return entry.userId === user; 
-            });            
-            console.log(alreadySeen);
-            
+                return entry.userId === user;
+            });
+            // console.log(alreadySeen);
+
             if (!alreadySeen) {
                 seenBy();
             }
         }
-    }, [id, role, data]); 
-    
+    }, [id, role, data]);
+
 
     return (
         <div className="gmailLetterPage">
             <Card className="gmailLetterCard">
                 <CardContent>
                     <div className="headerSection">
-                        <FaArrowLeft className="backIcon" onClick={() => navigate(-1)} style={{cursor:"pointer"}}/>
+                        <FaArrowLeft className="backIcon" onClick={() => navigate(-1)} style={{ cursor: "pointer" }} />
                         <Typography variant="h5" className="letterTitle">
                             <strong>{data?.subject}</strong>
                             <Chip label={data?.status} className={`statusChip ${data?.status.toLowerCase()}`} />
@@ -125,7 +156,7 @@ const SingleLetterView = () => {
                     )}
 
                     {/* Show QR Code Button only if the request is approved */}
-                    {data?.status === "approved" && data?.uniqueCode && role==="Student" &&(
+                    {data?.status === "approved" && data?.uniqueCode && role === "Student" && (
                         <div className="qrCodeSection">
                             <Button variant="contained" color="primary" startIcon={<FaQrcode />} onClick={() => setQrOpen(true)}>
                                 Generate QR Code
