@@ -4,17 +4,21 @@ import "./NotificationDropdown.scss";
 import { useListForNotificationQuery, useMarkRequestLetterAsSeenMutation } from "../../features/redux/users/RequestLetter";
 import { useNavigate } from "react-router";
 import { useSelector } from "react-redux";
-import { selectCurrentRole } from "../../features/redux/auth/AuthSlice";
+import { selectCurrentRole, selectCurrentUser } from "../../features/redux/auth/AuthSlice";
+import { SocketContext } from "../../features/context/SocketContext";
+import { useContext } from "react";
 
 const NotificationDropdown = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const dropdownRef = useRef(null);
   const role = useSelector(selectCurrentRole)
+  const { socketRef } = useContext(SocketContext);
+  const user = useSelector(selectCurrentUser);
   const pathPrefix = role === "Student" ? "/student" : "/dashboard";
 
   const { data, isLoading, isError, refetch } = useListForNotificationQuery();
   // console.log(data, "notification data");
-  
+
   const [markAsSeen] = useMarkRequestLetterAsSeenMutation();
 
   const navigate = useNavigate()
@@ -22,6 +26,27 @@ const NotificationDropdown = () => {
   useEffect(() => {
     refetch();
   }, []);
+
+  useEffect(() => {
+    if (!socketRef.current) return;
+
+    const socket = socketRef.current;
+
+    const handleNewLetter = (letter) => {
+
+      const isRecipient = letter?.toUids?.some(
+        (recipient) => recipient.userId === user
+      );
+
+      if (isRecipient) {
+        refetch();
+      }
+    };
+
+    socket.on("newRequestLetter", handleNewLetter);
+
+
+  },[socketRef,user])
 
   const notificationList = data?.unseenLetters || [];
 
@@ -31,13 +56,13 @@ const NotificationDropdown = () => {
     setFilteredNotifications(notificationList);
   }, [data]);
 
-  const removeNotification = async(id) => {
+  const removeNotification = async (id) => {
     try {
       await markAsSeen(id).unwrap();
       await refetch()
-  } catch (error) {
+    } catch (error) {
       console.error("Error marking as seen:", error);
-  }
+    }
   };
 
   useEffect(() => {
@@ -59,7 +84,7 @@ const NotificationDropdown = () => {
   }, [showNotifications]);
 
 
-  const navigateToLetter = async(id) => {
+  const navigateToLetter = async (id) => {
     try {
       await markAsSeen(id).unwrap();
       await refetch()
@@ -68,7 +93,7 @@ const NotificationDropdown = () => {
     } catch (error) {
       console.error("Error marking as seen:", error);
     }
- 
+
   }
 
 
@@ -83,14 +108,15 @@ const NotificationDropdown = () => {
       {filteredNotifications.length > 0 && showNotifications && (
         <div className="notification-dropdown">
           {filteredNotifications.map((notif) => (
-            <div className="notification-item" key={notif._id} onClick={()=>navigateToLetter(notif._id)}>
+            <div className="notification-item" key={notif._id} onClick={() => navigateToLetter(notif._id)}>
               <div className="notif-info">
                 <strong>{notif?.fromUser?.fullName || "Unknown Sender"}</strong>
                 <p>{notif.subject}</p>
               </div>
-              <X size={18} className="close-icon" onClick={(e) =>{
-                 e.stopPropagation()
-                 removeNotification(notif._id)}
+              <X size={18} className="close-icon" onClick={(e) => {
+                e.stopPropagation()
+                removeNotification(notif._id)
+              }
               } />
             </div>
           ))}
